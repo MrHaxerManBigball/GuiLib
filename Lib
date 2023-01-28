@@ -1,0 +1,102 @@
+function createmodule(window, name, transparency)
+    _G.ModuleAmmount[window.Name] += 1
+    local module = Instance.new("TextButton")
+    module.Parent = window or TestWindow
+    module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    module.Position = UDim2.new(window.Position) + UDim2.new(0,0,1.1 * _G.ModuleAmmount[window.Name])
+    module.Size = UDim2.new(0, 200, 0, 50)
+    module.Font = Enum.Font.SourceSans
+    module.TextColor3 = Color3.fromRGB(0, 0, 0)
+    module.TextSize = 14.000
+    module.Text = tostring(name)
+    if not _G.ModuleOn[name] then _G.ModuleOn[name] = false end
+    module.Transparency = transparency or 0
+    module.Activated:Connect(function() 
+        if _G.ModuleOn[name] then 
+            print('turned off')
+            _G.ModuleOn[name] = false 
+            module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        else 
+            print('turned on')
+            _G.ModuleOn[name] = true 
+            module.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        end 
+    end) 
+end 
+local mouse = lplr:GetMouse()
+local Boney = Instance.new("ScreenGui")
+local TestWindow = Instance.new("TextLabel")
+local TextButton = Instance.new("TextButton")
+Boney.Name = "balller"
+Boney.Parent = game.CoreGui
+Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+uis.InputBegan:Connect(function(input) 
+    if input.KeyCode == Enum.KeyCode.RightShift then 
+        if Boney.Enabled then 
+            Boney.Enabled = false 
+        else 
+            Boney.Enabled = true 
+        end 
+    end 
+end) 
+TestWindow.Name = "TestWindow"
+TestWindow.Parent = Boney
+TestWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+TestWindow.Position = UDim2.new(0.0308897775, 0, 0.0302419364, 0)
+TestWindow.Size = UDim2.new(0, 200, 0, 50)
+TestWindow.Font = Enum.Font.Highway
+TestWindow.Text = "World"
+TestWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
+TestWindow.TextSize = 25.000
+TestWindow.Active = true 
+TestWindow.Draggable = true 
+local CombatWindow = Instance.new("TextLabel")
+CombatWindow.Name = "CombatWindow"
+CombatWindow.Parent = Boney
+CombatWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+CombatWindow.Position = UDim2.new(TestWindow.Position) + UDim2.new(0.15,0,0.031)
+CombatWindow.Size = UDim2.new(0, 200, 0, 50)
+CombatWindow.Font = Enum.Font.Highway
+CombatWindow.Text = "Combat"
+CombatWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
+CombatWindow.TextSize = 25.000
+CombatWindow.Active = true 
+CombatWindow.Draggable = true 
+local UtilityWindow = Instance.new("TextLabel")
+UtilityWindow.Name = "UtilityWindow"
+UtilityWindow.Parent = Boney
+UtilityWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+UtilityWindow.Position = UDim2.new(TestWindow.Position) + UDim2.new(0.3,0,0.031)
+UtilityWindow.Size = UDim2.new(0, 200, 0, 50)
+UtilityWindow.Font = Enum.Font.Highway
+UtilityWindow.Text = "Utility"
+UtilityWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
+UtilityWindow.TextSize = 25.000
+UtilityWindow.Active = true 
+UtilityWindow.Draggable = true 
+local MovementWindow = Instance.new("TextLabel")
+MovementWindow.Name = "MovementWindow"
+MovementWindow.Parent = Boney
+MovementWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+MovementWindow.Position = UDim2.new(TestWindow.Position) + UDim2.new(0.45,0,0,40)
+MovementWindow.Size = UDim2.new(0, 200, 0, 50)
+MovementWindow.Font = Enum.Font.Highway
+MovementWindow.Text = "Movement"
+MovementWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
+MovementWindow.TextSize = 25.000
+MovementWindow.Active = true 
+MovementWindow.Draggable = true 
+_G.ModuleAmmount = {"Ammount" == 0}
+_G.ModuleOn = {"On" == false}
+if not _G.ModuleAmmount.TestWindow then 
+    _G.ModuleAmmount.TestWindow = 0
+end 
+if not _G.ModuleAmmount.CombatWindow then 
+    _G.ModuleAmmount.CombatWindow = 0
+end 
+if not _G.ModuleAmmount.UtilityWindow then 
+    _G.ModuleAmmount.UtilityWindow = 0
+end 
+if not _G.ModuleAmmount.MovementWindow then 
+    _G.ModuleAmmount.MovementWindow = 0
+end 
