@@ -1,3 +1,6 @@
+local Players = game:GetService("Players") 
+local uis = game:GetService("UserInputService")
+local http = game:GetService("HttpService")
 function createmodule(window, name, transparency)
     _G.ModuleAmmount[window.Name] += 1
     local module = Instance.new("TextButton")
