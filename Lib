@@ -203,8 +203,8 @@ local connection1, connection2, connection3, connection4
         dropdown2.TextEditable = false 
         dropdown2.LayoutOrder = 0
         dropdown2.Size = UDim2.new(0,0,0)
-        if not DropDownValue[tbl["Name"]] then 
-            DropDownValue[tbl["Name"]] = 0 
+        if not guiLib.DropDownValue[tbl["Name"]] then 
+            guiLib.DropDownValue[tbl["Name"]] = 0 
         end
         connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
             table.insert(disconnectfuncs, connection1)
