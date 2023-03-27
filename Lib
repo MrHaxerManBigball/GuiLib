@@ -229,7 +229,7 @@ local connection1, connection2, connection3, connection4
                 module.TextSize = 18
                 dropdown2.Size = UDim2.new(0,0,0)
             else 
-                dropdown2.Text = DropDownValue[tbl["Name"]] or "Empty"
+                dropdown2.Text = guiLib.DropDownValue[tbl["Name"]] or "Empty"
                 dropdown2.BackgroundTransparency = 0 
                 dropdown2.TextTransparency = 0
                 dropdown2.TextEditable = true 
