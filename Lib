@@ -294,7 +294,7 @@ end
                 for i,v in next, Boney:GetDescendants() do 
                     if v:IsA("TextButton") and v.Text == disablemodule then 
                         v.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
-                        notify(disablemodule, "Disabled", 1)
+                        guiLib.notify(disablemodule, "Disabled", 1)
                         --writefile("testlib/config/"..disablemodule..".txt", "false")
                         moduletable[disablemodule] = false
                         break
@@ -308,7 +308,7 @@ end
                 for i,v in next, Boney:GetDescendants() do 
                     if v:IsA("TextButton") and v.Text == enabledmodule then 
                         v.BackgroundColor3 = Color3.fromRGB(0, 255, 0) 
-                        notify(enabledmodule, "Enabled", 1)
+                        guiLib.notify(enabledmodule, "Enabled", 1)
                         --writefile("testlib/config/"..enabledmodule..".txt", "true")
                         moduletable[enabledmodule] = true
                         break
