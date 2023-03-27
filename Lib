@@ -1,4 +1,4 @@
-return 
+function guiLib() 
 if getgenv().executed then return error("Already Executed") end 
 local moduletable = {}
 getgenv().testing = moduletable
@@ -484,3 +484,5 @@ end
         Notification:Destroy()
     end)
 end
+end 
+return GuiLib
