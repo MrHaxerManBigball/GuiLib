@@ -151,7 +151,7 @@ end
 if not ModuleAmmount.RenderWindow then 
     ModuleAmmount.RenderWindow = 0 
 end 
-local disconnectfuncs = {}
+guiLib.disconnectfuncs = {}
 local connection1, connection2, connection3, connection4
  guiLib.createmodule = function(tbl)
     realwindow = nil
@@ -207,7 +207,7 @@ local connection1, connection2, connection3, connection4
             guiLib.DropDownValue[tbl["Name"]] = 0 
         end
         connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
-            table.insert(disconnectfuncs, connection1)
+            table.insert(guiLib.disconnectfuncs, connection1)
             pcall(function()
                 guiLib.DropDownValue[tbl["Name"]] = dropdown2.Text
                 if dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Min"] and tonumber(dropdown2.Text) < tbl["Dropdown"]["Min"] then 
@@ -220,7 +220,7 @@ local connection1, connection2, connection3, connection4
             end)
         end) 
         connection2 = module.MouseButton2Down:Connect(function(right) 
-            table.insert(disconnectfuncs, connection2)
+            table.insert(guiLib.disconnectfuncs, connection2)
             if dropdown2.TextEditable then 
                 dropdown2.BackgroundTransparency = 1 
                 dropdown2.TextTransparency = 1
@@ -240,7 +240,7 @@ local connection1, connection2, connection3, connection4
         end) 
     end 
     connection3 = uis.InputBegan:Connect(function(input) 
-        table.insert(disconnectfuncs, connection3)
+        table.insert(guiLib.disconnectfuncs, connection3)
         if input.KeyCode == binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
             if ModuleOn[tbl["Name"]] then 
                 ModuleOn[tbl["Name"]] = false 
@@ -269,7 +269,7 @@ local connection1, connection2, connection3, connection4
         module.MouseButton1Down:Connect(tbl["Function"]) 
     end)
     connection4 = module.MouseButton1Down:Connect(function(func) 
-        table.insert(disconnectfuncs, connection4)
+        table.insert(guiLib.disconnectfuncs, connection4)
         if ModuleOn[tbl["Name"]] then 
             ModuleOn[tbl["Name"]] = false 
             guiLib.notify(tbl["Name"], "Disabled", 1)
