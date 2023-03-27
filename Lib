@@ -1,4 +1,5 @@
 if getgenv().executed then return error("Already Executed") end 
+local guiLib = {}
 local moduletable = {}
 getgenv().testing = moduletable
 getgenv().executed = true 
@@ -6,16 +7,16 @@ local Players = game:GetService("Players")
 local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
-function isAlive(plr) 
+guiLib.isAlive = function(plr)
     return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
 end
-function enabled(module) 
+guiLib.enabled = function(module)
     return ModuleOn[tostring(module)] or false 
 end 
-function isTeammate(plr) 
+guiLib.isTeammate =  function(plr) 
     return plr.Team == lplr.Team and lplr.Team
 end
-function espFunc(plr)
+guiLib.espFunc = function(plr) 
     local partGui = Instance.new("BillboardGui", plr.Head)
     partGui.Size = UDim2.new(1,0,1,0)
     partGui.AlwaysOnTop = true
@@ -274,7 +275,7 @@ if not ModuleAmmount.RenderWindow then
 end 
 local disconnectfuncs = {}
 local connection1, connection2, connection3, connection4
-function createmodule(tbl)
+ guiLib.createmodule = function(tbl)
     realwindow = nil
     table.insert(moduletable, tbl["Name"])
     if tbl["Window"] == "World" then
@@ -409,7 +410,7 @@ for i,v in pairs(moduletable) do
         writefile("testlib/config/"..v..".txt", "false")
     end 
 end 
-    function disable(disablemodule) 
+    guiLib.disable = function(disablemodule)
         if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
             ModuleOn[disablemodule] = false 
                 for i,v in next, Boney:GetDescendants() do 
@@ -423,7 +424,7 @@ end
                 end 
             end 
         end
-        function enable(enabledmodule)
+         guiLib.enable = function(enabledmodule)
             if  ModuleOn[enabledmodule] then 
                 ModuleOn[enabledmodule] = true 
                 for i,v in next, Boney:GetDescendants() do 
@@ -438,7 +439,7 @@ end
             end 
         end 
     local notifications = 0
-    function notify(header, text, time, tweentime) 
+    guiLib.notify = function(header, text, time, tweentime) 
         task.spawn(function() 
         notifications += 1 
         local Notification = Instance.new("ScreenGui")
@@ -484,3 +485,4 @@ end
     end)
 end
 
+return guiLib
