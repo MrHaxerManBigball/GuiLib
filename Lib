@@ -1,3 +1,4 @@
+return 
 if getgenv().executed then return error("Already Executed") end 
 local moduletable = {}
 getgenv().testing = moduletable
