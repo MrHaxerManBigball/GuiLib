@@ -135,7 +135,7 @@ RenderWindow.Active = true
 RenderWindow.Draggable = true 
 ModuleAmmount = {"Ammount" == 0}
 ModuleOn = {"On" == false}
-DropDownValue = {"Value" == 0}
+guiLib.DropDownValue = {"Value" == 0}
 if not ModuleAmmount.WorldWindow then 
     ModuleAmmount.WorldWindow = 0
 end 
@@ -272,12 +272,12 @@ local connection1, connection2, connection3, connection4
         table.insert(disconnectfuncs, connection4)
         if ModuleOn[tbl["Name"]] then 
             ModuleOn[tbl["Name"]] = false 
-            notify(name, "Disabled", 1)
+            guiLib.notify(tbl["Name"], "Disabled", 1)
             module.BackgroundTransparency = 0.6
             module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
         else 
             ModuleOn[tbl["Name"]] = true 
-            notify(name, "Enabled", 1)
+            guiLib.notify(tbl["Name"], "Enabled", 1)
             module.BackgroundTransparency = 0.6
             module.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
         end 
