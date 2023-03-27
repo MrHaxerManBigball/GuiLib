@@ -63,12 +63,12 @@ guiLib.espFunc = function(plr)
 end
 
 local mouse = lplr:GetMouse()
-local Boney = Instance.new("ScreenGui")
+guiLib.Boney = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
 Boney.Name = http:GenerateGUID(false)
 Boney.Parent = game.CoreGui
 Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-local unj = uis.InputBegan:Connect(function(input) 
+guiLib.unj = uis.InputBegan:Connect(function(input) 
     if input.KeyCode == Enum.KeyCode.RightShift then 
         Boney.Enabled = not Boney.Enabled
     end 
