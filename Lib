@@ -283,7 +283,7 @@ local connection1, connection2, connection3, connection4
         end 
     end) 
 end 
-for i,v in pairs(moduletable) do 
+for i,v in pairs(guiLib.moduletable) do 
     if not isflie("testlib/config/"..v..".txt") then 
         writefile("testlib/config/"..v..".txt", "false")
     end 
