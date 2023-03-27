@@ -6,6 +6,20 @@ getgenv().executed = true
 local Players = game:GetService("Players") 
 local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
+function code(b) 
+    b() 
+end 
+local binds = {
+    ["TestFly"] = Enum.KeyCode.B,
+    ["KillAura"] = Enum.KeyCode.Z,
+    ["Speed"] = Enum.KeyCode.V,
+    ["HighJump"] = Enum.KeyCode.H,
+    ["FPSDestroyer"] = Enum.KeyCode.Y,
+    ["Fly"] = Enum.KeyCode.X, 
+    ["Nuker"] = Enum.KeyCode.P, 
+    ["ChestStealer"] = Enum.KeyCode.M,
+    ["LongJump"] = Enum.KeyCode.G,
+}
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
 guiLib.isAlive = function(plr)
     return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
