@@ -1,105 +1,485 @@
+if getgenv().executed then return error("Already Executed") end 
+local moduletable = {}
+getgenv().testing = moduletable
+getgenv().executed = true 
 local Players = game:GetService("Players") 
 local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
-function createmodule(window, name, transparency)
-    _G.ModuleAmmount[window.Name] += 1
-    local module = Instance.new("TextButton")
-    module.Parent = window or TestWindow
-    module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    module.Position = UDim2.new(window.Position) + UDim2.new(0,0,1.1 * _G.ModuleAmmount[window.Name])
-    module.Size = UDim2.new(0, 200, 0, 50)
-    module.Font = Enum.Font.SourceSans
-    module.TextColor3 = Color3.fromRGB(0, 0, 0)
-    module.TextSize = 14.000
-    module.Text = tostring(name)
-    if not _G.ModuleOn[name] then _G.ModuleOn[name] = false end
-    module.Transparency = transparency or 0
-    module.Activated:Connect(function() 
-        if _G.ModuleOn[name] then 
-            print('turned off')
-            _G.ModuleOn[name] = false 
-            module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-        else 
-            print('turned on')
-            _G.ModuleOn[name] = true 
-            module.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-        end 
-    end) 
+if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
+function isAlive(plr) 
+    return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
+end
+function enabled(module) 
+    return ModuleOn[tostring(module)] or false 
 end 
-local mouse = lplr:GetMouse()
-local Boney = Instance.new("ScreenGui")
-local TestWindow = Instance.new("TextLabel")
-local TextButton = Instance.new("TextButton")
-Boney.Name = "balller"
-Boney.Parent = game.CoreGui
-Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-uis.InputBegan:Connect(function(input) 
-    if input.KeyCode == Enum.KeyCode.RightShift then 
-        if Boney.Enabled then 
-            Boney.Enabled = false 
-        else 
-            Boney.Enabled = true 
+function isTeammate(plr) 
+    return plr.Team == lplr.Team and lplr.Team
+end
+function espFunc(plr)
+    local partGui = Instance.new("BillboardGui", plr.Head)
+    partGui.Size = UDim2.new(1,0,1,0)
+    partGui.AlwaysOnTop = true
+    partGui.Name = "ESP"
+    local frame = Instance.new("Frame", partGUi)
+    frame.BackgroundColor3 = Color3.fromRGB(255,80,60)  
+    frame.BackgroundTransparency = 0.85
+    frame.Size = UDim2.new(1,0,1,0)
+    frame.BorderSizePixel = 0 
+    local nameGui = Instance.new("BillboardGui", plr)
+    nameGui.Size = UDim2.new(3,0,1.5,0)
+    nameGui.SizeOffset = Vector2.new(0, 1.5)
+    nameGui.AlwaysOnTop = true
+    nameGui.Name = "Name"
+    local text = Instance.new("TextLabel", nameGui)
+    text.Text = Players:GetPlayerFromCharacter(plr).DisplayName
+    text.TextColor3 = Color3.fromRGB(196,69,42)
+    text.TextTransparency = 0
+    text.BackgroundTransparency = 1
+    text.TextScaled = true 
+    task.spawn(function()
+        while task.wait() do 
+          pcall(function()
+                text.Size = UDim2.new(1 *  (lplr.Character.HumanoidRootPart.Position - plr.HumanoidRootPart.Position).magnitude/ 5 ,0,1,0) or UDim2.new(1,0,1,0)
+            end)
+        end
+    end) 
+    text.Font = Enum.Font.Arial
+    text.Name = "Text"
+end
+local function disconnectAnimator(character) -- made by super skidded
+    if character then
+        local humanoid = character:WaitForChild("Humanoid", 15)
+            if humanoid then
+        end
+        local animator = humanoid:WaitForChild("Animator", 15)
+        if animator then
+            for i, connect in pairs(getconnections(animator.AnimationPlayed)) do
+                if connect.Function and debug.getconstant(connect.Function, 4) == "DRAGON_SLAYER_PUNCH" then
+                    connect:Disable()
+                end
+            end
+        end
+    end
+end
+local bed, closestbed, lplrbed
+function getbed(distb) 
+    if distb then closestbed = distb else closestbed = math.huge end 
+        pcall(function() 
+            for i,v in pairs(workspace:GetChildren()) do 
+                if v.Name == "bed" then 
+                    if (v.Position - lplr.Character.HumanoidRootPart.Position).magnitude < closestbed then 
+                        closestbed = (v.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+                        bed = v 
+                    end 
+                end 
+            end 
+        end)
+    return bed
+end 
+function selfbed() 
+    for i,v in pairs(workspace:GetChildren()) do 
+        if v.Name == "bed" and v.Covers.BrickColor == lplr.TeamColor then 
+            lplrbed = v
+            break
+        end 
+    end
+    return lplrbed
+end 
+function getchest(distance) 
+    local dist,chest = distance or math.huge, nil
+    for i,v in pairs(workspace:GetChildren()) do 
+        if lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") and v.Name == "chest" and v:FindFirstChild("ChestFolderValue") and #v.ChestFolderValue.Value:GetChildren() > 0 and (v.Position - lplr.Character.HumanoidRootPart.Position).magnitude < dist then 
+            dist = (v.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+            chest = v 
         end 
     end 
+    return chest 
+end  
+function getItem(item) 
+    return lplr.Character:FindFirstChild("InventoryFolder") and lplr.Character.InventoryFolder.Value:FindFirstChild(item)
+end  
+function getcloserpos(pos1, pos2, amount)
+    local newPos = (pos2 - pos1).Unit * math.min(amount, (pos2 - pos1).Magnitude) + pos1
+    return newPos
+end
+function closest(distance5) 
+    local dist5, closestplr = distance5 or math.huge, nil
+    for i,v in pairs(Players:GetPlayers()) do 
+        if v ~= lplr and v.Team ~= lplr.Team and lplr.Character and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and lplr.Character:FindFirstChild("HumanoidRootPart") and (lplr.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude < dist5 then 
+            dist5 =  (lplr.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude
+            closestplr = v 
+        end 
+    end 
+    return closestplr 
+end
+function getGuard(gdist) 
+    local gdist2, closestGuard = gdist or math.huge, nil
+    for i,v in pairs(workspace:GetChildren()) do 
+        if lplr.Character:FindFirstChild("HumanoidRootPart") and v.Name == "Model" and v:FindFirstChild("EntityHitbox") and (lplr.Character.HumanoidRootPart.Position - v.EntityHitbox.Position).magnitude < gdist2 then 
+            gdist2 = (lplr.Character.HumanoidRootPart.Position - v.EntityHitbox.Position).magnitude
+            closestGuard = v 
+        end
+    end 
+    return closestGuard
+end 
+function getremote(tab)  -- most of the remote stuff is made by xylex(7GrandDad) becuase im not at the level of understanding that yet lmao
+    for i,v in pairs(tab) do
+        if v == "Client" then
+            return tab[i + 1]
+        end
+    end
+    return ""
+end
+local KnitClient = debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 6)
+local SprintController = KnitClient.Controllers.SprintController
+local AnimThing = require(game:GetService("ReplicatedStorage").TS.animation.definitions["prod-animations"]) -- except for this
+local KillAuraRemote = getremote(debug.getconstants(getmetatable(KnitClient.Controllers.SwordController)["attackEntity"]))
+local swords = {
+    ["wood_sword"] = 1,
+    ["wood_dao"] = 2, 
+    ["stone_sword"] = 3, 
+    ["stone_dao"] = 4,
+    ["iron_sword"] = 5, 
+    ["iron_dao"] = 6, 
+    ["diamond_sword"] = 7, 
+    ["diamond_dao"] = 8,
+    ["emerald_sword"] = 9,
+    ["emerald_dao"] = 10, 
+    ["rageblade"] = 11,
+}
+local num, sword = 0, nil
+function getsword()
+    for i,v in pairs(lplr.Character.InventoryFolder.Value:GetChildren()) do 
+        if swords[v.Name] and swords[v.Name] > num then 
+            num = swords[v.Name] 
+            sword = v 
+        end 
+    end 
+    return sword
+end 
+function code(b) 
+    b() 
+end 
+local binds = {
+    ["TestFly"] = Enum.KeyCode.B,
+    ["KillAura"] = Enum.KeyCode.Z,
+    ["Speed"] = Enum.KeyCode.V,
+    ["HighJump"] = Enum.KeyCode.H,
+    ["FPSDestroyer"] = Enum.KeyCode.Y,
+    ["Fly"] = Enum.KeyCode.X, 
+    ["Nuker"] = Enum.KeyCode.P, 
+    ["ChestStealer"] = Enum.KeyCode.M,
+    ["LongJump"] = Enum.KeyCode.G,
+}
+local fallingtime = 0 
+task.spawn(function()
+    repeat
+        if isAlive(lplr) and lplr.Character:FindFirstChild("Humanoid") and lplr.Character.Humanoid.FloorMaterial == Enum.Material.Air then 
+            fallingtime += 0.25 
+            task.wait(0.25)
+        else 
+            fallingtime = 0 
+        end 
+    task.wait() 
+    until not getgenv().executed
+end)
+local mouse = lplr:GetMouse()
+local Boney = Instance.new("ScreenGui")
+local TextButton = Instance.new("TextButton")
+Boney.Name = http:GenerateGUID(false)
+Boney.Parent = game.CoreGui
+Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+local unj = uis.InputBegan:Connect(function(input) 
+    if input.KeyCode == Enum.KeyCode.RightShift then 
+        Boney.Enabled = not Boney.Enabled
+    end 
 end) 
-TestWindow.Name = "TestWindow"
-TestWindow.Parent = Boney
-TestWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
-TestWindow.Position = UDim2.new(0.0308897775, 0, 0.0302419364, 0)
-TestWindow.Size = UDim2.new(0, 200, 0, 50)
-TestWindow.Font = Enum.Font.Highway
-TestWindow.Text = "World"
-TestWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
-TestWindow.TextSize = 25.000
-TestWindow.Active = true 
-TestWindow.Draggable = true 
+local WorldWindow = Instance.new("TextLabel")
+WorldWindow.Name = "WorldWindow"
+WorldWindow.Parent = Boney
+WorldWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+WorldWindow.Position = UDim2.new(0.0308897775, 0, 0.0302419364, 0)
+WorldWindow.Size = UDim2.new(0, 200, 0, 50)
+WorldWindow.Font = Enum.Font.Highway
+WorldWindow.Text = "World"
+WorldWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
+WorldWindow.TextSize = 25
+WorldWindow.Active = true 
+WorldWindow.Draggable = true 
 local CombatWindow = Instance.new("TextLabel")
 CombatWindow.Name = "CombatWindow"
 CombatWindow.Parent = Boney
 CombatWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
-CombatWindow.Position = UDim2.new(TestWindow.Position) + UDim2.new(0.15,0,0.031)
+CombatWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.15,0,0.031)
 CombatWindow.Size = UDim2.new(0, 200, 0, 50)
 CombatWindow.Font = Enum.Font.Highway
 CombatWindow.Text = "Combat"
 CombatWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
-CombatWindow.TextSize = 25.000
+CombatWindow.TextSize = 25
 CombatWindow.Active = true 
 CombatWindow.Draggable = true 
 local UtilityWindow = Instance.new("TextLabel")
 UtilityWindow.Name = "UtilityWindow"
 UtilityWindow.Parent = Boney
 UtilityWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
-UtilityWindow.Position = UDim2.new(TestWindow.Position) + UDim2.new(0.3,0,0.031)
+UtilityWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.3,0,0.031)
 UtilityWindow.Size = UDim2.new(0, 200, 0, 50)
 UtilityWindow.Font = Enum.Font.Highway
 UtilityWindow.Text = "Utility"
 UtilityWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
-UtilityWindow.TextSize = 25.000
+UtilityWindow.TextSize = 25
 UtilityWindow.Active = true 
 UtilityWindow.Draggable = true 
 local MovementWindow = Instance.new("TextLabel")
 MovementWindow.Name = "MovementWindow"
 MovementWindow.Parent = Boney
 MovementWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
-MovementWindow.Position = UDim2.new(TestWindow.Position) + UDim2.new(0.45,0,0,40)
+MovementWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.45,0,0,40)
 MovementWindow.Size = UDim2.new(0, 200, 0, 50)
 MovementWindow.Font = Enum.Font.Highway
 MovementWindow.Text = "Movement"
 MovementWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
-MovementWindow.TextSize = 25.000
+MovementWindow.TextSize = 25
 MovementWindow.Active = true 
 MovementWindow.Draggable = true 
-_G.ModuleAmmount = {"Ammount" == 0}
-_G.ModuleOn = {"On" == false}
-if not _G.ModuleAmmount.TestWindow then 
-    _G.ModuleAmmount.TestWindow = 0
+local RenderWindow = Instance.new("TextLabel")
+RenderWindow.Name = "RenderWindow"
+RenderWindow.Parent = Boney
+RenderWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+RenderWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.6,0,0,49)
+RenderWindow.Size = UDim2.new(0, 200, 0, 50)
+RenderWindow.Font = Enum.Font.Highway
+RenderWindow.Text = "Render"
+RenderWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
+RenderWindow.TextSize = 25
+RenderWindow.Active = true 
+RenderWindow.Draggable = true 
+ModuleAmmount = {"Ammount" == 0}
+ModuleOn = {"On" == false}
+DropDownValue = {"Value" == 0}
+if not ModuleAmmount.WorldWindow then 
+    ModuleAmmount.WorldWindow = 0
 end 
-if not _G.ModuleAmmount.CombatWindow then 
-    _G.ModuleAmmount.CombatWindow = 0
+if not ModuleAmmount.CombatWindow then 
+    ModuleAmmount.CombatWindow = 0
 end 
-if not _G.ModuleAmmount.UtilityWindow then 
-    _G.ModuleAmmount.UtilityWindow = 0
+if not ModuleAmmount.UtilityWindow then 
+    ModuleAmmount.UtilityWindow = 0
 end 
-if not _G.ModuleAmmount.MovementWindow then 
-    _G.ModuleAmmount.MovementWindow = 0
+if not ModuleAmmount.MovementWindow then 
+    ModuleAmmount.MovementWindow = 0
 end 
+if not ModuleAmmount.RenderWindow then 
+    ModuleAmmount.RenderWindow = 0 
+end 
+local disconnectfuncs = {}
+local connection1, connection2, connection3, connection4
+function createmodule(tbl)
+    realwindow = nil
+    table.insert(moduletable, tbl["Name"])
+    if tbl["Window"] == "World" then
+        realwindow = WorldWindow
+    elseif tbl["Window"] == "Combat" then
+        realwindow = CombatWindow 
+    elseif tbl["Window"] == "Utility" then 
+        realwindow = UtilityWindow
+    elseif tbl["Window"] == "Movement" then 
+        realwindow = MovementWindow 
+    elseif tbl["Window"] == "Render" then 
+        realwindow = RenderWindow
+    end 
+    ModuleAmmount[realwindow.Name] += 1
+    local corner = Instance.new("UICorner", realwindow  or WorldWindow)
+    local module = Instance.new("TextButton", realwindow or WorldWindow)
+    corner:Clone().Parent = module
+    module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    module.BackgroundTransparency = 0.6
+    module.Position = UDim2.new(realwindow.Position) + UDim2.new(0,0,1.05 * ModuleAmmount[realwindow.Name])
+    module.Size = UDim2.new(0, 200, 0, 50)
+    module.Font = Enum.Font.SourceSans
+    module.TextColor3 = Color3.fromRGB(0, 0, 0)
+    module.TextSize = 18
+    module.Text = tostring(tbl["Name"])
+    if not ModuleOn[tbl["Name"]] then 
+        --[[
+            if isfile("testlib/config/"..name..".txt") then
+            ModuleOn[name] = readfile("testlib/config/"..name..".txt")
+            if ModuleOn[name] == "true" then enable(name) moduletable[name] = true end 
+            print(name,ModuleOn[name])
+        else 
+            ModuleOn[name] = false
+            moduletable[name] = false
+        end]]
+        ModuleOn[tbl["Name"]] = false
+    end
+    if tbl["Dropdown"] then 
+        print(tbl["Name"])
+        local dropdown2 = Instance.new("TextBox", realwindow) 
+        corner:Clone().Parent = dropdown2
+        dropdown2.Position = UDim2.new(module.Position) + UDim2.new(0.225,0.3,1.05) 
+        dropdown2.Text = dropdowntext or "Empty"
+        dropdown2.TextSize = 10
+        dropdown2.BackgroundTransparency = 1 
+        dropdown2.TextTransparency = 1
+        dropdown2.TextEditable = false 
+        dropdown2.LayoutOrder = 0
+        dropdown2.Size = UDim2.new(0,0,0)
+        if not DropDownValue[tbl["Name"]] then 
+            DropDownValue[tbl["Name"]] = 0 
+        end
+        connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
+            table.insert(disconnectfuncs, connection1)
+            pcall(function()
+                DropDownValue[tbl["Name"]] = dropdown2.Text
+                if dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Min"] and tonumber(dropdown2.Text) < tbl["Dropdown"]["Min"] then 
+                    dropdown2.Text = tbl["Dropdown"]["Min"]
+                    DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Min"]
+                elseif dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Max"] and tonumber(dropdown2.Text) > tonumber(tbl["Dropdown"]["Max"]) then
+                    dropdown2.Text = tbl["Dropdown"]["Max"]
+                    DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Max"]
+                end 
+            end)
+        end) 
+        connection2 = module.MouseButton2Down:Connect(function(right) 
+            table.insert(disconnectfuncs, connection2)
+            if dropdown2.TextEditable then 
+                dropdown2.BackgroundTransparency = 1 
+                dropdown2.TextTransparency = 1
+                dropdown2.TextEditable = false  
+                dropdown2.Selectable = false 
+                module.TextSize = 18
+                dropdown2.Size = UDim2.new(0,0,0)
+            else 
+                dropdown2.Text = DropDownValue[tbl["Name"]] or "Empty"
+                dropdown2.BackgroundTransparency = 0 
+                dropdown2.TextTransparency = 0
+                dropdown2.TextEditable = true 
+                dropdown2.Selectable = true
+                module.TextSize = 15
+                dropdown2.Size = UDim2.new(0,123,0,50) 
+            end 
+        end) 
+    end 
+    connection3 = uis.InputBegan:Connect(function(input) 
+        table.insert(disconnectfuncs, connection3)
+        if input.KeyCode == binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
+            if ModuleOn[tbl["Name"]] then 
+                ModuleOn[tbl["Name"]] = false 
+                notify(tbl["Name"], "Disabled", 1)
+                --writefile("testlib/config/"..name..".txt", "false")
+                module.BackgroundTransparency = 0.6
+                module.TextSize = 18
+                module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                task.spawn(function()
+                    code(tbl["Function"])
+                end)
+            else 
+                ModuleOn[tbl["Name"]] = true 
+                notify(tbl["Name"], "Enabled", 1)
+                --writefile("testlib/config/"..name..".txt", "true")
+                module.BackgroundTransparency = 0.6
+                module.TextSize = 18
+                module.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                task.spawn(function()
+                    code(tbl["Function"])
+                end)
+            end 
+        end 
+    end) 
+    task.spawn(function()
+        module.MouseButton1Down:Connect(tbl["Function"]) 
+    end)
+    connection4 = module.MouseButton1Down:Connect(function(func) 
+        table.insert(disconnectfuncs, connection4)
+        if ModuleOn[tbl["Name"]] then 
+            ModuleOn[tbl["Name"]] = false 
+            notify(name, "Disabled", 1)
+            module.BackgroundTransparency = 0.6
+            module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        else 
+            ModuleOn[tbl["Name"]] = true 
+            notify(name, "Enabled", 1)
+            module.BackgroundTransparency = 0.6
+            module.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        end 
+    end) 
+end 
+for i,v in pairs(moduletable) do 
+    if not isflie("testlib/config/"..v..".txt") then 
+        writefile("testlib/config/"..v..".txt", "false")
+    end 
+end 
+    function disable(disablemodule) 
+        if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
+            ModuleOn[disablemodule] = false 
+                for i,v in next, Boney:GetDescendants() do 
+                    if v:IsA("TextButton") and v.Text == disablemodule then 
+                        v.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
+                        notify(disablemodule, "Disabled", 1)
+                        --writefile("testlib/config/"..disablemodule..".txt", "false")
+                        moduletable[disablemodule] = false
+                        break
+                    end 
+                end 
+            end 
+        end
+        function enable(enabledmodule)
+            if  ModuleOn[enabledmodule] then 
+                ModuleOn[enabledmodule] = true 
+                for i,v in next, Boney:GetDescendants() do 
+                    if v:IsA("TextButton") and v.Text == enabledmodule then 
+                        v.BackgroundColor3 = Color3.fromRGB(0, 255, 0) 
+                        notify(enabledmodule, "Enabled", 1)
+                        --writefile("testlib/config/"..enabledmodule..".txt", "true")
+                        moduletable[enabledmodule] = true
+                        break
+                    end 
+                end 
+            end 
+        end 
+    local notifications = 0
+    function notify(header, text, time, tweentime) 
+        task.spawn(function() 
+        notifications += 1 
+        local Notification = Instance.new("ScreenGui")
+        local Frame = Instance.new("Frame")
+        local Header = Instance.new("TextLabel")
+        local Bottomtext = Instance.new("TextLabel")
+        Notification.Name = "Notification"
+        Notification.Parent = game:GetService("CoreGui")
+        Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        Frame.Parent = Notification
+        Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Frame.BackgroundTransparency = 0.6
+        Frame.Position = UDim2.new(0.897371888, 0, 0.917338729, 0)
+        Frame.Size = UDim2.new(0, 270, 0, 114)
+        Header.Name = header or "Header"
+        Header.Parent = Frame
+        Header.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Header.Position = UDim2.new(-0.00371747208, 0, 0, 0)
+        Header.Size = UDim2.new(0, 270, 0, 39)
+        Header.Font = Enum.Font.SourceSans
+        Header.Text = header or "Header"
+        Header.TextColor3 = Color3.fromRGB(0, 0, 0)
+        Header.TextSize = 25
+        
+        Bottomtext.Name = "Bottom text"
+        Bottomtext.Parent = Frame
+        Bottomtext.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Bottomtext.BackgroundTransparency = 1.000
+        Bottomtext.Position = UDim2.new(0, 0, 0.342105269, 0)
+        Bottomtext.Size = UDim2.new(0, 268, 0, 75)
+        Bottomtext.Font = Enum.Font.SourceSans
+        Bottomtext.Text = text or "Texet"
+        Bottomtext.TextColor3 = Color3.fromRGB(0, 0, 0)
+        Bottomtext.TextSize = 25
+        Bottomtext.TextXAlignment = Enum.TextXAlignment.Left
+        Bottomtext.TextYAlignment = Enum.TextYAlignment.Top
+        Frame:TweenPosition(UDim2.new(0.85,0.1,0.8 - (notifications / 11.65),0.4), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false) 
+        task.wait(time) 
+        Frame:TweenPosition(UDim2.new(0.897371888, 0, 0.917338729, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false)
+        task.wait(0.1)
+        notifications -= 1 
+        Notification:Destroy()
+    end)
+end
