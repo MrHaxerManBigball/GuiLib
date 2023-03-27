@@ -65,17 +65,17 @@ end
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
-Boney.Name = http:GenerateGUID(false)
-Boney.Parent = game.CoreGui
-Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+guiLib.Boney.Name = http:GenerateGUID(false)
+guiLib.Boney.Parent = game.CoreGui
+guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 guiLib.unj = uis.InputBegan:Connect(function(input) 
     if input.KeyCode == Enum.KeyCode.RightShift then 
-        Boney.Enabled = not Boney.Enabled
+        guiLib.Boney.Enabled = not guiLib.Boney.Enabled
     end 
 end) 
 local WorldWindow = Instance.new("TextLabel")
 WorldWindow.Name = "WorldWindow"
-WorldWindow.Parent = Boney
+WorldWindow.Parent = guiLib.Boney
 WorldWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
 WorldWindow.Position = UDim2.new(0.0308897775, 0, 0.0302419364, 0)
 WorldWindow.Size = UDim2.new(0, 200, 0, 50)
@@ -87,7 +87,7 @@ WorldWindow.Active = true
 WorldWindow.Draggable = true 
 local CombatWindow = Instance.new("TextLabel")
 CombatWindow.Name = "CombatWindow"
-CombatWindow.Parent = Boney
+CombatWindow.Parent = guiLib.Boney
 CombatWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
 CombatWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.15,0,0.031)
 CombatWindow.Size = UDim2.new(0, 200, 0, 50)
@@ -111,7 +111,7 @@ UtilityWindow.Active = true
 UtilityWindow.Draggable = true 
 local MovementWindow = Instance.new("TextLabel")
 MovementWindow.Name = "MovementWindow"
-MovementWindow.Parent = Boney
+MovementWindow.Parent = guiLib.Boney
 MovementWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
 MovementWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.45,0,0,40)
 MovementWindow.Size = UDim2.new(0, 200, 0, 50)
@@ -123,7 +123,7 @@ MovementWindow.Active = true
 MovementWindow.Draggable = true 
 local RenderWindow = Instance.new("TextLabel")
 RenderWindow.Name = "RenderWindow"
-RenderWindow.Parent = Boney
+RenderWindow.Parent = guiLib.Boney
 RenderWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
 RenderWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.6,0,0,49)
 RenderWindow.Size = UDim2.new(0, 200, 0, 50)
@@ -291,7 +291,7 @@ end
     guiLib.disable = function(disablemodule)
         if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
             ModuleOn[disablemodule] = false 
-                for i,v in next, Boney:GetDescendants() do 
+                for i,v in next, guiLib.Boney:GetDescendants() do 
                     if v:IsA("TextButton") and v.Text == disablemodule then 
                         v.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
                         guiLib.notify(disablemodule, "Disabled", 1)
@@ -305,7 +305,7 @@ end
          guiLib.enable = function(enabledmodule)
             if  ModuleOn[enabledmodule] then 
                 ModuleOn[enabledmodule] = true 
-                for i,v in next, Boney:GetDescendants() do 
+                for i,v in next, guiLib.Boney:GetDescendants() do 
                     if v:IsA("TextButton") and v.Text == enabledmodule then 
                         v.BackgroundColor3 = Color3.fromRGB(0, 255, 0) 
                         guiLib.notify(enabledmodule, "Enabled", 1)
