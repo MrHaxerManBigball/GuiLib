@@ -297,6 +297,7 @@ end
                         guiLib.notify(disablemodule, "Disabled", 1)
                         --writefile("testlib/config/"..disablemodule..".txt", "false")
                         moduletable[disablemodule] = false
+                        code(disablemodule)
                         break
                     end 
                 end 
