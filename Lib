@@ -1,82 +1,51 @@
 if getgenv().executed then return error("Already Executed") end 
+getgenv().executed = true
 local guiLib = {}
 guiLib.moduletable = {}
-getgenv().testing = moduletable
-getgenv().executed = true 
 local Players = game:GetService("Players") 
 local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
 function code(b) 
-    b() 
+	b() 
 end 
 local binds = {
-    ["TestFly"] = Enum.KeyCode.B,
-    ["KillAura"] = Enum.KeyCode.Z,
-    ["Speed"] = Enum.KeyCode.V,
-    ["HighJump"] = Enum.KeyCode.H,
-    ["FPSDestroyer"] = Enum.KeyCode.Y,
-    ["Fly"] = Enum.KeyCode.X, 
-    ["Nuker"] = Enum.KeyCode.P, 
-    ["ChestStealer"] = Enum.KeyCode.M,
-    ["LongJump"] = Enum.KeyCode.G,
+	["TestFly"] = Enum.KeyCode.B,
+	["KillAura"] = Enum.KeyCode.Z,
+	["Speed"] = Enum.KeyCode.V,
+	["HighJump"] = Enum.KeyCode.H,
+	["FPSDestroyer"] = Enum.KeyCode.Y,
+	["Fly"] = Enum.KeyCode.X, 
+	["Nuker"] = Enum.KeyCode.P, 
+	["ChestStealer"] = Enum.KeyCode.M,
+	["LongJump"] = Enum.KeyCode.G,
 }
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
 guiLib.isAlive = function(plr)
-    return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
+	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
 end
 guiLib.enabled = function(module)
-    return ModuleOn[tostring(module)] or false 
+	return ModuleOn[tostring(module)] or false 
 end 
 guiLib.isTeammate =  function(plr) 
-    return plr.Team == lplr.Team and lplr.Team
-end
-guiLib.espFunc = function(plr) 
-    local partGui = Instance.new("BillboardGui", plr.Head)
-    partGui.Size = UDim2.new(1,0,1,0)
-    partGui.AlwaysOnTop = true
-    partGui.Name = "ESP"
-    local frame = Instance.new("Frame", partGUi)
-    frame.BackgroundColor3 = Color3.fromRGB(255,80,60)  
-    frame.BackgroundTransparency = 0.85
-    frame.Size = UDim2.new(1,0,1,0)
-    frame.BorderSizePixel = 0 
-    local nameGui = Instance.new("BillboardGui", plr)
-    nameGui.Size = UDim2.new(3,0,1.5,0)
-    nameGui.SizeOffset = Vector2.new(0, 1.5)
-    nameGui.AlwaysOnTop = true
-    nameGui.Name = "Name"
-    local text = Instance.new("TextLabel", nameGui)
-    text.Text = Players:GetPlayerFromCharacter(plr).DisplayName
-    text.TextColor3 = Color3.fromRGB(196,69,42)
-    text.TextTransparency = 0
-    text.BackgroundTransparency = 1
-    text.TextScaled = true 
-    task.spawn(function()
-        while task.wait() do 
-          pcall(function()
-                text.Size = UDim2.new(1 *  (lplr.Character.HumanoidRootPart.Position - plr.HumanoidRootPart.Position).magnitude/ 5 ,0,1,0) or UDim2.new(1,0,1,0)
-            end)
-        end
-    end) 
-    text.Font = Enum.Font.Arial
-    text.Name = "Text"
+	return plr.Team == lplr.Team and lplr.Team
 end
 
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
 guiLib.Boney.Name = http:GenerateGUID(false)
-guiLib.Boney.Parent = game.CoreGui
+guiLib.Boney.Parent = lplr:WaitForChild("PlayerGui", 9e9)
 guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 guiLib.unj = uis.InputBegan:Connect(function(input) 
-    if input.KeyCode == Enum.KeyCode.RightShift then 
-        guiLib.Boney.Enabled = not guiLib.Boney.Enabled
-    end 
+	if input.KeyCode == Enum.KeyCode.RightShift then 
+		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
+	end 
 end) 
 local WorldWindow = Instance.new("TextLabel")
 WorldWindow.Name = "WorldWindow"
 WorldWindow.Parent = guiLib.Boney
-WorldWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+WorldWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
+WorldWindow.BackgroundTransparency = 0.3
 WorldWindow.Position = UDim2.new(0.0308897775, 0, 0.0302419364, 0)
 WorldWindow.Size = UDim2.new(0, 200, 0, 50)
 WorldWindow.Font = Enum.Font.Highway
@@ -85,10 +54,12 @@ WorldWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
 WorldWindow.TextSize = 25
 WorldWindow.Active = true 
 WorldWindow.Draggable = true 
+WorldWindow.BorderSizePixel = 0 
 local CombatWindow = Instance.new("TextLabel")
 CombatWindow.Name = "CombatWindow"
 CombatWindow.Parent = guiLib.Boney
-CombatWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+CombatWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
+CombatWindow.BackgroundTransparency = 0.3
 CombatWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.15,0,0.031)
 CombatWindow.Size = UDim2.new(0, 200, 0, 50)
 CombatWindow.Font = Enum.Font.Highway
@@ -97,10 +68,12 @@ CombatWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
 CombatWindow.TextSize = 25
 CombatWindow.Active = true 
 CombatWindow.Draggable = true 
+CombatWindow.BorderSizePixel = 0 
 local UtilityWindow = Instance.new("TextLabel")
 UtilityWindow.Name = "UtilityWindow"
 UtilityWindow.Parent = guiLib.Boney
-UtilityWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+UtilityWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
+UtilityWindow.BackgroundTransparency = 0.3
 UtilityWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.3,0,0.031)
 UtilityWindow.Size = UDim2.new(0, 200, 0, 50)
 UtilityWindow.Font = Enum.Font.Highway
@@ -109,10 +82,12 @@ UtilityWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
 UtilityWindow.TextSize = 25
 UtilityWindow.Active = true 
 UtilityWindow.Draggable = true 
+UtilityWindow.BorderSizePixel = 0 
 local MovementWindow = Instance.new("TextLabel")
 MovementWindow.Name = "MovementWindow"
 MovementWindow.Parent = guiLib.Boney
-MovementWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+MovementWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
+MovementWindow.BackgroundTransparency = 0.3
 MovementWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.45,0,0,40)
 MovementWindow.Size = UDim2.new(0, 200, 0, 50)
 MovementWindow.Font = Enum.Font.Highway
@@ -120,11 +95,13 @@ MovementWindow.Text = "Movement"
 MovementWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
 MovementWindow.TextSize = 25
 MovementWindow.Active = true 
-MovementWindow.Draggable = true 
+MovementWindow.Draggable = true
+MovementWindow.BorderSizePixel = 0 
 local RenderWindow = Instance.new("TextLabel")
 RenderWindow.Name = "RenderWindow"
 RenderWindow.Parent = guiLib.Boney
-RenderWindow.BackgroundColor3 = Color3.fromRGB(255, 160, 222)
+RenderWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
+RenderWindow.BackgroundTransparency = 0.3
 RenderWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.6,0,0,49)
 RenderWindow.Size = UDim2.new(0, 200, 0, 50)
 RenderWindow.Font = Enum.Font.Highway
@@ -133,53 +110,58 @@ RenderWindow.TextColor3 = Color3.fromRGB(0, 0, 0)
 RenderWindow.TextSize = 25
 RenderWindow.Active = true 
 RenderWindow.Draggable = true 
+RenderWindow.BorderSizePixel = 0 
 ModuleAmmount = {"Ammount" == 0}
 ModuleOn = {"On" == false}
 guiLib.DropDownValue = {"Value" == 0}
 if not ModuleAmmount.WorldWindow then 
-    ModuleAmmount.WorldWindow = 0
+	ModuleAmmount.WorldWindow = 0
 end 
 if not ModuleAmmount.CombatWindow then 
-    ModuleAmmount.CombatWindow = 0
+	ModuleAmmount.CombatWindow = 0
 end 
 if not ModuleAmmount.UtilityWindow then 
-    ModuleAmmount.UtilityWindow = 0
+	ModuleAmmount.UtilityWindow = 0
 end 
 if not ModuleAmmount.MovementWindow then 
-    ModuleAmmount.MovementWindow = 0
+	ModuleAmmount.MovementWindow = 0
 end 
 if not ModuleAmmount.RenderWindow then 
-    ModuleAmmount.RenderWindow = 0 
+	ModuleAmmount.RenderWindow = 0 
 end 
 guiLib.disconnectfuncs = {}
-local connection1, connection2, connection3, connection4
- guiLib.createmodule = function(tbl)
-    realwindow = nil
-    table.insert(guiLib.moduletable, tbl["Name"])
-    if tbl["Window"] == "World" then
-        realwindow = WorldWindow
-    elseif tbl["Window"] == "Combat" then
-        realwindow = CombatWindow 
-    elseif tbl["Window"] == "Utility" then 
-        realwindow = UtilityWindow
-    elseif tbl["Window"] == "Movement" then 
-        realwindow = MovementWindow 
-    elseif tbl["Window"] == "Render" then 
-        realwindow = RenderWindow
-    end 
-    ModuleAmmount[realwindow.Name] += 1
-    local corner = Instance.new("UICorner", realwindow  or WorldWindow)
-    local module = Instance.new("TextButton", realwindow or WorldWindow)
-    corner:Clone().Parent = module
-    module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    module.BackgroundTransparency = 0.6
-    module.Position = UDim2.new(realwindow.Position) + UDim2.new(0,0,1.05 * ModuleAmmount[realwindow.Name])
-    module.Size = UDim2.new(0, 200, 0, 50)
-    module.Font = Enum.Font.SourceSans
-    module.TextColor3 = Color3.fromRGB(0, 0, 0)
-    module.TextSize = 18
-    module.Text = tostring(tbl["Name"])
-    if not ModuleOn[tbl["Name"]] then 
+local connection1, connection2, connection3, connection4, realwindow
+guiLib.createmodule = function(tbl)
+	realwindow = nil
+	table.insert(guiLib.moduletable, tbl["Name"])
+	if tbl["Window"] == "World" then
+		realwindow = WorldWindow
+	elseif tbl["Window"] == "Combat" then
+		realwindow = CombatWindow 
+	elseif tbl["Window"] == "Utility" then 
+		realwindow = UtilityWindow
+	elseif tbl["Window"] == "Movement" then 
+		realwindow = MovementWindow 
+	elseif tbl["Window"] == "Render" then 
+		realwindow = RenderWindow
+	end 
+	ModuleAmmount[realwindow.Name] += 1
+	--local corner = Instance.new("UICorner", realwindow  or WorldWindow)
+	local module = Instance.new("TextButton", realwindow or WorldWindow)
+	--corner:Clone().Parent = module
+	module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+	module.BackgroundTransparency = 0.5
+	module.Position = UDim2.new(realwindow.Position) + UDim2.new(0,0,1 * ModuleAmmount[realwindow.Name])
+	module.Size = UDim2.new(0, 200, 0, 50)
+	module.Font = Enum.Font.SourceSans
+	module.TextStrokeColor3 = Color3.fromRGB(255, 0, 255)
+	module.TextColor3 = Color3.fromRGB(255, 255, 255)
+	module.TextSize = 18
+	module.TextXAlignment = "Left"
+	module.Text = " "..tostring(tbl["Name"])
+	module.TextTransparency = 0 
+	module.BorderSizePixel = 0 
+	if not ModuleOn[tbl["Name"]] then 
         --[[
             if isfile("testlib/config/"..name..".txt") then
             ModuleOn[name] = readfile("testlib/config/"..name..".txt")
@@ -189,179 +171,200 @@ local connection1, connection2, connection3, connection4
             ModuleOn[name] = false
             moduletable[name] = false
         end]]
-        ModuleOn[tbl["Name"]] = false
-    end
-    if tbl["Dropdown"] then 
-        print(tbl["Name"])
-        local dropdown2 = Instance.new("TextBox", realwindow) 
-        corner:Clone().Parent = dropdown2
-        dropdown2.Position = UDim2.new(module.Position) + UDim2.new(0.225,0.3,1.05) 
-        dropdown2.Text = dropdowntext or "Empty"
-        dropdown2.TextSize = 10
-        dropdown2.BackgroundTransparency = 1 
-        dropdown2.TextTransparency = 1
-        dropdown2.TextEditable = false 
-        dropdown2.LayoutOrder = 0
-        dropdown2.Size = UDim2.new(0,0,0)
-        if not guiLib.DropDownValue[tbl["Name"]] then 
-            guiLib.DropDownValue[tbl["Name"]] = 0 
-        end
-        connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
-            table.insert(guiLib.disconnectfuncs, connection1)
-            pcall(function()
-                guiLib.DropDownValue[tbl["Name"]] = dropdown2.Text
-                if dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Min"] and tonumber(dropdown2.Text) < tbl["Dropdown"]["Min"] then 
-                    dropdown2.Text = tbl["Dropdown"]["Min"]
-                    DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Min"]
-                elseif dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Max"] and tonumber(dropdown2.Text) > tonumber(tbl["Dropdown"]["Max"]) then
-                    dropdown2.Text = tbl["Dropdown"]["Max"]
-                    DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Max"]
-                end 
-            end)
-        end) 
-        connection2 = module.MouseButton2Down:Connect(function(right) 
-            table.insert(guiLib.disconnectfuncs, connection2)
-            if dropdown2.TextEditable then 
-                dropdown2.BackgroundTransparency = 1 
-                dropdown2.TextTransparency = 1
-                dropdown2.TextEditable = false  
-                dropdown2.Selectable = false 
-                module.TextSize = 18
-                dropdown2.Size = UDim2.new(0,0,0)
-            else 
-                dropdown2.Text = guiLib.DropDownValue[tbl["Name"]] or "Empty"
-                dropdown2.BackgroundTransparency = 0 
-                dropdown2.TextTransparency = 0
-                dropdown2.TextEditable = true 
-                dropdown2.Selectable = true
-                module.TextSize = 15
-                dropdown2.Size = UDim2.new(0,123,0,50) 
-            end 
-        end) 
-    end 
-    connection3 = uis.InputBegan:Connect(function(input) 
-        table.insert(guiLib.disconnectfuncs, connection3)
-        if input.KeyCode == binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
-            if ModuleOn[tbl["Name"]] then 
-                ModuleOn[tbl["Name"]] = false 
-                guiLib.notify(tbl["Name"], "Disabled", 1)
-                --writefile("testlib/config/"..name..".txt", "false")
-                module.BackgroundTransparency = 0.6
-                module.TextSize = 18
-                module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-                task.spawn(function()
-                    code(tbl["Function"])
-                end)
-            else 
-                ModuleOn[tbl["Name"]] = true 
-                guiLib.notify(tbl["Name"], "Enabled", 1)
-                --writefile("testlib/config/"..name..".txt", "true")
-                module.BackgroundTransparency = 0.6
-                module.TextSize = 18
-                module.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-                task.spawn(function()
-                    code(tbl["Function"])
-                end)
-            end 
-        end 
-    end) 
-    task.spawn(function()
-        module.MouseButton1Down:Connect(tbl["Function"]) 
-    end)
-    connection4 = module.MouseButton1Down:Connect(function(func) 
-        table.insert(guiLib.disconnectfuncs, connection4)
-        if ModuleOn[tbl["Name"]] then 
-            ModuleOn[tbl["Name"]] = false 
-            guiLib.notify(tbl["Name"], "Disabled", 1)
-            module.BackgroundTransparency = 0.6
-            module.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-        else 
-            ModuleOn[tbl["Name"]] = true 
-            guiLib.notify(tbl["Name"], "Enabled", 1)
-            module.BackgroundTransparency = 0.6
-            module.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-        end 
-    end) 
+		ModuleOn[tbl["Name"]] = false
+	end
+	if tbl["Dropdown"] then 
+		print(tbl["Name"])
+		local dropdown2 = Instance.new("TextBox", realwindow) 
+		--corner:Clone().Parent = dropdown2
+		dropdown2.Position = UDim2.new(module.Position) + UDim2.new(0.225,0.3,1.05) 
+		dropdown2.TextSize = 10
+		dropdown2.BackgroundTransparency = 1 
+		dropdown2.TextTransparency = 1
+		dropdown2.TextEditable = false 
+		dropdown2.LayoutOrder = 0
+		dropdown2.Size = UDim2.new(0,0,0)
+		if not guiLib.DropDownValue[tbl["Name"]] then 
+			guiLib.DropDownValue[tbl["Name"]] = 0 
+		end
+		connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
+			table.insert(guiLib.disconnectfuncs, connection1)
+			pcall(function()
+				guiLib.DropDownValue[tbl["Name"]] = dropdown2.Text
+				if dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Min"] and tonumber(dropdown2.Text) < tbl["Dropdown"]["Min"] then 
+					dropdown2.Text = tbl["Dropdown"]["Min"]
+					guiLib.DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Min"]
+				elseif dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Max"] and tonumber(dropdown2.Text) > tonumber(tbl["Dropdown"]["Max"]) then
+					dropdown2.Text = tbl["Dropdown"]["Max"]
+					guiLib.DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Max"]
+				end 
+			end)
+		end) 
+		connection2 = module.MouseButton2Down:Connect(function(right) 
+			table.insert(guiLib.disconnectfuncs, connection2)
+			if dropdown2.TextEditable then 
+				dropdown2.BackgroundTransparency = 1 
+				dropdown2.TextTransparency = 1
+				dropdown2.TextEditable = false  
+				dropdown2.Selectable = false 
+				module.TextSize = 18
+				dropdown2.Size = UDim2.new(0,0,0)
+			else 
+				dropdown2.Text = guiLib.DropDownValue[tbl["Name"]] or "Empty"
+				dropdown2.BackgroundTransparency = 0 
+				dropdown2.TextTransparency = 0
+				dropdown2.TextEditable = true 
+				dropdown2.Selectable = true
+				module.TextSize = 15
+				dropdown2.Size = UDim2.new(0,123,0,50) 
+			end 
+		end) 
+	end 
+	connection3 = uis.InputBegan:Connect(function(input) 
+		table.insert(guiLib.disconnectfuncs, connection3)
+		if input.KeyCode == binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
+			if ModuleOn[tbl["Name"]] then 
+				ModuleOn[tbl["Name"]] = false 
+				guiLib.notify(tbl["Name"], "Disabled", 1)
+				--writefile("testlib/config/"..name..".txt", "false")
+				module.TextSize = 18
+				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+				task.spawn(function()
+					code(tbl["Function"])
+				end)
+			else 
+				ModuleOn[tbl["Name"]] = true 
+				guiLib.notify(tbl["Name"], "Enabled", 1)
+				--writefile("testlib/config/"..name..".txt", "true")
+				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+				task.spawn(function()
+					code(tbl["Function"])
+				end)
+			end 
+		end 
+	end) 
+	task.spawn(function()
+		module.MouseButton1Down:Connect(tbl["Function"]) 
+	end)
+	connection4 = module.MouseButton1Down:Connect(function(func) 
+		table.insert(guiLib.disconnectfuncs, connection4)
+		if ModuleOn[tbl["Name"]] then 
+			ModuleOn[tbl["Name"]] = false 
+			guiLib.notify(tbl["Name"], "Disabled", 1)
+			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+		else 
+			ModuleOn[tbl["Name"]] = true 
+			guiLib.notify(tbl["Name"], "Enabled", 1)
+			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+		end 
+	end) 
 end 
-for i,v in pairs(guiLib.moduletable) do 
-    if not isflie("testlib/config/"..v..".txt") then 
-        writefile("testlib/config/"..v..".txt", "false")
-    end 
+
+guiLib.disable = function(disablemodule)
+	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
+		ModuleOn[disablemodule] = false 
+		for i,v in next, guiLib.Boney:GetDescendants() do 
+			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
+				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+				guiLib.notify(disablemodule, "Disabled", 1)
+				--writefile("testlib/config/"..disablemodule..".txt", "false")
+				guiLib.moduletable[disablemodule] = false
+				code(disablemodule)
+				break
+			end 
+		end 
+	end 
+end
+guiLib.enable = function(enabledmodule)
+	if  ModuleOn[enabledmodule] then 
+		ModuleOn[enabledmodule] = true 
+		for i,v in next, guiLib.Boney:GetDescendants() do 
+			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
+				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+				guiLib.notify(enabledmodule, "Enabled", 1)
+				--writefile("testlib/config/"..enabledmodule..".txt", "true")
+				guiLib.moduletable[enabledmodule] = true
+				break
+			end 
+		end 
+	end 
 end 
-    guiLib.disable = function(disablemodule)
-        if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
-            ModuleOn[disablemodule] = false 
-                for i,v in next, guiLib.Boney:GetDescendants() do 
-                    if v:IsA("TextButton") and v.Text == disablemodule then 
-                        v.BackgroundColor3 = Color3.fromRGB(255, 0, 0) 
-                        guiLib.notify(disablemodule, "Disabled", 1)
-                        --writefile("testlib/config/"..disablemodule..".txt", "false")
-                        moduletable[disablemodule] = false
-                        code(disablemodule)
-                        break
-                    end 
-                end 
-            end 
-        end
-         guiLib.enable = function(enabledmodule)
-            if  ModuleOn[enabledmodule] then 
-                ModuleOn[enabledmodule] = true 
-                for i,v in next, guiLib.Boney:GetDescendants() do 
-                    if v:IsA("TextButton") and v.Text == enabledmodule then 
-                        v.BackgroundColor3 = Color3.fromRGB(0, 255, 0) 
-                        guiLib.notify(enabledmodule, "Enabled", 1)
-                        --writefile("testlib/config/"..enabledmodule..".txt", "true")
-                        moduletable[enabledmodule] = true
-                        break
-                    end 
-                end 
-            end 
-        end 
-    local notifications = 0
-    guiLib.notify = function(header, text, time, tweentime) 
-        task.spawn(function() 
-        notifications += 1 
-        local Notification = Instance.new("ScreenGui")
-        local Frame = Instance.new("Frame")
-        local Header = Instance.new("TextLabel")
-        local Bottomtext = Instance.new("TextLabel")
-        Notification.Name = "Notification"
-        Notification.Parent = game:GetService("CoreGui")
-        Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-        Frame.Parent = Notification
-        Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        Frame.BackgroundTransparency = 0.6
-        Frame.Position = UDim2.new(0.897371888, 0, 0.917338729, 0)
-        Frame.Size = UDim2.new(0, 270, 0, 114)
-        Header.Name = header or "Header"
-        Header.Parent = Frame
-        Header.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        Header.Position = UDim2.new(-0.00371747208, 0, 0, 0)
-        Header.Size = UDim2.new(0, 270, 0, 39)
-        Header.Font = Enum.Font.SourceSans
-        Header.Text = header or "Header"
-        Header.TextColor3 = Color3.fromRGB(0, 0, 0)
-        Header.TextSize = 25
-        
-        Bottomtext.Name = "Bottom text"
-        Bottomtext.Parent = Frame
-        Bottomtext.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        Bottomtext.BackgroundTransparency = 1.000
-        Bottomtext.Position = UDim2.new(0, 0, 0.342105269, 0)
-        Bottomtext.Size = UDim2.new(0, 268, 0, 75)
-        Bottomtext.Font = Enum.Font.SourceSans
-        Bottomtext.Text = text or "Texet"
-        Bottomtext.TextColor3 = Color3.fromRGB(0, 0, 0)
-        Bottomtext.TextSize = 25
-        Bottomtext.TextXAlignment = Enum.TextXAlignment.Left
-        Bottomtext.TextYAlignment = Enum.TextYAlignment.Top
-        Frame:TweenPosition(UDim2.new(0.85,0.1,0.8 - (notifications / 11.65),0.4), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false) 
-        task.wait(time) 
-        Frame:TweenPosition(UDim2.new(0.897371888, 0, 0.917338729, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false)
-        task.wait(0.1)
-        notifications -= 1 
-        Notification:Destroy()
-    end)
+local notifications = 0
+guiLib.notify = function(header, text, time, tweentime) 
+	task.spawn(function() 
+		notifications += 1 
+		local Notification = Instance.new("ScreenGui")
+		local Frame = Instance.new("Frame")
+		local Header = Instance.new("TextLabel")
+		local Bottomtext = Instance.new("TextLabel")
+		Notification.Name = "Notification"
+		Notification.Parent = lplr:WaitForChild("PlayerGui", 9e9)
+		Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		Frame.Parent = Notification
+		Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Frame.BackgroundTransparency = 0.6
+		Frame.Position = UDim2.new(0.897371888, 0, 0.917338729, 0)
+		Frame.Size = UDim2.new(0, 270, 0, 114)
+		Header.Name = header or "Header"
+		Header.Parent = Frame
+		Header.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Header.Position = UDim2.new(-0.00371747208, 0, 0, 0)
+		Header.Size = UDim2.new(0, 270, 0, 39)
+		Header.Font = Enum.Font.SourceSans
+		Header.Text = header or "Header"
+		Header.TextColor3 = Color3.fromRGB(0, 0, 0)
+		Header.TextSize = 25
+
+		Bottomtext.Name = "Bottom text"
+		Bottomtext.Parent = Frame
+		Bottomtext.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Bottomtext.BackgroundTransparency = 1.000
+		Bottomtext.Position = UDim2.new(0, 0, 0.342105269, 0)
+		Bottomtext.Size = UDim2.new(0, 268, 0, 75)
+		Bottomtext.Font = Enum.Font.SourceSans
+		Bottomtext.Text = text or "Texet"
+		Bottomtext.TextColor3 = Color3.fromRGB(0, 0, 0)
+		Bottomtext.TextSize = 25
+		Bottomtext.TextXAlignment = Enum.TextXAlignment.Left
+		Bottomtext.TextYAlignment = Enum.TextYAlignment.Top
+		Frame:TweenPosition(UDim2.new(0.85,0.1,0.8 - (notifications / 11.65),0.4), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false) 
+		task.wait(time) 
+		Frame:TweenPosition(UDim2.new(0.897371888, 0, 0.917338729, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false)
+		task.wait(0.1)
+		notifications -= 1 
+		Notification:Destroy()
+	end)
 end
 
-return guiLib
+guiLib.createmodule({
+	["Name"] = "Test", 
+	["Window"] = "Render", 
+	["Function"] = function() 
+		if guiLib.enabled("Test") then 
+			print('on') 
+		else 
+			print('off')
+		end
+	end,
+})
+
+guiLib.DropDownValue["HighJump"] = 50 
+guiLib.createmodule({
+	["Name"] = "HighJump", 
+	["Window"] = "Utility", 
+	["Function"] = function() 
+		if guiLib.enabled("HighJump") then     
+			if guiLib.isAlive(lplr) then 
+				lplr.Character.HumanoidRootPart.Velocity = Vector3.new(lplr.Character.HumanoidRootPart.Velocity.X,guiLib.DropDownValue["HighJump"],lplr.Character.HumanoidRootPart.Velocity.Z)
+				guiLib.disable("HighJump")
+			else 
+				guiLib.disable("HighJump")
+			end 
+		end 
+	end,
+	["Dropdown"] = { 
+		["Enabled"] = true,
+		["Min"] = 0, 
+		["Max"] = 500,
+	}
+})
