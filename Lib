@@ -1,6 +1,7 @@
 if getgenv().executed then return error("Already Executed") end 
 getgenv().executed = true
 local guiLib = {}
+getgenv().testing = guiLib
 guiLib.moduletable = {}
 local Players = game:GetService("Players") 
 local uis = game:GetService("UserInputService")
