@@ -270,7 +270,7 @@ guiLib.disable = function(disablemodule)
 				guiLib.notify(disablemodule, "Disabled", 1)
 				--writefile("testlib/config/"..disablemodule..".txt", "false")
 				guiLib.moduletable[disablemodule] = false
-				code(guiLib.functions["disablemodule"))
+				code(guiLib.functions["disablemodule"])
 				break
 			end 
 		end 
@@ -285,7 +285,7 @@ guiLib.enable = function(enabledmodule)
 				guiLib.notify(enabledmodule, "Enabled", 1)
 				--writefile("testlib/config/"..enabledmodule..".txt", "true")
 				guiLib.moduletable[enabledmodule] = true
-				code(guiLib.functions["disablemodule"))
+				code(guiLib.functions["disablemodule"])
 				break
 			end 
 		end 
@@ -338,4 +338,3 @@ guiLib.notify = function(header, text, time, tweentime)
 	end)
 end
 
-return guiLib
