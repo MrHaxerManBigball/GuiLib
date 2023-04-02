@@ -29,7 +29,7 @@ end
 guiLib.isTeammate =  function(plr) 
 	return plr.Team == lplr.Team and lplr.Team
 end
-
+guiLib.functions = {}
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
@@ -134,6 +134,7 @@ local connection1, connection2, connection3, connection4, realwindow
 guiLib.createmodule = function(tbl)
 	realwindow = nil
 	table.insert(guiLib.moduletable, tbl["Name"])
+	table.insert(guiLib.functions, tbl["Function"])
 	if tbl["Window"] == "World" then
 		realwindow = WorldWindow
 	elseif tbl["Window"] == "Combat" then
@@ -269,7 +270,7 @@ guiLib.disable = function(disablemodule)
 				guiLib.notify(disablemodule, "Disabled", 1)
 				--writefile("testlib/config/"..disablemodule..".txt", "false")
 				guiLib.moduletable[disablemodule] = false
-				code(disablemodule)
+				code(guiLib.functions["disablemodule"))
 				break
 			end 
 		end 
@@ -284,6 +285,7 @@ guiLib.enable = function(enabledmodule)
 				guiLib.notify(enabledmodule, "Enabled", 1)
 				--writefile("testlib/config/"..enabledmodule..".txt", "true")
 				guiLib.moduletable[enabledmodule] = true
+				code(guiLib.functions["disablemodule"))
 				break
 			end 
 		end 
