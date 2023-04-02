@@ -336,35 +336,4 @@ guiLib.notify = function(header, text, time, tweentime)
 	end)
 end
 
-guiLib.createmodule({
-	["Name"] = "Test", 
-	["Window"] = "Render", 
-	["Function"] = function() 
-		if guiLib.enabled("Test") then 
-			print('on') 
-		else 
-			print('off')
-		end
-	end,
-})
-
-guiLib.DropDownValue["HighJump"] = 50 
-guiLib.createmodule({
-	["Name"] = "HighJump", 
-	["Window"] = "Utility", 
-	["Function"] = function() 
-		if guiLib.enabled("HighJump") then     
-			if guiLib.isAlive(lplr) then 
-				lplr.Character.HumanoidRootPart.Velocity = Vector3.new(lplr.Character.HumanoidRootPart.Velocity.X,guiLib.DropDownValue["HighJump"],lplr.Character.HumanoidRootPart.Velocity.Z)
-				guiLib.disable("HighJump")
-			else 
-				guiLib.disable("HighJump")
-			end 
-		end 
-	end,
-	["Dropdown"] = { 
-		["Enabled"] = true,
-		["Min"] = 0, 
-		["Max"] = 500,
-	}
-})
+return guiLib
