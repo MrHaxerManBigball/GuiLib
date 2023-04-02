@@ -135,7 +135,7 @@ local connection1, connection2, connection3, connection4, realwindow
 guiLib.createmodule = function(tbl)
 	realwindow = nil
 	table.insert(guiLib.moduletable, tbl["Name"])
-	table.insert(guiLib.functions, tbl["Function"])
+	table.insert(guiLib.functions, tbl)
 	if tbl["Window"] == "World" then
 		realwindow = WorldWindow
 	elseif tbl["Window"] == "Combat" then
