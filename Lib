@@ -31,6 +31,18 @@ guiLib.isTeammate =  function(plr)
 	return plr.Team == lplr.Team and lplr.Team
 end
 guiLib.functions = {}
+local returnedFunc
+function getModuleFunc(moduletofunc)
+	for i,v in next, guiLib.functions do 
+		for i2,v2 in next, v do 
+			if v.Name == moduletofunc then 
+				returnedFunc = v["Function"]
+				break
+			end
+		end 
+	end
+	return returnedFunc
+end
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
@@ -271,7 +283,7 @@ guiLib.disable = function(disablemodule)
 				guiLib.notify(disablemodule, "Disabled", 1)
 				--writefile("testlib/config/"..disablemodule..".txt", "false")
 				guiLib.moduletable[disablemodule] = false
-				code(guiLib.functions["disablemodule"])
+				code(getModuleFunc(disablemodule))
 				break
 			end 
 		end 
@@ -286,7 +298,7 @@ guiLib.enable = function(enabledmodule)
 				guiLib.notify(enabledmodule, "Enabled", 1)
 				--writefile("testlib/config/"..enabledmodule..".txt", "true")
 				guiLib.moduletable[enabledmodule] = true
-				code(guiLib.functions["disablemodule"])
+				code(getModuleFunc(enabledmodule))
 				break
 			end 
 		end 
