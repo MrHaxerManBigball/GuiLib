@@ -338,3 +338,5 @@ guiLib.notify = function(header, text, time, tweentime)
 	end)
 end
 
+return guiLib
+
