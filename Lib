@@ -49,7 +49,7 @@ local TextButton = Instance.new("TextButton")
 guiLib.Boney.Name = http:GenerateGUID(false)
 guiLib.Boney.Parent = game:GetService("CoreGui")
 guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-guiLib.Boney.ResetOnSpawn = false 
+--guiLib.Boney.ResetOnSpawn = false 
 guiLib.unj = uis.InputBegan:Connect(function(input) 
 	if input.KeyCode == Enum.KeyCode.RightShift then 
 		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
