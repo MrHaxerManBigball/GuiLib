@@ -47,16 +47,16 @@ local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
 guiLib.Boney.Name = http:GenerateGUID(false)
-guiLib.Boney.Parent = game:GetService("CoreGui")
+guiLib.Boney.Parent = lplr:WaitForChild("PlayerGui", 9e9)
 guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
---guiLib.Boney.ResetOnSpawn = false 
+guiLib.Boney.ResetOnSpawn = false
 guiLib.unj = uis.InputBegan:Connect(function(input) 
 	if input.KeyCode == Enum.KeyCode.RightShift then 
 		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
 	end 
 end) 
 local WorldWindow = Instance.new("TextLabel")
-WorldWindow.Name = game:GetService("HttpService"):GenerateGUID(false)
+WorldWindow.Name = "WorldWindow"
 WorldWindow.Parent = guiLib.Boney
 WorldWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 WorldWindow.BackgroundTransparency = 0.3
@@ -70,7 +70,7 @@ WorldWindow.Active = true
 WorldWindow.Draggable = true 
 WorldWindow.BorderSizePixel = 0 
 local CombatWindow = Instance.new("TextLabel")
-CombatWindow.Name = game:GetService("HttpService"):GenerateGUID(false)
+CombatWindow.Name = "CombatWindow"
 CombatWindow.Parent = guiLib.Boney
 CombatWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 CombatWindow.BackgroundTransparency = 0.3
@@ -84,7 +84,7 @@ CombatWindow.Active = true
 CombatWindow.Draggable = true 
 CombatWindow.BorderSizePixel = 0 
 local UtilityWindow = Instance.new("TextLabel")
-UtilityWindow.Name = game:GetService("HttpService"):GenerateGUID(false)
+UtilityWindow.Name = "UtilityWindow"
 UtilityWindow.Parent = guiLib.Boney
 UtilityWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 UtilityWindow.BackgroundTransparency = 0.3
@@ -98,7 +98,7 @@ UtilityWindow.Active = true
 UtilityWindow.Draggable = true 
 UtilityWindow.BorderSizePixel = 0 
 local MovementWindow = Instance.new("TextLabel")
-MovementWindow.Name = game:GetService("HttpService"):GenerateGUID(false)
+MovementWindow.Name = "MovementWindow"
 MovementWindow.Parent = guiLib.Boney
 MovementWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 MovementWindow.BackgroundTransparency = 0.3
@@ -112,7 +112,7 @@ MovementWindow.Active = true
 MovementWindow.Draggable = true
 MovementWindow.BorderSizePixel = 0 
 local RenderWindow = Instance.new("TextLabel")
-RenderWindow.Name = game:GetService("HttpService"):GenerateGUID(false)
+RenderWindow.Name = "RenderWindow"
 RenderWindow.Parent = guiLib.Boney
 RenderWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 RenderWindow.BackgroundTransparency = 0.3
@@ -176,7 +176,6 @@ guiLib.createmodule = function(tbl)
 	module.Text = " "..tostring(tbl["Name"])
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
-	module.Name = game:GetService("HttpService"):GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
         --[[
             if isfile("testlib/config/"..name..".txt") then
@@ -315,7 +314,7 @@ guiLib.notify = function(header, text, time, tweentime)
 		local Header = Instance.new("TextLabel")
 		local Bottomtext = Instance.new("TextLabel")
 		Notification.Name = "Notification"
-		Notification.Parent = game:GetService("CoreGui")
+		Notification.Parent = lplr:WaitForChild("PlayerGui", 9e9)
 		Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		Frame.Parent = Notification
 		Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -354,4 +353,3 @@ guiLib.notify = function(header, text, time, tweentime)
 end
 
 return guiLib
-
