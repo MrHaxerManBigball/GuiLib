@@ -144,38 +144,44 @@ if not ModuleAmmount.RenderWindow then
 	ModuleAmmount.RenderWindow = 0 
 end 
 guiLib.disconnectfuncs = {}
-local connection1, connection2, connection3, connection4, realwindow
+local connection1, connection2, connection3, connection4, realwindow, wname
 guiLib.createmodule = function(tbl)
 	realwindow = nil
 	table.insert(guiLib.moduletable, tbl["Name"])
 	table.insert(guiLib.functions, tbl)
 	if tbl["Window"] == "World" then
 		realwindow = WorldWindow
+        wname = "WorldWindow"
 	elseif tbl["Window"] == "Combat" then
 		realwindow = CombatWindow 
+        wname = "CombatWindow"
 	elseif tbl["Window"] == "Utility" then 
 		realwindow = UtilityWindow
+        wname = "UtilityWindow"
 	elseif tbl["Window"] == "Movement" then 
 		realwindow = MovementWindow 
+        wname = "MovementWindow"
 	elseif tbl["Window"] == "Render" then 
 		realwindow = RenderWindow
+        wname = "RenderWindow"
 	end 
-	ModuleAmmount[realwindow.Name] += 1
+	ModuleAmmount[wname] += 1
 	--local corner = Instance.new("UICorner", realwindow  or WorldWindow)
 	local module = Instance.new("TextButton", realwindow or WorldWindow)
 	--corner:Clone().Parent = module
 	module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	module.BackgroundTransparency = 0.5
-	module.Position = UDim2.new(realwindow.Position) + UDim2.new(0,0,1 * ModuleAmmount[realwindow.Name])
+	module.Position = UDim2.new(realwindow.Position) + UDim2.new(0,0,1 * ModuleAmmount[wname])
 	module.Size = UDim2.new(0, 200, 0, 50)
 	module.Font = Enum.Font.SourceSans
 	module.TextStrokeColor3 = Color3.fromRGB(255, 0, 255)
-	module.TextColor3 = Color3.fromRGB(255, 255, 255)
+	module.TextColor3 = Colo r3.fromRGB(255, 255, 255)
 	module.TextSize = 18
 	module.TextXAlignment = "Left"
 	module.Text = " "..tostring(tbl["Name"])
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
+    module.Name = http:GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
         --[[
             if isfile("testlib/config/"..name..".txt") then
