@@ -208,6 +208,7 @@ guiLib.createmodule = function(tbl)
 		dropdown2.Size = UDim2.new(0,0,0)
 		dropdown2.Name = http:GenerateGUID(false)
 		dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+		dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
 		if not guiLib.DropDownValue[tbl["Name"]] then 
 			guiLib.DropDownValue[tbl["Name"]] = 0 
 		end
