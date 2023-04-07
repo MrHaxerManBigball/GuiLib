@@ -200,11 +200,14 @@ guiLib.createmodule = function(tbl)
 		--corner:Clone().Parent = dropdown2
 		dropdown2.Position = UDim2.new(module.Position) + UDim2.new(0.225,0.3,1.05) 
 		dropdown2.TextSize = 10
-		dropdown2.BackgroundTransparency = 1 
+		dropdown2.BackgroundTransparency = 0.6 
+		dropdown2.BorderSizePixel = 0 
 		dropdown2.TextTransparency = 1
 		dropdown2.TextEditable = false 
 		dropdown2.LayoutOrder = 0
 		dropdown2.Size = UDim2.new(0,0,0)
+		dropdown2.Name = http:GenerateGUID(false)
+		dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 		if not guiLib.DropDownValue[tbl["Name"]] then 
 			guiLib.DropDownValue[tbl["Name"]] = 0 
 		end
