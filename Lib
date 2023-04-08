@@ -363,3 +363,27 @@ guiLib.notify = function(header, text, time, tweentime)
 end
 
 return guiLib
+
+--[[
+example 
+local GuiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib", true))()
+GuiLib.createmodule({
+    ["Name"] = "Uninject", 
+    ["Window"] = "Utility", 
+    ["Function"] = function() 
+        if GuiLib.enabled("Uninject") then 
+            for i,v in pairs(GuiLib.moduletable) do 
+                GuiLib.disable(v)
+            end 
+            for i,v in pairs(GuiLib.disconnectfuncs) do 
+                v:Disconnect() 
+            end 
+            GuiLib.unj:Disconnect()
+            GuiLib.Boney:Destroy()  
+            GuiLib.moduletable = {}
+            GuiLib.binds = {}
+            getgenv().executed = false 
+        end 
+    end,
+})
+]]
