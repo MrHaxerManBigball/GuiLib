@@ -9,7 +9,7 @@ local http = game:GetService("HttpService")
 function code(b) 
 	b() 
 end 
-local binds = getgenv().binds
+guiLib.binds = getgenv().binds
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
 guiLib.isAlive = function(plr)
 	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
@@ -234,7 +234,7 @@ guiLib.createmodule = function(tbl)
 	end 
 	connection3 = uis.InputBegan:Connect(function(input) 
 		table.insert(guiLib.disconnectfuncs, connection3)
-		if input.KeyCode == binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
+		if input.KeyCode == guiLib.binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
 				guiLib.notify(tbl["Name"], "Disabled", 1)
