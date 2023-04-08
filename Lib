@@ -173,7 +173,7 @@ guiLib.createmodule = function(tbl)
             if ModuleOn[tbl["Name"]] == "true" then guiLib.enable(tbl["Name"]) end 
             print(tbl["Name"],ModuleOn[tbl["Name"]])
         else 
-            ModuleOn[tbl["Name"]] = false
+            --ModuleOn[tbl["Name"]] = false
         end
 	end
 	if tbl["Dropdown"] then 
