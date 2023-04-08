@@ -166,10 +166,14 @@ guiLib.createmodule = function(tbl)
 	module.Text = " "..tostring(tbl["Name"])
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
-    module.Name = http:GenerateGUID(false)
+    	module.Name = http:GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
             if isfile("testlib/config/"..tbl["Name"]..".txt") and getgenv().canSave then
-            ModuleOn[tbl["Name"]] = readfile("testlib/config/"..tbl["Name"]..".txt")
+	    if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then 
+            ModuleOn[tbl["Name"]] = true 
+	    elseif readfile("testlib/config/"..tbl["Name"]..".txt") == "false" then 
+	    ModuleOn[tbl["Name"]] = false 
+	    end 
             if ModuleOn[tbl["Name"]] == "true" then guiLib.enable(tbl["Name"]) end 
             print(tbl["Name"],ModuleOn[tbl["Name"]])
         else 
