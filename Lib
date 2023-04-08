@@ -1,6 +1,5 @@
 if getgenv().executed then return error("Already Executed") end 
 getgenv().executed = true
-getgenv().canSave = true 
 local guiLib = {}
 getgenv().testing = guiLib
 guiLib.moduletable = {}
@@ -166,19 +165,18 @@ guiLib.createmodule = function(tbl)
 	module.Text = " "..tostring(tbl["Name"])
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
-    	module.Name = http:GenerateGUID(false)
+    module.Name = http:GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
-            if isfile("testlib/config/"..tbl["Name"]..".txt") and getgenv().canSave then
-	    if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then 
-            ModuleOn[tbl["Name"]] = true 
-	    elseif readfile("testlib/config/"..tbl["Name"]..".txt") == "false" then 
-	    ModuleOn[tbl["Name"]] = false 
-	    end 
-            if ModuleOn[tbl["Name"]] == "true" then guiLib.enable(tbl["Name"]) end 
-            print(tbl["Name"],ModuleOn[tbl["Name"]])
+        --[[
+            if isfile("testlib/config/"..name..".txt") then
+            ModuleOn[name] = readfile("testlib/config/"..name..".txt")
+            if ModuleOn[name] == "true" then enable(name) moduletable[name] = true end 
+            print(name,ModuleOn[name])
         else 
-            --ModuleOn[tbl["Name"]] = false
-        end
+            ModuleOn[name] = false
+            moduletable[name] = false
+        end]]
+		ModuleOn[tbl["Name"]] = false
 	end
 	if tbl["Dropdown"] then 
 		print(tbl["Name"])
@@ -236,13 +234,11 @@ guiLib.createmodule = function(tbl)
 	end 
 	connection3 = uis.InputBegan:Connect(function(input) 
 		table.insert(guiLib.disconnectfuncs, connection3)
-		if guiLib.binds[tbl["Name"]]  and input.KeyCode == guiLib.binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
+		if input.KeyCode == guiLib.binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
 				guiLib.notify(tbl["Name"], "Disabled", 1)
-				if getgenv().canSave then 
-					writefile("testlib/config/"..tbl["Name"]..".txt", "false")
-				end 
+				--writefile("testlib/config/"..name..".txt", "false")
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				task.spawn(function()
@@ -251,9 +247,7 @@ guiLib.createmodule = function(tbl)
 			else 
 				ModuleOn[tbl["Name"]] = true 
 				guiLib.notify(tbl["Name"], "Enabled", 1)
-				if getgenv().canSave then 
-					writefile("testlib/config/"..tbl["Name"]..".txt", "true")
-				end 
+				--writefile("testlib/config/"..name..".txt", "true")
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				task.spawn(function()
 					code(tbl["Function"])
@@ -285,9 +279,7 @@ guiLib.disable = function(disablemodule)
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib.notify(disablemodule, "Disabled", 1)
-				if getgenv().canSave then 
-					writefile("testlib/config/"..disablemodule..".txt", "false")
-				end 
+				--writefile("testlib/config/"..disablemodule..".txt", "false")
 				guiLib.moduletable[disablemodule] = false
 				code(getModuleFunc(disablemodule))
 				break
@@ -302,9 +294,7 @@ guiLib.enable = function(enabledmodule)
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				guiLib.notify(enabledmodule, "Enabled", 1)
-				if getgenv().canSave then 
-				writefile("testlib/config/"..enabledmodule..".txt", "true")
-				end 
+				--writefile("testlib/config/"..enabledmodule..".txt", "true")
 				guiLib.moduletable[enabledmodule] = true
 				code(getModuleFunc(enabledmodule))
 				break
@@ -365,7 +355,6 @@ GuiLib.createmodule({
     ["Window"] = "Utility", 
     ["Function"] = function() 
         if GuiLib.enabled("Uninject") then 
-		getgenv().canSave = false 
             for i,v in pairs(GuiLib.moduletable) do 
                 GuiLib.disable(v)
             end 
