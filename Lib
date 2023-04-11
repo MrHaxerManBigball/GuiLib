@@ -24,8 +24,8 @@ guiLib.isTeammate =  function(plr)
 	return plr.Team == lplr.Team and lplr.Team
 end
 guiLib.functions = {}
-local returnedFunc
 function getModuleFunc(moduletofunc)
+	local returnedFunc
 	for i,v in next, guiLib.functions do 
 		for i2,v2 in next, v do 
 			if v.Name == moduletofunc then 
