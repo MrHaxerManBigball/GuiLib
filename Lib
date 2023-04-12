@@ -291,7 +291,7 @@ guiLib.disable = function(disablemodule)
 	end 
 end
 guiLib.enable = function(enabledmodule)
-	if  ModuleOn[enabledmodule] then 
+	if  not ModuleOn[enabledmodule] then 
 		ModuleOn[enabledmodule] = true 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
