@@ -254,7 +254,9 @@ guiLib.createmodule = function(tbl)
 			end 
 		end 
 	end) 
-	task.spawn(module.MouseButton1Down:Connect(tbl["Function"]))
+	task.spawn(function()
+		module.MouseButton1Down:Connect(tbl["Function"])
+	end)
 	connection4 = module.MouseButton1Down:Connect(function(func) 
 		table.insert(guiLib.disconnectfuncs, connection4)
 		if ModuleOn[tbl["Name"]] then 
