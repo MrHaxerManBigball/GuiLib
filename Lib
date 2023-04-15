@@ -202,8 +202,7 @@ guiLib.createmodule = function(tbl)
 		if not guiLib.DropDownValue[tbl["Name"]] then 
 			guiLib.DropDownValue[tbl["Name"]] = 0 
 		end
-		connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
-			table.insert(guiLib.disconnectfuncs, connection1)
+		disconnectfuncs[#disconnectfuncs + 1] = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) -- i saw this way of doing it when viewing other scripts src
 			pcall(function()
 				guiLib.DropDownValue[tbl["Name"]] = dropdown2.Text
 				if dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Min"] and tonumber(dropdown2.Text) < tbl["Dropdown"]["Min"] then 
@@ -215,8 +214,7 @@ guiLib.createmodule = function(tbl)
 				end 
 			end)
 		end) 
-		connection2 = module.MouseButton2Down:Connect(function(right) 
-			table.insert(guiLib.disconnectfuncs, connection2)
+		disconnectfuncs[#disconnectfuncs + 1] = module.MouseButton2Down:Connect(function(right) 
 			if dropdown2.TextEditable then 
 				dropdown2.BackgroundTransparency = 1 
 				dropdown2.TextTransparency = 1
@@ -235,8 +233,7 @@ guiLib.createmodule = function(tbl)
 			end 
 		end) 
 	end 
-	connection3 = uis.InputBegan:Connect(function(input) 
-		table.insert(guiLib.disconnectfuncs, connection3)
+	disconnectfuncs[#disconnectfuncs + 1] = uis.InputBegan:Connect(function(input) 
 		if input.KeyCode == guiLib.binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
@@ -261,8 +258,7 @@ guiLib.createmodule = function(tbl)
 	task.spawn(function()
 		module.MouseButton1Down:Connect(tbl["Function"]) 
 	end)
-	connection4 = module.MouseButton1Down:Connect(function(func) 
-		table.insert(guiLib.disconnectfuncs, connection4)
+	disconnectfuncs[#disconnectfuncs + 1] = module.MouseButton1Down:Connect(function(func) 
 		if ModuleOn[tbl["Name"]] then 
 			ModuleOn[tbl["Name"]] = false 
 			guiLib.notify(tbl["Name"], "Disabled", 1)
