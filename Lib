@@ -244,23 +244,17 @@ guiLib.createmodule = function(tbl)
 				--writefile("testlib/config/"..name..".txt", "false")
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				task.spawn(function()
-					code(tbl["Function"])
-				end)
+				task.spawn(code(tbl["Function"]))
 			else 
 				ModuleOn[tbl["Name"]] = true 
 				guiLib.notify(tbl["Name"], "Enabled", 1)
 				--writefile("testlib/config/"..name..".txt", "true")
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-				task.spawn(function()
-					code(tbl["Function"])
-				end)
+				task.spawn(code(tbl["Function"]))
 			end 
 		end 
 	end) 
-	task.spawn(function()
-		module.MouseButton1Down:Connect(tbl["Function"]) 
-	end)
+	task.spawn(module.MouseButton1Down:Connect(tbl["Function"]))
 	connection4 = module.MouseButton1Down:Connect(function(func) 
 		table.insert(guiLib.disconnectfuncs, connection4)
 		if ModuleOn[tbl["Name"]] then 
