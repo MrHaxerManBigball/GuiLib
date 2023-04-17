@@ -1,3 +1,6 @@
+getgenv().binds = { 
+    ["Test"] = Enum.KeyCode.K, 
+} 
 if not game:IsLoaded() then game.Loaded:Wait() end 
 local loadingGui 
 if not gethui then loadingGui = game:GetService("CoreGui") else loadingGui = gethui() end 
@@ -17,7 +20,7 @@ if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end
 guiLib.isAlive = function(plr)
 	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
 end
-guiLib.enabled = function(module)
+function guiLib:Enabled(module)
 	return ModuleOn[tostring(module)] or false 
 end 
 guiLib.isTeammate =  function(plr) 
@@ -132,7 +135,7 @@ if not ModuleAmmount.RenderWindow then
 end 
 guiLib.disconnectfuncs = {}
 local connection1, connection2, connection3, connection4, realwindow, wname
-guiLib.createmodule = function(tbl)
+function guiLib:CreateModule(tbl)
 	realwindow = nil
 	table.insert(guiLib.moduletable, tbl["Name"])
 	table.insert(guiLib.functions, tbl)
@@ -240,7 +243,7 @@ guiLib.createmodule = function(tbl)
 		if input.KeyCode == guiLib.binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
-				guiLib.notify(tbl["Name"], "Disabled", 1)
+				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				--writefile("testlib/config/"..name..".txt", "false")
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
@@ -249,7 +252,7 @@ guiLib.createmodule = function(tbl)
 				end)
 			else 
 				ModuleOn[tbl["Name"]] = true 
-				guiLib.notify(tbl["Name"], "Enabled", 1)
+				guiLib:Notify(tbl["Name"], "Enabled", 1)
 				--writefile("testlib/config/"..name..".txt", "true")
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				task.spawn(function()
@@ -265,23 +268,23 @@ guiLib.createmodule = function(tbl)
 		table.insert(guiLib.disconnectfuncs, connection4)
 		if ModuleOn[tbl["Name"]] then 
 			ModuleOn[tbl["Name"]] = false 
-			guiLib.notify(tbl["Name"], "Disabled", 1)
+			guiLib:Notify(tbl["Name"], "Disabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 		else 
 			ModuleOn[tbl["Name"]] = true 
-			guiLib.notify(tbl["Name"], "Enabled", 1)
+			guiLib:Notify(tbl["Name"], "Enabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 		end 
 	end) 
 end 
 
-guiLib.disable = function(disablemodule)
+function guiLib:Disable(disablemodule)
 	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
 		ModuleOn[disablemodule] = false 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				guiLib.notify(disablemodule, "Disabled", 1)
+				guiLib:Notify(disablemodule, "Disabled", 1)
 				--writefile("testlib/config/"..disablemodule..".txt", "false")
 				guiLib.moduletable[disablemodule] = false
 				code(getModuleFunc(disablemodule))
@@ -290,13 +293,13 @@ guiLib.disable = function(disablemodule)
 		end 
 	end 
 end
-guiLib.enable = function(enabledmodule)
+function guiLib:Enable(enabledmodule)
 	if  not ModuleOn[enabledmodule] then 
 		ModuleOn[enabledmodule] = true 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-				guiLib.notify(enabledmodule, "Enabled", 1)
+				guiLib:Notify(enabledmodule, "Enabled", 1)
 				--writefile("testlib/config/"..enabledmodule..".txt", "true")
 				guiLib.moduletable[enabledmodule] = true
 				code(getModuleFunc(enabledmodule))
@@ -306,7 +309,7 @@ guiLib.enable = function(enabledmodule)
 	end 
 end 
 local notifications = 0
-guiLib.notify = function(header, text, time, tweentime) 
+function guiLib:Notify(header, text, time, tweentime)
 	task.spawn(function() 
 		notifications += 1 
 		local Notification = Instance.new("ScreenGui", loadingGui)
@@ -353,11 +356,11 @@ return guiLib
 --[[
 example 
 local GuiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib", true))()
-GuiLib.createmodule({
+GuiLib:CreateModule({
     ["Name"] = "Uninject", 
     ["Window"] = "Utility", 
     ["Function"] = function() 
-        if GuiLib.enabled("Uninject") then 
+        if GuiLib:Enabled("Uninject") then 
             for i,v in pairs(GuiLib.moduletable) do 
                 GuiLib.disable(v)
             end 
