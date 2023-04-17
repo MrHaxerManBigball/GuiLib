@@ -1,6 +1,3 @@
-getgenv().binds = { 
-    ["Test"] = Enum.KeyCode.K, 
-} 
 if not game:IsLoaded() then game.Loaded:Wait() end 
 local loadingGui 
 if not gethui then loadingGui = game:GetService("CoreGui") else loadingGui = gethui() end 
