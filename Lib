@@ -23,9 +23,7 @@ end
 guiLib.isTeammate =  function(plr) 
 	return plr.Team == lplr.Team and lplr.Team
 end
-function guiLib:DropDownValue(dropped) 
-	return guiLib.DropDownValue[dropped]
-end 
+
 guiLib.functions = {}
 function getModuleFunc(moduletofunc)
 	local returnedFunc
@@ -118,6 +116,9 @@ RenderWindow.BorderSizePixel = 0
 ModuleAmmount = {"Ammount" == 0}
 ModuleOn = {"On" == false}
 guiLib.DropDownValue = {"Value" == 0}
+function guiLib:DropDownValue(dropped) 
+	return guiLib.DropDownValue[dropped]
+end 
 if not ModuleAmmount.WorldWindow then 
 	ModuleAmmount.WorldWindow = 0
 end 
