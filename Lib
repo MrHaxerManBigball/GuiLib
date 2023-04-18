@@ -170,13 +170,13 @@ function guiLib:CreateModule(tbl)
 	module.BorderSizePixel = 0 
     module.Name = http:GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
-            if isfile("testlib/config/"..name..".txt") then
-            ModuleOn[name] = readfile("testlib/config/"..name..".txt")
+            if isfile("testlib/config/"..tbl["Name"]..".txt") then
+            ModuleOn[name] = readfile("testlib/config/"..tbl["Name"]..".txt")
             if ModuleOn[name] == "true" then enable(name) moduletable[name] = true end 
             print(name,ModuleOn[name])
         else 
             ModuleOn[name] = false
-	    writefile("testlib/config/"..name..".txt", "false") 
+	    writefile("testlib/config/"..tbl["Name"]..".txt", "false") 
         end
 		ModuleOn[tbl["Name"]] = false
 	end
@@ -240,7 +240,7 @@ function guiLib:CreateModule(tbl)
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
-				writefile("testlib/config/"..name..".txt", "false")
+				writefile("testlib/config/"..tbl["Name"]..".txt", "false")
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				task.spawn(function()
@@ -249,7 +249,7 @@ function guiLib:CreateModule(tbl)
 			else 
 				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
-				writefile("testlib/config/"..name..".txt", "true")
+				writefile("testlib/config/"..tbl["Name"]..".txt", "true")
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				task.spawn(function()
 					code(tbl["Function"])
