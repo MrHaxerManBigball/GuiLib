@@ -172,7 +172,7 @@ function guiLib:CreateModule(tbl)
 	if not ModuleOn[tbl["Name"]] then 
             if isfile("testlib/config/"..tbl["Name"]..".txt") then
             ModuleOn[tbl["Name"]] = readfile("testlib/config/"..tbl["Name"]..".txt")
-            if ModuleOn[tbl["Name"]] == "true" then enable(name) moduletable[name] = true end 
+            if ModuleOn[tbl["Name"]] == "true" then guiLib:Enable(tbl["Name"]]) moduletable[tbl["Name"]]] = true end 
             print(tbl["Name"],ModuleOn[tbl["Name"]])
         else 
             ModuleOn[tbl["Name"]] = false
