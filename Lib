@@ -346,8 +346,8 @@ function guiLib:Notify(header, text, time, tweentime)
 		task.wait(time) 
 		Frame:TweenPosition(UDim2.new(0.897371888, 0, 0.917338729, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false)
 		task.wait(0.1)
-		--notifications -= 1 
-		--Notification:Destroy()
+		notifications -= 1 
+		Notification:Destroy()
 	end)
 end
 
