@@ -116,7 +116,7 @@ RenderWindow.BorderSizePixel = 0
 ModuleAmmount = {"Ammount" == 0}
 ModuleOn = {"On" == false}
 guiLib.DropDownValue = {"Value" == 0}
-function guiLib:DropDownValue(dropped) 
+function guiLib:GetDropDownValue(dropped) 
 	return guiLib.DropDownValue[dropped]
 end 
 if not ModuleAmmount.WorldWindow then 
