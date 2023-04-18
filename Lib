@@ -361,7 +361,7 @@ GuiLib:CreateModule({
     ["Function"] = function() 
         if GuiLib:Enabled("Uninject") then 
             for i,v in pairs(GuiLib.moduletable) do 
-                GuiLib.disable(v)
+                GuiLib:Disable(v)
             end 
             for i,v in pairs(GuiLib.disconnectfuncs) do 
                 v:Disconnect() 
