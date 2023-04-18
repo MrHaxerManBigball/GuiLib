@@ -23,6 +23,9 @@ end
 guiLib.isTeammate =  function(plr) 
 	return plr.Team == lplr.Team and lplr.Team
 end
+function guiLib:DropDownValue(dropped) 
+	return guiLib.DropDownValue[dropped]
+end 
 guiLib.functions = {}
 function getModuleFunc(moduletofunc)
 	local returnedFunc
