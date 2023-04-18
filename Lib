@@ -170,15 +170,14 @@ function guiLib:CreateModule(tbl)
 	module.BorderSizePixel = 0 
     module.Name = http:GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
-        --[[
             if isfile("testlib/config/"..name..".txt") then
             ModuleOn[name] = readfile("testlib/config/"..name..".txt")
             if ModuleOn[name] == "true" then enable(name) moduletable[name] = true end 
             print(name,ModuleOn[name])
         else 
             ModuleOn[name] = false
-            moduletable[name] = false
-        end]]
+	    writefile("testlib/config/"..name..".txt", "false") 
+        end
 		ModuleOn[tbl["Name"]] = false
 	end
 	if tbl["Dropdown"] then 
@@ -241,7 +240,7 @@ function guiLib:CreateModule(tbl)
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
-				--writefile("testlib/config/"..name..".txt", "false")
+				writefile("testlib/config/"..name..".txt", "false")
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				task.spawn(function()
@@ -250,7 +249,7 @@ function guiLib:CreateModule(tbl)
 			else 
 				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
-				--writefile("testlib/config/"..name..".txt", "true")
+				writefile("testlib/config/"..name..".txt", "true")
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				task.spawn(function()
 					code(tbl["Function"])
@@ -282,7 +281,7 @@ function guiLib:Disable(disablemodule)
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib:Notify(disablemodule, "Disabled", 1)
-				--writefile("testlib/config/"..disablemodule..".txt", "false")
+				writefile("testlib/config/"..disablemodule..".txt", "false")
 				guiLib.moduletable[disablemodule] = false
 				code(getModuleFunc(disablemodule))
 				break
@@ -297,7 +296,7 @@ function guiLib:Enable(enabledmodule)
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
-				--writefile("testlib/config/"..enabledmodule..".txt", "true")
+				writefile("testlib/config/"..enabledmodule..".txt", "true")
 				guiLib.moduletable[enabledmodule] = true
 				code(getModuleFunc(enabledmodule))
 				break
