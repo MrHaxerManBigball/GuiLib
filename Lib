@@ -364,13 +364,17 @@ GuiLib:CreateModule({
     ["Window"] = "Utility", 
     ["Function"] = function() 
         if GuiLib:Enabled("Uninject") then 
+            getgenv().canSave = false 
             for i,v in pairs(GuiLib.moduletable) do 
-                GuiLib:Disable(v)
+                if GuiLib:Enabled(v) then 
+                    GuiLib:Disable(v)
+                end 
             end 
             for i,v in pairs(GuiLib.disconnectfuncs) do 
                 v:Disconnect() 
             end 
             GuiLib.unj:Disconnect()
+            GuiLib.functions = {}
             GuiLib.Boney:Destroy()  
             GuiLib.moduletable = {}
             getgenv().binds = {}
