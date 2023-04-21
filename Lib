@@ -12,6 +12,7 @@ local http = game:GetService("HttpService")
 function code(b) 
 	b() 
 end 
+local ModuleOn = {}
 guiLib.binds = getgenv().binds
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
 guiLib.isAlive = function(plr)
@@ -114,7 +115,6 @@ RenderWindow.Active = true
 RenderWindow.Draggable = true 
 RenderWindow.BorderSizePixel = 0 
 ModuleAmmount = {"Ammount" == 0}
-ModuleOn = {"On" == false}
 guiLib.DropDownValue = {"Value" == 0}
 function guiLib:GetDropDownValue(dropped) 
 	return guiLib.DropDownValue[dropped]
