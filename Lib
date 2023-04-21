@@ -12,14 +12,13 @@ local http = game:GetService("HttpService")
 function code(b) 
 	b() 
 end 
-guiLib.ModuleOn = {}
 guiLib.binds = getgenv().binds
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
 guiLib.isAlive = function(plr)
 	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
 end
 function guiLib:Enabled(module)
-	return guiLib.ModuleOn[tostring(module)] or false 
+	return ModuleOn[tostring(module)] or false 
 end 
 guiLib.isTeammate =  function(plr) 
 	return plr.Team == lplr.Team and lplr.Team
@@ -115,6 +114,7 @@ RenderWindow.Active = true
 RenderWindow.Draggable = true 
 RenderWindow.BorderSizePixel = 0 
 ModuleAmmount = {"Ammount" == 0}
+ModuleOn = {"On" == false}
 guiLib.DropDownValue = {"Value" == 0}
 function guiLib:GetDropDownValue(dropped) 
 	return guiLib.DropDownValue[dropped]
@@ -173,12 +173,12 @@ function guiLib:CreateModule(tbl)
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
     module.Name = http:GenerateGUID(false)
-	if not guiLib.ModuleOn[tbl["Name"]] then 
+	if not ModuleOn[tbl["Name"]] then 
             if isfile("testlib/config/"..tbl["Name"]..".txt") then
-            if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) end 
-            print(tbl["Name"],guiLib.ModuleOn[tbl["Name"]])
+            if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+            print(tbl["Name"],ModuleOn[tbl["Name"]])
         else 
-            guiLib.ModuleOn[tbl["Name"]] = false
+            ModuleOn[tbl["Name"]] = false
 	    writefile("testlib/config/"..tbl["Name"]..".txt", "false") 
         end
 	end
@@ -239,8 +239,8 @@ function guiLib:CreateModule(tbl)
 	connection3 = uis.InputBegan:Connect(function(input) 
 		table.insert(guiLib.disconnectfuncs, connection3)
 		if input.KeyCode == guiLib.binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
-			if guiLib.ModuleOn[tbl["Name"]] then 
-				guiLib.ModuleOn[tbl["Name"]] = false 
+			if ModuleOn[tbl["Name"]] then 
+				ModuleOn[tbl["Name"]] = false 
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				writefile("testlib/config/"..tbl["Name"]..".txt", "false")
 				module.TextSize = 18
@@ -249,7 +249,7 @@ function guiLib:CreateModule(tbl)
 					code(tbl["Function"])
 				end)
 			else 
-				guiLib.ModuleOn[tbl["Name"]] = true 
+				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
 				writefile("testlib/config/"..tbl["Name"]..".txt", "true")
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
@@ -264,12 +264,12 @@ function guiLib:CreateModule(tbl)
 	end)
 	connection4 = module.MouseButton1Down:Connect(function(func) 
 		table.insert(guiLib.disconnectfuncs, connection4)
-		if guiLib.ModuleOn[tbl["Name"]] then 
-			guiLib.ModuleOn[tbl["Name"]] = false 
+		if ModuleOn[tbl["Name"]] then 
+			ModuleOn[tbl["Name"]] = false 
 			guiLib:Notify(tbl["Name"], "Disabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 		else 
-			guiLib.ModuleOn[tbl["Name"]] = true 
+			ModuleOn[tbl["Name"]] = true 
 			guiLib:Notify(tbl["Name"], "Enabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 		end 
@@ -277,13 +277,13 @@ function guiLib:CreateModule(tbl)
 end 
 
 function guiLib:Disable(disablemodule)
-	if disablemodule ~= "Uninject" then 
+	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
+		ModuleOn[disablemodule] = false 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				writefile("testlib/config/"..disablemodule..".txt", "false")
-				guiLib.ModuleOn[disablemodule] = false 
 				guiLib.moduletable[disablemodule] = false
 				code(getModuleFunc(disablemodule))
 				break
@@ -292,18 +292,19 @@ function guiLib:Disable(disablemodule)
 	end 
 end
 function guiLib:Enable(enabledmodule)
+	if  not ModuleOn[enabledmodule] then 
+		ModuleOn[enabledmodule] = true 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-				guiLib.ModuleOn[enabledmodule] = true
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				writefile("testlib/config/"..enabledmodule..".txt", "true")
-				guiLib.ModuleOn[disablemodule] = true 
-				guiLib.moduletable[disablemodule] = true
+				guiLib.moduletable[enabledmodule] = true
 				code(getModuleFunc(enabledmodule))
 				break
 			end 
-		end  
+		end 
+	end 
 end 
 local notifications = 0
 function guiLib:Notify(header, text, time, tweentime)
