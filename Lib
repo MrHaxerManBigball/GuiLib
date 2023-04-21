@@ -278,7 +278,7 @@ function guiLib:CreateModule(tbl)
 end 
 
 function guiLib:Disable(disablemodule)
-	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
+	if disablemodule ~= "Uninject" then 
 		ModuleOn[disablemodule] = false 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
