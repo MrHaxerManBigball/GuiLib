@@ -277,13 +277,15 @@ function guiLib:CreateModule(tbl)
 end 
 
 function guiLib:Disable(disablemodule)
-	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" and getgenv().canSave then 
+	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
 		ModuleOn[disablemodule] = false 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib:Notify(disablemodule, "Disabled", 1)
-				writefile("testlib/config/"..disablemodule..".txt", "false")
+				if getgenv().canSave then 
+					writefile("testlib/config/"..disablemodule..".txt", "false")
+				end
 				guiLib.moduletable[disablemodule] = false
 				code(getModuleFunc(disablemodule))
 				break
@@ -292,13 +294,15 @@ function guiLib:Disable(disablemodule)
 	end 
 end
 function guiLib:Enable(enabledmodule)
-	if  not ModuleOn[enabledmodule] and getgenv().canSave then 
+	if  not ModuleOn[enabledmodule] then 
 		ModuleOn[enabledmodule] = true 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
+				if getgenv().canSave then 
 				writefile("testlib/config/"..enabledmodule..".txt", "true")
+				end
 				guiLib.moduletable[enabledmodule] = true
 				code(getModuleFunc(enabledmodule))
 				break
