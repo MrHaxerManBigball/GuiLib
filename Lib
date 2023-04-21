@@ -172,15 +172,14 @@ function guiLib:CreateModule(tbl)
 	module.Text = " "..tostring(tbl["Name"])
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
-    module.Name = http:GenerateGUID(false)
+    	module.Name = http:GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
             if isfile("testlib/config/"..tbl["Name"]..".txt") then
-            if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
-            print(tbl["Name"],ModuleOn[tbl["Name"]])
-        else 
-            ModuleOn[tbl["Name"]] = false
-	    writefile("testlib/config/"..tbl["Name"]..".txt", "false") 
-        end
+           	 if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+        	else 
+            		ModuleOn[tbl["Name"]] = false
+	    		writefile("testlib/config/"..tbl["Name"]..".txt", "false") 
+        	end
 	end
 	if tbl["Dropdown"] then 
 		print(tbl["Name"])
