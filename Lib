@@ -2,6 +2,10 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 local loadingGui 
 if not gethui then loadingGui = game:GetService("CoreGui") else loadingGui = gethui() end 
 if getgenv().executed then return error("Already Executed") end 
+if not isfolder("testlib") then makefolder("testlib") end 
+if not isfolder("testlib/config") then makefolder("testlib/config") 
+if not isfolder("testlib/games") then makefolder("testlib/games") 
+if not isfolder("testlib/config/"..game.GameId) then makefolder("testlib/config/"..game.GameId) end 
 getgenv().executed = true
 local guiLib = {}
 getgenv().testing = guiLib
