@@ -298,6 +298,7 @@ function guiLib:Enable(enabledmodule)
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+				ModuleOn[enabledmodule] = true
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				writefile("testlib/config/"..enabledmodule..".txt", "true")
 				guiLib.moduletable[enabledmodule] = true
