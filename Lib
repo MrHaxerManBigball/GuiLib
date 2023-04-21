@@ -182,7 +182,7 @@ function guiLib:CreateModule(tbl)
            	 if readfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
         	else 
             		ModuleOn[tbl["Name"]] = false
-	    		writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "") 
+	    		writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "false") 
         	end
 	end
 	if tbl["Dropdown"] then 
