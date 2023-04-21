@@ -174,11 +174,11 @@ function guiLib:CreateModule(tbl)
 	module.BorderSizePixel = 0 
     	module.Name = http:GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
-            if isfile("testlib/config/"..tbl["Name"]..".txt") then
-           	 if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+            if isfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") then
+           	 if readfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
         	else 
             		ModuleOn[tbl["Name"]] = false
-	    		writefile("testlib/config/"..tbl["Name"]..".txt", "false") 
+	    		writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") 
         	end
 	end
 	if tbl["Dropdown"] then 
@@ -241,7 +241,7 @@ function guiLib:CreateModule(tbl)
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
-				writefile("testlib/config/"..tbl["Name"]..".txt", "false")
+				writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "false")
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				task.spawn(function()
@@ -250,7 +250,7 @@ function guiLib:CreateModule(tbl)
 			else 
 				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
-				writefile("testlib/config/"..tbl["Name"]..".txt", "true")
+				writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "true")
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				task.spawn(function()
 					code(tbl["Function"])
@@ -283,7 +283,7 @@ function guiLib:Disable(disablemodule)
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				if getgenv().canSave then 
-					writefile("testlib/config/"..disablemodule..".txt", "false")
+					writefile("testlib/config/"..game.GameId.."/"..disablemodule..".txt", "false")
 				end
 				guiLib.moduletable[disablemodule] = false
 				code(getModuleFunc(disablemodule))
@@ -300,7 +300,7 @@ function guiLib:Enable(enabledmodule)
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				if getgenv().canSave then 
-				writefile("testlib/config/"..enabledmodule..".txt", "true")
+				writefile("testlib/config/"..game.GameId.."/"..enabledmodule..".txt", "true")
 				end
 				guiLib.moduletable[enabledmodule] = true
 				code(getModuleFunc(enabledmodule))
