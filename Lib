@@ -279,12 +279,13 @@ end
 
 function guiLib:Disable(disablemodule)
 	if disablemodule ~= "Uninject" then 
-		ModuleOn[disablemodule] = false 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				writefile("testlib/config/"..disablemodule..".txt", "false")
+				ModuleOn[disablemodule] = false 
+				guiLib.moduletable[disablemodule] = false
 				code(getModuleFunc(disablemodule))
 				break
 			end 
@@ -298,6 +299,8 @@ function guiLib:Enable(enabledmodule)
 				ModuleOn[enabledmodule] = true
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				writefile("testlib/config/"..enabledmodule..".txt", "true")
+				ModuleOn[disablemodule] = true 
+				guiLib.moduletable[disablemodule] = true
 				code(getModuleFunc(enabledmodule))
 				break
 			end 
