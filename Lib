@@ -175,7 +175,7 @@ function guiLib:CreateModule(tbl)
     module.Name = http:GenerateGUID(false)
 	if not ModuleOn[tbl["Name"]] then 
             if isfile("testlib/config/"..tbl["Name"]..".txt") then
-            if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+            if readfile("testlib/config/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) end 
             print(tbl["Name"],ModuleOn[tbl["Name"]])
         else 
             ModuleOn[tbl["Name"]] = false
