@@ -277,7 +277,7 @@ function guiLib:CreateModule(tbl)
 end 
 
 function guiLib:Disable(disablemodule)
-	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
+	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" and getgenv().canSave then 
 		ModuleOn[disablemodule] = false 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
@@ -292,7 +292,7 @@ function guiLib:Disable(disablemodule)
 	end 
 end
 function guiLib:Enable(enabledmodule)
-	if  not ModuleOn[enabledmodule] then 
+	if  not ModuleOn[enabledmodule] and getgenv().canSave then 
 		ModuleOn[enabledmodule] = true 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
