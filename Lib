@@ -16,6 +16,19 @@ local http = game:GetService("HttpService")
 function code(b) 
 	b() 
 end 
+local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 1,2,3,4,5,6,7,8,9,0, "!", "@", "#","$","%","^","&","*","(",")","_","-","=","+"}
+function guiLib:randomString(amount)
+    local returnedString = ""
+    for i = 1, amount do 
+        if math.random(2) == 2 then 
+            returnedString = returnedString..string.lower(letters[math.random(50)])
+        else 
+            returnedString = returnedString..letters[math.random(50)]
+        end 
+    end 
+    return returnedString
+end
+
 guiLib.binds = getgenv().binds
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
 guiLib.isAlive = function(plr)
@@ -44,7 +57,7 @@ end
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui", loadingGui)
 local TextButton = Instance.new("TextButton")
-guiLib.Boney.Name = http:GenerateGUID(false)
+guiLib.Boney.Name = guiLib:randomString(50)
 guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 guiLib.Boney.ResetOnSpawn = false
 guiLib.unj = uis.InputBegan:Connect(function(input) 
@@ -53,7 +66,7 @@ guiLib.unj = uis.InputBegan:Connect(function(input)
 	end 
 end) 
 local WorldWindow = Instance.new("TextLabel", guiLib.Boney)
-WorldWindow.Name = http:GenerateGUID(false)
+WorldWindow.Name = guiLib:randomString(50)
 WorldWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 WorldWindow.BackgroundTransparency = 0.3
 WorldWindow.Position = UDim2.new(0.0308897775, 0, 0.0302419364, 0)
@@ -66,7 +79,7 @@ WorldWindow.Active = true
 WorldWindow.Draggable = true 
 WorldWindow.BorderSizePixel = 0 
 local CombatWindow = Instance.new("TextLabel", guiLib.Boney)
-CombatWindow.Name = http:GenerateGUID(false)
+CombatWindow.Name = guiLib:randomString(50)
 CombatWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 CombatWindow.BackgroundTransparency = 0.3
 CombatWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.15,0,0.031)
@@ -79,7 +92,7 @@ CombatWindow.Active = true
 CombatWindow.Draggable = true 
 CombatWindow.BorderSizePixel = 0 
 local UtilityWindow = Instance.new("TextLabel", guiLib.Boney)
-UtilityWindow.Name = http:GenerateGUID(false)
+UtilityWindow.Name = guiLib:randomString(50)
 UtilityWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 UtilityWindow.BackgroundTransparency = 0.3
 UtilityWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.3,0,0.031)
@@ -92,7 +105,7 @@ UtilityWindow.Active = true
 UtilityWindow.Draggable = true 
 UtilityWindow.BorderSizePixel = 0 
 local MovementWindow = Instance.new("TextLabel", guiLib.Boney)
-MovementWindow.Name = http:GenerateGUID(false)
+MovementWindow.Name = guiLib:randomString(50)
 MovementWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 MovementWindow.BackgroundTransparency = 0.3
 MovementWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.45,0,0,40)
@@ -105,7 +118,7 @@ MovementWindow.Active = true
 MovementWindow.Draggable = true
 MovementWindow.BorderSizePixel = 0 
 local RenderWindow = Instance.new("TextLabel", guiLib.Boney)
-RenderWindow.Name = http:GenerateGUID(false)
+RenderWindow.Name = guiLib:randomString(50)
 RenderWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 RenderWindow.BackgroundTransparency = 0.3
 RenderWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.6,0,0,49)
@@ -166,7 +179,7 @@ function guiLib:CreateModule(tbl)
 	module.Text = " "..tostring(tbl["Name"])
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
-    	module.Name = http:GenerateGUID(false)
+    	module.Name = guiLib:randomString(50)
 	if not ModuleOn[tbl["Name"]] then 
             if isfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") then
            	 if readfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
@@ -186,7 +199,7 @@ function guiLib:CreateModule(tbl)
 		dropdown2.TextEditable = false 
 		dropdown2.LayoutOrder = 0
 		dropdown2.Size = UDim2.new(0,0,0)
-		dropdown2.Name = http:GenerateGUID(false)
+		dropdown2.Name = guiLib:randomString(50)
 		dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 		dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
 		if tbl["Dropdown"]["Default"] then 
@@ -310,13 +323,13 @@ function guiLib:Notify(header, text, time, tweentime)
 		local Frame = Instance.new("Frame", Notification)
 		local Header = Instance.new("TextLabel", Frame)
 		local Bottomtext = Instance.new("TextLabel", Frame)
-		Notification.Name = http:GenerateGUID(false)
+		Notification.Name = guiLib:randomString(50)
 		Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		Frame.BackgroundColor3 = Color3.fromRGB(0,0,0)
 		Frame.BackgroundTransparency = 0.6
 		Frame.Position = UDim2.new(0.897371888, 0, 0.917338729, 0)
 		Frame.Size = UDim2.new(0, 270, 0, 114)
-		Header.Name = http:GenerateGUID(false)
+		Header.Name = guiLib:randomString(50)
 		Header.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
 		Header.BackgroundTransparency = 0.2
 		Header.Position = UDim2.new(-0.00371747208, 0, 0, 0)
@@ -327,7 +340,7 @@ function guiLib:Notify(header, text, time, tweentime)
 		Header.TextSize = 25
 		Header.BorderSizePixel = 0.5
 
-		Bottomtext.Name = http:GenerateGUID(false)
+		Bottomtext.Name = guiLib:randomString(50)
 		Bottomtext.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		Bottomtext.BackgroundTransparency = 1
 		Bottomtext.Position = UDim2.new(0, 0, 0.342105269, 0)
