@@ -56,6 +56,7 @@ function getModuleFunc(moduletofunc)
 end
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui", loadingGui)
+guiLib.Boney.Enabled = false 
 local TextButton = Instance.new("TextButton")
 guiLib.Boney.Name = guiLib:randomString(50)
 guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -360,7 +361,7 @@ function guiLib:Notify(header, text, time, tweentime)
 		Notification:Destroy()
 	end)
 end
-
+guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 return guiLib
 
 --[[
