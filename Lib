@@ -117,27 +117,17 @@ RenderWindow.TextSize = 25
 RenderWindow.Active = true 
 RenderWindow.Draggable = true 
 RenderWindow.BorderSizePixel = 0 
-ModuleAmmount = {"Ammount" == 0}
-ModuleOn = {"On" == false}
+ModuleAmmount = {}
+ModuleOn = {}
 guiLib.DropDownValue = {"Value" == 0}
 function guiLib:GetDropDownValue(dropped) 
 	return guiLib.DropDownValue[dropped]
 end 
-if not ModuleAmmount.WorldWindow then 
-	ModuleAmmount.WorldWindow = 0
-end 
-if not ModuleAmmount.CombatWindow then 
-	ModuleAmmount.CombatWindow = 0
-end 
-if not ModuleAmmount.UtilityWindow then 
-	ModuleAmmount.UtilityWindow = 0
-end 
-if not ModuleAmmount.MovementWindow then 
-	ModuleAmmount.MovementWindow = 0
-end 
-if not ModuleAmmount.RenderWindow then 
-	ModuleAmmount.RenderWindow = 0 
-end 
+ModuleAmmount.WorldWindow = 0  
+ModuleAmmount.CombatWindow = 0
+ModuleAmmount.UtilityWindow = 0
+ModuleAmmount.MovementWindow = 0
+ModuleAmmount.RenderWindow = 0 
 guiLib.disconnectfuncs = {}
 local connection1, connection2, connection3, connection4, realwindow, wname
 function guiLib:CreateModule(tbl)
@@ -186,7 +176,6 @@ function guiLib:CreateModule(tbl)
         	end
 	end
 	if tbl["Dropdown"] then 
-		print(tbl["Name"])
 		local dropdown2 = Instance.new("TextBox", realwindow) 
 		--corner:Clone().Parent = dropdown2
 		dropdown2.Position = UDim2.new(module.Position) + UDim2.new(0.225,0.3,1.05) 
