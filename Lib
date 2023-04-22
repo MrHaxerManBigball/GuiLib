@@ -16,14 +16,14 @@ local http = game:GetService("HttpService")
 function code(b) 
 	b() 
 end 
-local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 1,2,3,4,5,6,7,8,9,0, "!", "@", "#","$","%","^","&","*","(",")","_","-","=","+"}
+local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 1,2,3,4,5,6,7,8,9,0, "!", "@", "#","$","%","^","&","*","(",")","_","-","=","+", "|", "{", "}", ".", ",", ";", ":","<",">","'",'"', "`", "?","/",}
 function guiLib:randomString(amount)
     local returnedString = ""
     for i = 1, amount do 
         if math.random(2) == 2 then 
-            returnedString = returnedString..string.lower(letters[math.random(50)])
+            returnedString = returnedString..string.lower(letters[math.random(#letters)])
         else 
-            returnedString = returnedString..letters[math.random(50)]
+            returnedString = returnedString..letters[math.random(#letters)]
         end 
     end 
     return returnedString
