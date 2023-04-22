@@ -210,7 +210,7 @@ function guiLib:CreateModule(tbl)
 			table.insert(guiLib.disconnectfuncs, connection1)
 			pcall(function()
 				guiLib.DropDownValue[tbl["Name"]] = dropdown2.Text
-				if dropdown2 and tbl["Dropdown"] and typeof(dropdown2.Text) == tbl["Dropdown"]["Type"] and tbl["Dropdown"]["Min"] and tonumber(dropdown2.Text) < tbl["Dropdown"]["Min"] then 
+				if dropdown2 and dropdown2.Text and tbl["Dropdown"] and typeof(dropdown2.Text) == tbl["Dropdown"]["Type"] and tbl["Dropdown"]["Min"] and tonumber(dropdown2.Text) < tbl["Dropdown"]["Min"] then 
 					dropdown2.Text = tbl["Dropdown"]["Min"]
 					guiLib.DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Min"]
 				elseif dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Max"] and tonumber(dropdown2.Text) > tonumber(tbl["Dropdown"]["Max"]) then
