@@ -347,13 +347,7 @@ function guiLib:Notify(header, text, time, tweentime)
 		Notification:Destroy()
 	end)
 end
-lplr.OnTeleport:Connect(function(State)
-    if State == Enum.TeleportState.InProgress then
-        local old = getgenv().binds
-        syn.queue_on_teleport("getgenv().binds = old")
-        syn.queue_on_teleport("loadstring(readfile('testlib/loadstring.lua'))()")
-    end
-end)
+
 return guiLib
 
 --[[
