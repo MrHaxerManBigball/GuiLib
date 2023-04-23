@@ -29,7 +29,7 @@ function guiLib:randomString(amount)
     return returnedString
 end
 
-guiLib.binds = getgenv().binds
+guiLib.binds = getgenv().binds or {}
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
 guiLib.isAlive = function(plr)
 	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
