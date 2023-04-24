@@ -211,6 +211,7 @@ function guiLib:CreateModule(tbl)
 			else 
 			guiLib.DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Default"]
 			writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt", tbl["Dropdown"]["Default"])
+			end 
 		end
 		if not guiLib.DropDownValue[tbl["Name"]] then 
 			guiLib.DropDownValue[tbl["Name"]] = 0 
