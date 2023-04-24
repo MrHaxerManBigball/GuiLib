@@ -199,6 +199,7 @@ function guiLib:CreateModule(tbl)
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 				task.spawn(function()
 					code(tbl["Function"])
 				end)
@@ -206,6 +207,7 @@ function guiLib:CreateModule(tbl)
 				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
 				task.spawn(function()
 					code(tbl["Function"])
 				end)
@@ -221,10 +223,12 @@ function guiLib:CreateModule(tbl)
 			ModuleOn[tbl["Name"]] = false 
 			guiLib:Notify(tbl["Name"], "Disabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 		else 
 			ModuleOn[tbl["Name"]] = true 
 			guiLib:Notify(tbl["Name"], "Enabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
 		end 
 	end) 
 end 
