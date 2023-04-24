@@ -287,7 +287,7 @@ function guiLib:CreateDropDown(tbl2)
 	connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
 		table.insert(guiLib.disconnectfuncs, connection1)
 		pcall(function()
-			writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"]..tbl2["Name"]..".txt", dropdown2.Text)
+			writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt", dropdown2.Text)
 			guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] = dropdown2.Text
 			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
 				dropdown2.Text = tbl2["Min"]
