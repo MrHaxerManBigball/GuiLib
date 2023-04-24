@@ -188,7 +188,9 @@ function guiLib:CreateModule(tbl)
 			if readfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
 		else 
 			ModuleOn[tbl["Name"]] = false
+			if getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
+			end 
 		end
 	end
 	connection3 = uis.InputBegan:Connect(function(input) 
@@ -199,7 +201,9 @@ function guiLib:CreateModule(tbl)
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+				if getgenv().canSave then 
 				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
+				end
 				task.spawn(function()
 					code(tbl["Function"])
 				end)
@@ -207,7 +211,9 @@ function guiLib:CreateModule(tbl)
 				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+				if getgenv().canSave then 
 				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
+				end 
 				task.spawn(function()
 					code(tbl["Function"])
 				end)
@@ -223,12 +229,16 @@ function guiLib:CreateModule(tbl)
 			ModuleOn[tbl["Name"]] = false 
 			guiLib:Notify(tbl["Name"], "Disabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+			if getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
+			end
 		else 
 			ModuleOn[tbl["Name"]] = true 
 			guiLib:Notify(tbl["Name"], "Enabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+			if getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
+			end
 		end 
 	end) 
 end 
@@ -285,14 +295,18 @@ function guiLib:CreateDropDown(tbl2)
 				guiLib.DropDownValue[realModule][tbl2["Name"]] = readfile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt")
 			else 
 				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Default"]
+				if getgenv().canSave then 
 				writefile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt", tbl2["Default"])
+				end
 			end 
 		end
 	end
 	connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
 		table.insert(guiLib.disconnectfuncs, connection1)
 		pcall(function()
+		if getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt", dropdown2.Text)
+		end
 			guiLib.DropDownValue[realModule][tbl2["Name"]] = dropdown2.Text
 			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
 				dropdown2.Text = tbl2["Min"]
@@ -342,7 +356,9 @@ function guiLib:Disable(disablemodule)
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				guiLib.moduletable[disablemodule] = false
-                writefile("testlib/config/"..game.GameId.."/Modules/"..disablemodule..".txt", "false") 
+				if getgenv().canSave then 
+                		writefile("testlib/config/"..game.GameId.."/Modules/"..disablemodule..".txt", "false") 
+				end
 				code(getModuleFunc(disablemodule))
 				break
 			end 
@@ -357,7 +373,9 @@ function guiLib:Enable(enabledmodule)
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				guiLib.moduletable[enabledmodule] = true
-                writefile("testlib/config/"..game.GameId.."/Modules/"..enabledmodule..".txt", "true") 
+				if getgenv().canSave then 
+                		writefile("testlib/config/"..game.GameId.."/Modules/"..enabledmodule..".txt", "true") 
+				end 
 				code(getModuleFunc(enabledmodule))
 				break
 			end 
