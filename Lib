@@ -30,9 +30,7 @@ function guiLib:randomString(amount)
     return returnedString
 end
 
-guiLib.binds = {
-	["Test"] = Enum.KeyCode.K,
-}
+guiLib.binds = getgenv().binds or {}
 local lplr = Players.LocalPlayer
 guiLib.isAlive = function(plr)
 	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
