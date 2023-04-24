@@ -243,7 +243,6 @@ function guiLib:CreateDropDown(tbl2)
 	if not guiLib.DropDownValue[tbl2["Module"]] then guiLib.DropDownValue[tbl2["Module"]] = {} end 
 	if not isfolder("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"]) then makefolder("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"]) end 
 	TabAmount[tbl2["Module"]] +=1
-	print(TabAmount[tbl2["Module"]])
 	local module = guiLib:GetModule(tbl2["Module"])
 	local dropdownText = Instance.new("TextLabel", realwindow)
 	local dropdown2 = Instance.new("TextBox", dropdownText) 
