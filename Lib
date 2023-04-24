@@ -249,7 +249,7 @@ function guiLib:CreateDropDown(tbl2)
 	local dropdownText = Instance.new("TextLabel", realwindow)
 	local dropdown2 = Instance.new("TextBox", dropdownText) 
 	--corner:Clone().Parent = dropdown2
-	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,2 * (TabAmount[module] ))
+	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,2 * (TabAmount[realModule]))
 	dropdownText.TextSize = 10
 	dropdownText.Text = tbl2["Name"]..": "
 	dropdownText.BackgroundTransparency = 0.9
