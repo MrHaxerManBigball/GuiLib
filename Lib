@@ -202,7 +202,7 @@ function guiLib:CreateModule(tbl)
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				if ModuleOn[tbl["Name"]] ~= "Uninject" getgenv().canSave then 
+				if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
 				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 				end
 				task.spawn(function()
