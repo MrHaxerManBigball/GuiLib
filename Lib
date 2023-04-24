@@ -206,7 +206,11 @@ function guiLib:CreateModule(tbl)
 		dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 		dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
 		if tbl["Dropdown"]["Default"] then 
-			guiLib.DropDownValue[tbl["Name"]] = isfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt") and readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt") or tbl["Dropdown"]["Default"]
+			if isfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt") and isfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt") ~= "" then 
+				guiLib.DropDownValue[tbl["Name"]] = readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt")
+			else 
+			guiLib.DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Default"]
+			writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt", tbl["Dropdown"]["Default"])
 		end
 		if not guiLib.DropDownValue[tbl["Name"]] then 
 			guiLib.DropDownValue[tbl["Name"]] = 0 
