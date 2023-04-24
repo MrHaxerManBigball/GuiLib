@@ -184,11 +184,11 @@ function guiLib:CreateModule(tbl)
 	module.BorderSizePixel = 0 
 	module.Name = guiLib:randomString(50)
 	if not ModuleOn[tbl["Name"]] then 
-		if isfile("testlib/config/"..game.GameId.."/Modules"..tbl["Name"]..".txt") then
-			if readfile("testlib/config/"..game.GameId.."/Modules"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+		if isfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") then
+			if readfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
 		else 
 			ModuleOn[tbl["Name"]] = false
-			writefile("testlib/config/"..game.GameId.."/Modules"..tbl["Name"]..".txt", "false") 
+			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 		end
 	end
 	connection3 = uis.InputBegan:Connect(function(input) 
