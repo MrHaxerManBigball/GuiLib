@@ -30,8 +30,10 @@ function guiLib:randomString(amount)
     return returnedString
 end
 
-guiLib.binds = getgenv().binds or {}
-if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
+guiLib.binds = {
+	["Test"] = Enum.KeyCode.K,
+}
+local lplr = Players.LocalPlayer
 guiLib.isAlive = function(plr)
 	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
 end
@@ -135,8 +137,8 @@ RenderWindow.BorderSizePixel = 0
 ModuleAmmount = {}
 ModuleOn = {}
 guiLib.DropDownValue = {"Value" == 0}
-function guiLib:GetDropDownValue(dropped) 
-	return guiLib.DropDownValue[dropped]
+function guiLib:GetDropDownValue(dropped, dropname) 
+	return guiLib.DropDownValue[dropped][dropname]
 end 
 ModuleAmmount.WorldWindow = 0  
 ModuleAmmount.CombatWindow = 0
@@ -151,19 +153,19 @@ function guiLib:CreateModule(tbl)
 	table.insert(guiLib.functions, tbl)
 	if tbl["Window"] == "World" then
 		realwindow = WorldWindow
-        wname = "WorldWindow"
+		wname = "WorldWindow"
 	elseif tbl["Window"] == "Combat" then
 		realwindow = CombatWindow 
-        wname = "CombatWindow"
+		wname = "CombatWindow"
 	elseif tbl["Window"] == "Utility" then 
 		realwindow = UtilityWindow
-        wname = "UtilityWindow"
+		wname = "UtilityWindow"
 	elseif tbl["Window"] == "Movement" then 
 		realwindow = MovementWindow 
-        wname = "MovementWindow"
+		wname = "MovementWindow"
 	elseif tbl["Window"] == "Render" then 
 		realwindow = RenderWindow
-        wname = "RenderWindow"
+		wname = "RenderWindow"
 	end 
 	ModuleAmmount[wname] += 1
 	--local corner = Instance.new("UICorner", realwindow  or WorldWindow)
@@ -181,84 +183,21 @@ function guiLib:CreateModule(tbl)
 	module.Text = " "..tostring(tbl["Name"])
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
-    	module.Name = guiLib:randomString(50)
+	module.Name = guiLib:randomString(50)
 	if not ModuleOn[tbl["Name"]] then 
-            if isfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") then
-           	 if readfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
-        	else 
-            		ModuleOn[tbl["Name"]] = false
-	    		writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "false") 
-        	end
+		if isfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") then
+			if readfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+		else 
+			ModuleOn[tbl["Name"]] = false
+			writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "false") 
+		end
 	end
-	if tbl["Dropdown"] then 
-		if not isfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt") then writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt", "") end 
-		local dropdown2 = Instance.new("TextBox", realwindow) 
-		--corner:Clone().Parent = dropdown2
-		dropdown2.Position = UDim2.new(module.Position) + UDim2.new(0.225,0.3,1.05) 
-		dropdown2.TextSize = 10
-		dropdown2.BackgroundTransparency = 0.6 
-		dropdown2.BorderSizePixel = 0 
-		dropdown2.TextTransparency = 1
-		dropdown2.TextEditable = false 
-		dropdown2.LayoutOrder = 0
-		dropdown2.Size = UDim2.new(0,0,0)
-		dropdown2.Name = guiLib:randomString(50)
-		dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-		dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
-		if tbl["Dropdown"]["Default"] then 
-			if isfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt") and readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt") ~= "" then 
-				guiLib.DropDownValue[tbl["Name"]] = readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt")
-			else 
-			guiLib.DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Default"]
-			writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt", tbl["Dropdown"]["Default"])
-			end 
-		end
-		if not guiLib.DropDownValue[tbl["Name"]] then 
-			guiLib.DropDownValue[tbl["Name"]] = 0 
-		end
-		connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
-			table.insert(guiLib.disconnectfuncs, connection1)
-			pcall(function()
-				writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt", dropdown2.Text)
-				guiLib.DropDownValue[tbl["Name"]] = dropdown2.Text
-				if dropdown2 and dropdown2.Text and tbl["Dropdown"] and typeof(dropdown2.Text) == tbl["Dropdown"]["Type"] and tbl["Dropdown"]["Min"] and tonumber(dropdown2.Text) < tbl["Dropdown"]["Min"] then 
-					dropdown2.Text = tbl["Dropdown"]["Min"]
-					guiLib.DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Min"]
-					writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt", tbl["Dropdown"]["Min"])
-				elseif dropdown2 and tbl["Dropdown"] and tbl["Dropdown"]["Max"] and tonumber(dropdown2.Text) > tonumber(tbl["Dropdown"]["Max"]) then
-					dropdown2.Text = tbl["Dropdown"]["Max"]
-					guiLib.DropDownValue[tbl["Name"]] = tbl["Dropdown"]["Max"]
-					writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl["Name"]..".txt", tbl["Dropdown"]["Max"])
-				end 
-			end)
-		end) 
-		connection2 = module.MouseButton2Down:Connect(function(right) 
-			table.insert(guiLib.disconnectfuncs, connection2)
-			if dropdown2.TextEditable then 
-				dropdown2.BackgroundTransparency = 1 
-				dropdown2.TextTransparency = 1
-				dropdown2.TextEditable = false  
-				dropdown2.Selectable = false 
-				module.TextSize = 18
-				dropdown2.Size = UDim2.new(0,0,0)
-			else 
-				dropdown2.Text = guiLib.DropDownValue[tbl["Name"]] or "Empty"
-				dropdown2.BackgroundTransparency = 0 
-				dropdown2.TextTransparency = 0
-				dropdown2.TextEditable = true 
-				dropdown2.Selectable = true
-				module.TextSize = 15
-				dropdown2.Size = UDim2.new(0,123,0,50) 
-			end 
-		end) 
-	end 
 	connection3 = uis.InputBegan:Connect(function(input) 
 		table.insert(guiLib.disconnectfuncs, connection3)
 		if input.KeyCode == guiLib.binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
-				writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "false")
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				task.spawn(function()
@@ -267,7 +206,6 @@ function guiLib:CreateModule(tbl)
 			else 
 				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
-				writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "true")
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				task.spawn(function()
 					code(tbl["Function"])
@@ -291,7 +229,108 @@ function guiLib:CreateModule(tbl)
 		end 
 	end) 
 end 
+local TabAmount = {}
+local gottenModule
+function guiLib:GetModule(mname) 
+	for i,v in next, guiLib.Boney:GetDescendants() do 
+		if v:IsA("TextButton") and v.Text == " "..mname then
+			gottenModule = v 
+			break
+		end
+	end
+	return gottenModule
+end
+function guiLib:CreateDropDown(tbl2)
+	if not TabAmount[tbl2["Module"]] then TabAmount[tbl2["Module"]] = 0 end 
+	if not guiLib.DropDownValue[tbl2["Module"]] then guiLib.DropDownValue[tbl2["Module"]] = {} end 
+	if not isfolder("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"]) then makefolder("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"]) end 
+	TabAmount[tbl2["Module"]] +=1
+	print(TabAmount[tbl2["Module"]])
+	local module = guiLib:GetModule(tbl2["Module"])
+	local dropdownText = Instance.new("TextLabel", realwindow)
+	local dropdown2 = Instance.new("TextBox", dropdownText) 
+	--corner:Clone().Parent = dropdown2
+	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,2 * (TabAmount[tbl2["Module"]] ))
+	dropdownText.TextSize = 10
+	dropdownText.Text = tbl2["Name"]..": "
+	dropdownText.BackgroundTransparency = 0.9
+	dropdownText.BorderSizePixel = 0 
+	dropdownText.TextTransparency = 1
+	dropdownText.LayoutOrder = 0
+	dropdownText.Size = UDim2.new(0,0,0)
+	dropdownText.Name = guiLib:randomString(50)
+	dropdownText.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+	dropdownText.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+	dropdown2.Position = UDim2.new(dropdownText.Position) + UDim2.new(0,0,1) 
+	dropdown2.TextSize = 10
+	dropdown2.BackgroundTransparency = 0.6 
+	dropdown2.BorderSizePixel = 0 
+	dropdown2.TextTransparency = 1
+	dropdown2.TextEditable = false 
+	dropdown2.LayoutOrder = 0
+	dropdown2.Size = UDim2.new(0,0,0)
+	dropdown2.Name = guiLib:randomString(50)
+	dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+	dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
+	if not guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] then 
+		guiLib.DropDownValue[tbl2["Module"]][tbl2["Name"]] = 0 
+	end
+	if tbl2["Default"] then 
+		if tbl2["Default"] then 
+			if isfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt") and readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt") ~= "" then 
+				guiLib.DropDownValue[tbl2["Module"]][tbl2["Name"]] = readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt")
+			else 
+				guiLib.DropDownValue[tbl2["Module"]][tbl2["Name"]] = tbl2["Default"]
+				writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt", tbl2["Default"])
+			end 
+		end
+	end
+	connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
+		table.insert(guiLib.disconnectfuncs, connection1)
+		pcall(function()
+			writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Name"]..".txt", dropdown2.Text)
+			guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] = dropdown2.Text
+			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
+				dropdown2.Text = tbl2["Min"]
+				guiLib.DropDownValue[tbl2["Name"]] = tbl2["Min"]
+			elseif dropdown2 and tbl2 and tbl2["Max"] and tonumber(dropdown2.Text) > tonumber(tbl2["Max"]) then
+				dropdown2.Text = tbl2["Max"]
+				guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] = tbl2["Max"]
+			end 
+		end)
+	end) 
+	connection2 = module.MouseButton2Down:Connect(function(right) 
+		table.insert(guiLib.disconnectfuncs, connection2)
+		if dropdown2.TextEditable then 
+			dropdown2.BackgroundTransparency = 1 
+			dropdown2.TextTransparency = 1
+			dropdown2.TextEditable = false  
+			dropdown2.Selectable = false 
+			module.TextSize = 18
+			dropdown2.Size = UDim2.new(0,0,0)
+
+			dropdownText.BackgroundTransparency = 1 
+			dropdownText.TextTransparency = 1
+			dropdownText.Selectable = false 
+			dropdownText.Size = UDim2.new(0,0,0)
+		else 
+			dropdown2.Text = guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] or "Empty"
+			dropdown2.BackgroundTransparency = 0 
+			dropdown2.TextTransparency = 0
+			dropdown2.TextEditable = true 
+			dropdown2.Selectable = true
+			dropdown2.Size = UDim2.new(0, 200, 0, 50)
+			module.TextSize = 15
+
+			dropdownText.Text = tbl2["Name"]..": "
+			dropdownText.BackgroundTransparency = 0.6
+			dropdownText.TextTransparency = 0
+			dropdownText.Selectable = true
+			dropdownText.Size = UDim2.new(0, 200, 0, 50)
+		end 
+	end) 
+end 
 function guiLib:Disable(disablemodule)
 	if ModuleOn[disablemodule] and disablemodule ~= "Uninject" then 
 		ModuleOn[disablemodule] = false 
@@ -299,9 +338,6 @@ function guiLib:Disable(disablemodule)
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib:Notify(disablemodule, "Disabled", 1)
-				if getgenv().canSave then 
-					writefile("testlib/config/"..game.GameId.."/"..disablemodule..".txt", "false")
-				end
 				guiLib.moduletable[disablemodule] = false
 				code(getModuleFunc(disablemodule))
 				break
@@ -316,9 +352,6 @@ function guiLib:Enable(enabledmodule)
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
-				if getgenv().canSave then 
-				writefile("testlib/config/"..game.GameId.."/"..enabledmodule..".txt", "true")
-				end
 				guiLib.moduletable[enabledmodule] = true
 				code(getModuleFunc(enabledmodule))
 				break
@@ -373,11 +406,11 @@ function guiLib:Notify(header, text, time, tweentime)
 		Notification:Destroy()
 	end)
 end
-guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 return guiLib
+guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 
---[[
-example 
+--[[ examples: 
+
 local GuiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib", true))()
 GuiLib:CreateModule({
     ["Name"] = "Uninject", 
@@ -385,22 +418,53 @@ GuiLib:CreateModule({
     ["Function"] = function() 
         if GuiLib:Enabled("Uninject") then 
             getgenv().canSave = false 
-            for i,v in pairs(GuiLib.moduletable) do 
+            for _,v in pairs(GuiLib.moduletable) do 
                 if GuiLib:Enabled(v) then 
                     GuiLib:Disable(v)
                 end 
             end 
-            for i,v in pairs(GuiLib.disconnectfuncs) do 
+            for _,v in pairs(GuiLib.disconnectfuncs) do 
                 v:Disconnect() 
+                v = nil 
             end 
             GuiLib.unj:Disconnect()
             GuiLib.functions = {}
             GuiLib.Boney:Destroy()  
             GuiLib.moduletable = {}
             getgenv().binds = {}
+            Speeding = false
             GuiLib.binds = {}
             getgenv().executed = false 
         end 
     end,
+})
+
+GuiLib:CreateModule({
+	Name = "Test", 
+	Window = "Utility", 
+	Function = function() 
+		if GuiLib:Enabled("Test") then 
+			print(GuiLib:GetDropDownValue("Test", "Balls"))
+		end
+	end,
+})
+
+GuiLib:CreateDropDown({
+	Module = "Test",
+	Name = "Balls", 
+	Type = "number", 
+	Min = 10, 
+	Max = 50,
+	Default = 150,
+})
+
+
+GuiLib:CreateDropDown({
+	Module = "Test",
+	Name = "Balls2", 
+	Type = "number", 
+	Min = 10, 
+	Max = 50,
+	Default = 150,
 })
 ]]
