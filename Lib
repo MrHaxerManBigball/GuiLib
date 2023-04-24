@@ -240,11 +240,12 @@ function guiLib:GetModule(mname)
 	return gottenModule
 end
 function guiLib:CreateDropDown(tbl2)
-	if not TabAmount[tbl2["Module"]] then TabAmount[tbl2["Module"]] = 0 end 
-	if not guiLib.DropDownValue[tbl2["Module"]] then guiLib.DropDownValue[tbl2["Module"]] = {} end 
-	if not isfolder("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"]) then makefolder("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"]) end 
-	TabAmount[tbl2["Module"]] +=1
-	local module = guiLib:GetModule(tbl2["Module"])
+    local realModule = tbl2["Module"]
+	if not TabAmount[realModule] then TabAmount[realModule] = 0 end 
+	if not guiLib.DropDownValue[realModule] then guiLib.DropDownValue[realModule] = {} end 
+	if not isfolder("testlib/config/"..game.GameId.."/DropDowns/"..realModule) then makefolder("testlib/config/"..game.GameId.."/DropDowns/"..realModule) end 
+	local module = guiLib:GetModule(realModule)
+    TabAmount[realModule] +=1
 	local dropdownText = Instance.new("TextLabel", realwindow)
 	local dropdown2 = Instance.new("TextBox", dropdownText) 
 	--corner:Clone().Parent = dropdown2
@@ -271,30 +272,30 @@ function guiLib:CreateDropDown(tbl2)
 	dropdown2.Name = guiLib:randomString(50)
 	dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
-	if not guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] then 
-		guiLib.DropDownValue[tbl2["Module"]][tbl2["Name"]] = 0 
+	if not guiLib.DropDownValue[realModule[tbl2["Name"]]] then 
+		guiLib.DropDownValue[realModule][tbl2["Name"]] = 0 
 	end
 	if tbl2["Default"] then 
 		if tbl2["Default"] then 
-			if isfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt") and readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt") ~= "" then 
-				guiLib.DropDownValue[module.tbl2["Name"]] = readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt")
+			if isfile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt") and readfile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt") ~= "" then 
+				guiLib.DropDownValue[realModule][tbl2["Name"]] = readfile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt")
 			else 
-				guiLib.DropDownValue[module.tbl2["Name"]] = tbl2["Default"]
-				writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt", tbl2["Default"])
+				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Default"]
+				writefile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt", tbl2["Default"])
 			end 
 		end
 	end
 	connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
 		table.insert(guiLib.disconnectfuncs, connection1)
 		pcall(function()
-			writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt", dropdown2.Text)
-			guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] = dropdown2.Text
+			writefile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt", dropdown2.Text)
+			guiLib.DropDownValue[realModule[tbl2["Name"]]] = dropdown2.Text
 			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
 				dropdown2.Text = tbl2["Min"]
 				guiLib.DropDownValue[tbl2["Name"]] = tbl2["Min"]
 			elseif dropdown2 and tbl2 and tbl2["Max"] and tonumber(dropdown2.Text) > tonumber(tbl2["Max"]) then
 				dropdown2.Text = tbl2["Max"]
-				guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] = tbl2["Max"]
+				guiLib.DropDownValue[realModule[tbl2["Name"]]] = tbl2["Max"]
 			end 
 		end)
 	end) 
@@ -313,7 +314,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.Selectable = false 
 			dropdownText.Size = UDim2.new(0,0,0)
 		else 
-			dropdown2.Text = guiLib.DropDownValue[tbl2["Module"]][tbl2["Name"]]
+			dropdown2.Text = guiLib.DropDownValue[realModule][tbl2["Name"]]
 			dropdown2.BackgroundTransparency = 0 
 			dropdown2.TextTransparency = 0
 			dropdown2.TextEditable = true 
