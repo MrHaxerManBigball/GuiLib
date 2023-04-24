@@ -289,13 +289,13 @@ function guiLib:CreateDropDown(tbl2)
 		table.insert(guiLib.disconnectfuncs, connection1)
 		pcall(function()
 			writefile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt", dropdown2.Text)
-			guiLib.DropDownValue[realModule[tbl2["Name"]]] = dropdown2.Text
+			guiLib.DropDownValue[realModule][tbl2["Name"]] = dropdown2.Text
 			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
 				dropdown2.Text = tbl2["Min"]
-				guiLib.DropDownValue[tbl2["Name"]] = tbl2["Min"]
+				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Min"]
 			elseif dropdown2 and tbl2 and tbl2["Max"] and tonumber(dropdown2.Text) > tonumber(tbl2["Max"]) then
 				dropdown2.Text = tbl2["Max"]
-				guiLib.DropDownValue[realModule[tbl2["Name"]]] = tbl2["Max"]
+				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Max"]
 			end 
 		end)
 	end) 
@@ -338,6 +338,7 @@ function guiLib:Disable(disablemodule)
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				guiLib.moduletable[disablemodule] = false
+                writefile("testlib/config/"..game.GameId.."/Modules/"..disablemodule..".txt", "false") 
 				code(getModuleFunc(disablemodule))
 				break
 			end 
@@ -352,6 +353,7 @@ function guiLib:Enable(enabledmodule)
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				guiLib.moduletable[enabledmodule] = true
+                writefile("testlib/config/"..game.GameId.."/Modules/"..enabledmodule..".txt", "true") 
 				code(getModuleFunc(enabledmodule))
 				break
 			end 
