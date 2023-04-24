@@ -6,6 +6,7 @@ if not isfolder("testlib") then makefolder("testlib") end
 if not isfolder("testlib/config") then makefolder("testlib/config") end 
 if not isfolder("testlib/games") then makefolder("testlib/games") end
 if not isfolder("testlib/config/"..game.GameId) then makefolder("testlib/config/"..game.GameId) end 
+if not isfolder("testlib/config/"..game.GameId.."/Modules") then makefolder("testlib/config/"..game.GameId.."/Modules") end 
 if not isfolder("testlib/config/"..game.GameId.."/DropDowns") then makefolder("testlib/config/"..game.GameId.."/DropDowns") end 
 getgenv().executed = true
 local guiLib = {}
@@ -183,11 +184,11 @@ function guiLib:CreateModule(tbl)
 	module.BorderSizePixel = 0 
 	module.Name = guiLib:randomString(50)
 	if not ModuleOn[tbl["Name"]] then 
-		if isfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") then
-			if readfile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+		if isfile("testlib/config/"..game.GameId.."/Modules"..tbl["Name"]..".txt") then
+			if readfile("testlib/config/"..game.GameId.."/Modules"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
 		else 
 			ModuleOn[tbl["Name"]] = false
-			writefile("testlib/config/"..game.GameId.."/"..tbl["Name"]..".txt", "false") 
+			writefile("testlib/config/"..game.GameId.."/Modules"..tbl["Name"]..".txt", "false") 
 		end
 	end
 	connection3 = uis.InputBegan:Connect(function(input) 
