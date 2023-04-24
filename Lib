@@ -9,6 +9,7 @@ if not isfolder("testlib/config/"..game.GameId) then makefolder("testlib/config/
 if not isfolder("testlib/config/"..game.GameId.."/Modules") then makefolder("testlib/config/"..game.GameId.."/Modules") end 
 if not isfolder("testlib/config/"..game.GameId.."/DropDowns") then makefolder("testlib/config/"..game.GameId.."/DropDowns") end 
 getgenv().executed = true
+getgenv().canSave = true 
 local guiLib = {}
 getgenv().testing = guiLib
 guiLib.moduletable = {}
@@ -188,7 +189,7 @@ function guiLib:CreateModule(tbl)
 			if readfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
 		else 
 			ModuleOn[tbl["Name"]] = false
-			if getgenv().canSave then 
+			if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 			end 
 		end
@@ -201,7 +202,7 @@ function guiLib:CreateModule(tbl)
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				if getgenv().canSave then 
+				if ModuleOn[tbl["Name"]] ~= "Uninject" getgenv().canSave then 
 				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 				end
 				task.spawn(function()
@@ -211,7 +212,7 @@ function guiLib:CreateModule(tbl)
 				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-				if getgenv().canSave then 
+				if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
 				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
 				end 
 				task.spawn(function()
@@ -229,14 +230,14 @@ function guiLib:CreateModule(tbl)
 			ModuleOn[tbl["Name"]] = false 
 			guiLib:Notify(tbl["Name"], "Disabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-			if getgenv().canSave then 
+			if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 			end
 		else 
 			ModuleOn[tbl["Name"]] = true 
 			guiLib:Notify(tbl["Name"], "Enabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-			if getgenv().canSave then 
+			if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
 			end
 		end 
@@ -373,7 +374,7 @@ function guiLib:Enable(enabledmodule)
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				guiLib.moduletable[enabledmodule] = true
-				if getgenv().canSave then 
+				if enabledmodule ~= "Uninject" and getgenv().canSave then 
                 		writefile("testlib/config/"..game.GameId.."/Modules/"..enabledmodule..".txt", "true") 
 				end 
 				code(getModuleFunc(enabledmodule))
