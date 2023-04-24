@@ -189,7 +189,7 @@ function guiLib:CreateModule(tbl)
 			if readfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
 		else 
 			ModuleOn[tbl["Name"]] = false
-			if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
+			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 			end 
 		end
@@ -202,7 +202,7 @@ function guiLib:CreateModule(tbl)
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				module.TextSize = 18
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
+				if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 				end
 				task.spawn(function()
@@ -212,7 +212,7 @@ function guiLib:CreateModule(tbl)
 				ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-				if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
+				if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
 				end 
 				task.spawn(function()
@@ -230,14 +230,14 @@ function guiLib:CreateModule(tbl)
 			ModuleOn[tbl["Name"]] = false 
 			guiLib:Notify(tbl["Name"], "Disabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-			if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
+			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 			end
 		else 
 			ModuleOn[tbl["Name"]] = true 
 			guiLib:Notify(tbl["Name"], "Enabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-			if ModuleOn[tbl["Name"]] ~= "Uninject" and getgenv().canSave then 
+			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
 			end
 		end 
