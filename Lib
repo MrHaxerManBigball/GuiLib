@@ -8,6 +8,7 @@ if not isfolder("testlib/games") then makefolder("testlib/games") end
 if not isfolder("testlib/config/"..game.GameId) then makefolder("testlib/config/"..game.GameId) end 
 if not isfolder("testlib/config/"..game.GameId.."/Modules") then makefolder("testlib/config/"..game.GameId.."/Modules") end 
 if not isfolder("testlib/config/"..game.GameId.."/DropDowns") then makefolder("testlib/config/"..game.GameId.."/DropDowns") end 
+if not isfolder("testlib/config/"..game.GameId.."/Binds") then makefolder("testlib/config/"..game.GameId.."/Binds") end 
 getgenv().executed = true
 getgenv().canSave = true 
 local guiLib = {}
@@ -196,7 +197,8 @@ function guiLib:CreateModule(tbl)
 	end
 	connection3 = uis.InputBegan:Connect(function(input) 
 		table.insert(guiLib.disconnectfuncs, connection3)
-		if input.KeyCode == guiLib.binds[tbl["Name"]] and not uis:GetFocusedTextBox() then 
+		if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
+			if input.KeyCode == Enum.KeyCode[readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")] and not uis:GetFocusedTextBox() then 
 			if ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
@@ -219,6 +221,8 @@ function guiLib:CreateModule(tbl)
 					code(tbl["Function"])
 				end)
 			end 
+			else 
+			writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
 		end 
 	end) 
 	task.spawn(function()
