@@ -248,7 +248,7 @@ function guiLib:CreateDropDown(tbl2)
 	local dropdownText = Instance.new("TextLabel", realwindow)
 	local dropdown2 = Instance.new("TextBox", dropdownText) 
 	--corner:Clone().Parent = dropdown2
-	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,2 * (TabAmount[tbl2["Module"]] ))
+	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,2 * (TabAmount[module] ))
 	dropdownText.TextSize = 10
 	dropdownText.Text = tbl2["Name"]..": "
 	dropdownText.BackgroundTransparency = 0.9
@@ -277,9 +277,9 @@ function guiLib:CreateDropDown(tbl2)
 	if tbl2["Default"] then 
 		if tbl2["Default"] then 
 			if isfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt") and readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt") ~= "" then 
-				guiLib.DropDownValue[tbl2["Module"]][tbl2["Name"]] = readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt")
+				guiLib.DropDownValue[module.tbl2["Name"]] = readfile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt")
 			else 
-				guiLib.DropDownValue[tbl2["Module"]][tbl2["Name"]] = tbl2["Default"]
+				guiLib.DropDownValue[module.tbl2["Name"]] = tbl2["Default"]
 				writefile("testlib/config/"..game.GameId.."/DropDowns/"..tbl2["Module"].."/"..tbl2["Name"]..".txt", tbl2["Default"])
 			end 
 		end
