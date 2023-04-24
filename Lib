@@ -313,7 +313,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.Selectable = false 
 			dropdownText.Size = UDim2.new(0,0,0)
 		else 
-			dropdown2.Text = guiLib.DropDownValue[tbl2["Module"][tbl2["Name"]]] 
+			dropdown2.Text = guiLib.DropDownValue[tbl2["Module"]][tbl2["Name"]]
 			dropdown2.BackgroundTransparency = 0 
 			dropdown2.TextTransparency = 0
 			dropdown2.TextEditable = true 
