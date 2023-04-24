@@ -404,8 +404,10 @@ function guiLib:Notify(header, text, time, tweentime)
 		Notification:Destroy()
 	end)
 end
-return guiLib
+
 guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
+
+return guiLib
 
 --[[ examples: 
 
