@@ -443,12 +443,16 @@ function guiLib:Notify(header, text, time, tweentime)
 		Notification:Destroy()
 	end)
 end
-lplr.OnTeleport:Connect(function(State)
+local queueing
+queueing = lplr.OnTeleport:Connect(function(State)
     if State == Enum.TeleportState.InProgress then
         syn.queue_on_teleport('loadstring(readfile("testlib/loadstring.lua"))()')
     end
 end)
-
+task.spawn(function() 
+	repeat task.wait() until not getgenv().executed 
+	queueing:Disconnect()
+end)
 guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 
 return guiLib
