@@ -33,7 +33,6 @@ function guiLib:randomString(amount)
     return returnedString
 end
 
-guiLib.binds = getgenv().binds or {}
 local lplr = Players.LocalPlayer
 guiLib.isAlive = function(plr)
 	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
@@ -195,8 +194,7 @@ function guiLib:CreateModule(tbl)
 			end 
 		end
 	end
-	connection3 = uis.InputBegan:Connect(function(input) 
-		table.insert(guiLib.disconnectfuncs, connection3)
+	getgenv().binds = uis.InputBegan:Connect(function(input) 
 		if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
 			if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" and input.KeyCode == Enum.KeyCode[readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")] and not uis:GetFocusedTextBox() then 
                 if ModuleOn[tbl["Name"]] then 
