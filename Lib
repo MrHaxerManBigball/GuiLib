@@ -336,7 +336,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.TextTransparency = 1
 			dropdownText.Selectable = false 
 			dropdownText.Size = UDim2.new(0,0,0)
-			dropdown2.ZIndex = = 0 
+			dropdown2.ZIndex = 0 
 		else 
 			dropdown2.Text = guiLib.DropDownValue[realModule][tbl2["Name"]]
 			dropdown2.BackgroundTransparency = 0 
