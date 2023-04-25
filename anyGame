@@ -51,7 +51,7 @@ GuiLib:CreateModule({
             task.spawn(function()
                 repeat task.wait() until GuiLib:GetDropDownValue("Fly", "Speed") 
                 repeat 
-                    if isAlive(lplr) then 
+                    if isAlive(lplr) and GuiLib:GetDropDownValue("Fly", "Speed") ~= "" then 
                         if uis:IsKeyDown(Enum.KeyCode.Space) and not uis:GetFocusedTextBox() then FlyY = GuiLib:GetDropDownValue("Fly", "Speed") or 10 elseif not uis:IsKeyDown(Enum.KeyCode.LeftShift) then FlyY = 0 end 
                         if uis:IsKeyDown(Enum.KeyCode.LeftShift) and not uis:GetFocusedTextBox() then FlyY = -GuiLib:GetDropDownValue("Fly", "Speed")  or 10 elseif not uis:IsKeyDown(Enum.KeyCode.Space) then FlyY = 0 end  
                         FlyVelo = lplr.Character.Humanoid.MoveDirection * GuiLib:GetDropDownValue("Fly", "Speed") or 22.5
@@ -113,7 +113,7 @@ GuiLib:CreateModule({
             task.spawn(function()
                 repeat task.wait() until GuiLib:GetDropDownValue("Speed", "Speed")
                 repeat 
-                    if isAlive(lplr) and not GuiLib:Enabled("Fly") and not GuiLib:Enabled("InfiniteFly") then 
+                    if isAlive(lplr) and not GuiLib:Enabled("Fly") and not GuiLib:GetDropDownValue("Speed", "Speed") == "" then 
                         SpeedVelo = lplr.Character.Humanoid.MoveDirection * GuiLib:GetDropDownValue("Speed", "Speed") or 23
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.new(SpeedVelo.X,lplr.Character.HumanoidRootPart.Velocity.Y,SpeedVelo.Z)
                     end 
