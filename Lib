@@ -39,7 +39,7 @@ guiLib.isAlive = function(plr)
 	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
 end
 function guiLib:Enabled(module)
-	return ModuleOn[tostring(module)] or false 
+	return guiLib.ModuleOn[tostring(module)] or false 
 end 
 guiLib.isTeammate =  function(plr) 
 	return plr.Team == lplr.Team and lplr.Team
@@ -136,7 +136,7 @@ RenderWindow.Active = true
 RenderWindow.Draggable = true 
 RenderWindow.BorderSizePixel = 0 
 ModuleAmmount = {}
-ModuleOn = {}
+guiLib.ModuleOn = {}
 guiLib.DropDownValue = {"Value" == 0}
 function guiLib:GetDropDownValue(dropped, dropname) 
 	return guiLib.DropDownValue[dropped][dropname]
@@ -185,60 +185,30 @@ function guiLib:CreateModule(tbl)
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
 	module.Name = guiLib:randomString(50)
-	if not ModuleOn[tbl["Name"]] then 
+	if not guiLib.ModuleOn[tbl["Name"]] then 
 		if isfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") then
 			if readfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
 		else 
-			ModuleOn[tbl["Name"]] = false
+			guiLib.ModuleOn[tbl["Name"]] = false
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 			end 
 		end
 	end
-		getgenv().binds = uis.InputBegan:Connect(function(input) 
-			if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
-				if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" and input.KeyCode == Enum.KeyCode[readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")] and not uis:GetFocusedTextBox() then 
-			if ModuleOn[tbl["Name"]] then 
-			    ModuleOn[tbl["Name"]] = false 
-			    guiLib:Notify(tbl["Name"], "Disabled", 1)
-			    module.TextSize = 18
-			    module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-			    if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-			    writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
-			    end
-			    task.spawn(function()
-				code(tbl["Function"])
-			    end)
-			else 
-			    ModuleOn[tbl["Name"]] = true 
-			    guiLib:Notify(tbl["Name"], "Enabled", 1)
-			    module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-			    if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
-			    end 
-			    task.spawn(function()
-				code(tbl["Function"])
-			    end)
-			end 
-		    end
-			else 
-				writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
-			end 
-		end)
 	task.spawn(function()
 		module.MouseButton1Down:Connect(tbl["Function"]) 
 	end)
 	connection4 = module.MouseButton1Down:Connect(function(func) 
 		table.insert(guiLib.disconnectfuncs, connection4)
-		if ModuleOn[tbl["Name"]] then 
-			ModuleOn[tbl["Name"]] = false 
+		if guiLib.ModuleOn[tbl["Name"]] then 
+			guiLib.ModuleOn[tbl["Name"]] = false 
 			guiLib:Notify(tbl["Name"], "Disabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
 			end
 		else 
-			ModuleOn[tbl["Name"]] = true 
+			guiLib.ModuleOn[tbl["Name"]] = true 
 			guiLib:Notify(tbl["Name"], "Enabled", 1)
 			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
@@ -246,6 +216,38 @@ function guiLib:CreateModule(tbl)
 			end
 		end 
 	end) 
+	getgenv().binds = {} 
+	local binds2 = uis.InputBegan:Connect(function(input) 
+		table.insert(getgenv().binds, binds2)
+		if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
+			if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" and input.KeyCode == Enum.KeyCode[readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")] and not uis:GetFocusedTextBox() then 
+				if guiLib.ModuleOn[tbl["Name"]] then 
+					guiLib.ModuleOn[tbl["Name"]] = false 
+					guiLib:Notify(tbl["Name"], "Disabled", 1)
+					module.TextSize = 18
+					module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+					if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
+						writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
+					end
+					task.spawn(function()
+						code(tbl["Function"])
+					end)
+				else 
+					guiLib.ModuleOn[tbl["Name"]] = true 
+					guiLib:Notify(tbl["Name"], "Enabled", 1)
+					module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+					if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
+						writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
+					end 
+					task.spawn(function()
+						code(tbl["Function"])
+					end)
+				end 
+			end
+		else 
+			writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
+		end 
+	end)
 end 
 local TabAmount = {}
 local gottenModule
@@ -356,8 +358,8 @@ function guiLib:CreateDropDown(tbl2)
 	end) 
 end 
 function guiLib:Disable(disablemodule)
-	if ModuleOn[disablemodule]  then 
-		ModuleOn[disablemodule] = false 
+	if guiLib.ModuleOn[disablemodule]  then 
+		guiLib.ModuleOn[disablemodule] = false 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
@@ -373,8 +375,8 @@ function guiLib:Disable(disablemodule)
 	end 
 end
 function guiLib:Enable(enabledmodule)
-	if  not ModuleOn[enabledmodule] then 
-		ModuleOn[enabledmodule] = true 
+	if  not guiLib.ModuleOn[enabledmodule] then 
+		guiLib.ModuleOn[enabledmodule] = true 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
