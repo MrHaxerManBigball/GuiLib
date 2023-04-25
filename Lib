@@ -141,6 +141,7 @@ guiLib.DropDownValue = {"Value" == 0}
 function guiLib:GetDropDownValue(dropped, dropname) 
 	return guiLib.DropDownValue[dropped][dropname]
 end 
+getgenv().binds = {} 
 ModuleAmmount.WorldWindow = 0  
 ModuleAmmount.CombatWindow = 0
 ModuleAmmount.UtilityWindow = 0
@@ -216,11 +217,13 @@ function guiLib:CreateModule(tbl)
 			end
 		end 
 	end) 
-	getgenv().binds = {} 
+if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
+	if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" then 
+		local stored = readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")
+	end 
 	local binds2 = uis.InputBegan:Connect(function(input) 
 		table.insert(getgenv().binds, binds2)
-		if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
-			if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" and input.KeyCode == Enum.KeyCode[readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")] and not uis:GetFocusedTextBox() then 
+			if input.KeyCode == Enum.KeyCode[stored] and not uis:GetFocusedTextBox() then 
 				if guiLib.ModuleOn[tbl["Name"]] then 
 					guiLib.ModuleOn[tbl["Name"]] = false 
 					guiLib:Notify(tbl["Name"], "Disabled", 1)
@@ -244,10 +247,10 @@ function guiLib:CreateModule(tbl)
 					end)
 				end 
 			end
-		else 
-			writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
-		end 
-	end)
+		end)
+	else 
+		writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
+	end
 end 
 local TabAmount = {}
 local gottenModule
