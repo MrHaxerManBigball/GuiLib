@@ -194,9 +194,8 @@ function guiLib:CreateModule(tbl)
 			end 
 		end
 	end
-	if not getgenv().binds then 
 		getgenv().binds = uis.InputBegan:Connect(function(input) 
-			if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") and getgenv().executed then
+			if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
 				if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" and input.KeyCode == Enum.KeyCode[readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")] and not uis:GetFocusedTextBox() then 
 			if ModuleOn[tbl["Name"]] then 
 			    ModuleOn[tbl["Name"]] = false 
@@ -225,7 +224,6 @@ function guiLib:CreateModule(tbl)
 				writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
 			end 
 		end)
-	end
 	task.spawn(function()
 		module.MouseButton1Down:Connect(tbl["Function"]) 
 	end)
