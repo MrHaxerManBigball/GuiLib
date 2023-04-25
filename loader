@@ -2,6 +2,6 @@ repeat task.wait() until game:IsLoaded()
 if isfolder("testlib") and isfile("testlib/games/"..game.GameId..".lua") then 
 	loadstring(readfile("testlib/games/"..game.GameId..".lua"))()
 	else 
-	error("Unsupported game")
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/anyGame", true))()
 end 
 
