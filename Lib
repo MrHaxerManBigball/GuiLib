@@ -194,36 +194,38 @@ function guiLib:CreateModule(tbl)
 			end 
 		end
 	end
-	getgenv().binds = uis.InputBegan:Connect(function(input) 
-		if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
-			if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" and input.KeyCode == Enum.KeyCode[readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")] and not uis:GetFocusedTextBox() then 
-                if ModuleOn[tbl["Name"]] then 
-                    ModuleOn[tbl["Name"]] = false 
-                    guiLib:Notify(tbl["Name"], "Disabled", 1)
-                    module.TextSize = 18
-                    module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-                    if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-                    writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
-                    end
-                    task.spawn(function()
-                        code(tbl["Function"])
-                    end)
-                else 
-                    ModuleOn[tbl["Name"]] = true 
-                    guiLib:Notify(tbl["Name"], "Enabled", 1)
-                    module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-                    if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-                        writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
-                    end 
-                    task.spawn(function()
-                        code(tbl["Function"])
-                    end)
-                end 
-            end
-		else 
-			writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
-		end 
-	end) 
+	if not getgenv().binds then 
+		getgenv().binds = uis.InputBegan:Connect(function(input) 
+			if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") and getgenv().executed then
+				if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" and input.KeyCode == Enum.KeyCode[readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")] and not uis:GetFocusedTextBox() then 
+			if ModuleOn[tbl["Name"]] then 
+			    ModuleOn[tbl["Name"]] = false 
+			    guiLib:Notify(tbl["Name"], "Disabled", 1)
+			    module.TextSize = 18
+			    module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+			    if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
+			    writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
+			    end
+			    task.spawn(function()
+				code(tbl["Function"])
+			    end)
+			else 
+			    ModuleOn[tbl["Name"]] = true 
+			    guiLib:Notify(tbl["Name"], "Enabled", 1)
+			    module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+			    if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
+				writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
+			    end 
+			    task.spawn(function()
+				code(tbl["Function"])
+			    end)
+			end 
+		    end
+			else 
+				writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
+			end 
+		end)
+	end
 	task.spawn(function()
 		module.MouseButton1Down:Connect(tbl["Function"]) 
 	end)
