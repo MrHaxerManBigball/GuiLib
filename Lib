@@ -249,9 +249,10 @@ if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
 					end 
 				end
 			end)
-		else 
-			writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
+	
 		end
+	else 
+		writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", "")
 	end
 end 
 local TabAmount = {}
