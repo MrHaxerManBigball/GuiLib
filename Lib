@@ -221,7 +221,7 @@ if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
 	if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" then 
 		local stored = readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")
 		local binds2 = uis.InputBegan:Connect(function(input) 
-			if binds2 and not getgenv().executed then binds2:Disconnect() end 
+			if binds2 and not getgenv().executed then print(getgenv().executed) binds2:Disconnect() end 
 			table.insert(getgenv().binds, binds2)
 				if input.KeyCode == Enum.KeyCode[stored] and not uis:GetFocusedTextBox() then 
 					if guiLib.ModuleOn[tbl["Name"]] then 
