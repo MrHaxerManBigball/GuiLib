@@ -148,7 +148,7 @@ ModuleAmmount.UtilityWindow = 0
 ModuleAmmount.MovementWindow = 0
 ModuleAmmount.RenderWindow = 0 
 guiLib.disconnectfuncs = {}
-local connection1, connection2, connection3, connection4, realwindow, wname
+local connection1, connection2, connection3, connection4, realwindow, wname, binds2
 function guiLib:CreateModule(tbl)
 	realwindow = nil
 	table.insert(guiLib.moduletable, tbl["Name"])
@@ -220,7 +220,8 @@ function guiLib:CreateModule(tbl)
 if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
 	if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" then 
 		local stored = readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt")
-		local binds2 = uis.InputBegan:Connect(function(input) 
+		binds2 = uis.InputBegan:Connect(function(input) 
+			if not getgenv().executed and binds2 then binds2:Disconnect() end 
 			if not getgenv().executed then return end 
 			table.insert(getgenv().binds, binds2)
 				if input.KeyCode == Enum.KeyCode[stored] and not uis:GetFocusedTextBox() then 
