@@ -172,6 +172,7 @@ function guiLib:CreateModule(tbl)
 	ModuleAmmount[wname] += 1
 	--local corner = Instance.new("UICorner", realwindow  or WorldWindow)
 	local module = Instance.new("TextButton", realwindow or WorldWindow)
+	local bindmenu = Instance.new("TextBox", module)
 	--corner:Clone().Parent = module
 	module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	module.BackgroundTransparency = 0.5
@@ -186,6 +187,18 @@ function guiLib:CreateModule(tbl)
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
 	module.Name = guiLib:randomString(50)
+	bindmenu.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+	bindmenu.BackgroundTransparency = 1
+	bindmenu.Position = UDim2.new(realwindow.Position) + UDim2.new(0,0,1.5)
+	bindmenu.Size = UDim2.new(0, 0, 0, 0)
+	bindmenu.Font = Enum.Font.SourceSans
+	bindmenu.TextStrokeColor3 = Color3.fromRGB(255, 0, 255)
+	bindmenu.TextColor3 = Color3.fromRGB(255, 255, 255)
+	bindmenu.TextSize = 18
+	bindmenu.TextXAlignment = "Left"
+	bindmenu.TextTransparency = 0 
+	bindmenu.BorderSizePixel = 0 
+	bindmenu.TextTransparency = 1
 	if not guiLib.ModuleOn[tbl["Name"]] then 
 		if isfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") then
 			if readfile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt") == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
@@ -199,23 +212,32 @@ function guiLib:CreateModule(tbl)
 	task.spawn(function()
 		module.MouseButton1Down:Connect(tbl["Function"]) 
 	end)
-	connection4 = module.MouseButton1Down:Connect(function(func) 
+		connection4 = module.MouseButton1Down:Connect(function(func) 
 		table.insert(guiLib.disconnectfuncs, connection4)
-		if guiLib.ModuleOn[tbl["Name"]] then 
-			guiLib.ModuleOn[tbl["Name"]] = false 
-			guiLib:Notify(tbl["Name"], "Disabled", 1)
-			module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
-			end
+		if uis:IsKeyDown(Enum.KeyCode.LeftShift) then 
+			bindmenu.Size = UDim2.new(0, 100, 0, 50)
+			bindmenu.BackgroundTransparency = 0.3 
+			bindmenu.TextTransparency = 0 
+			bindmenu.ZIndex = 5
+			task.spawn(function()
+				repeat task.wait() until not uis:IsKeyDown(Enum.KeyCode.LeftShift) and not uis:GetFocusedTextBox()
+				writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", bindmenu.Text)
+				bindmenu.Size = UDim2.new(0, 0, 0, 0)
+				bindmenu.BackgroundTransparency = 1 
+				bindmenu.TextTransparency = 1
+				bindmenu.ZIndex = 0
+			end)
 		else 
-			guiLib.ModuleOn[tbl["Name"]] = true 
-			guiLib:Notify(tbl["Name"], "Enabled", 1)
-			module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "true") 
-			end
-		end 
+			if ModuleOn[tbl["Name"]] then 
+				ModuleOn[tbl["Name"]] = false 
+				guiLib:Notify(tbl["Name"], "Disabled", 1)
+				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+			else 
+				ModuleOn[tbl["Name"]] = true 
+				guiLib:Notify(tbl["Name"], "Enabled", 1)
+				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+			end 
+		end
 	end) 
 if isfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") then
 	if readfile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt") ~= "" then 
