@@ -195,6 +195,7 @@ function guiLib:CreateModule(tbl)
 	bindmenu.TextStrokeColor3 = Color3.fromRGB(255, 0, 255)
 	bindmenu.TextColor3 = Color3.fromRGB(255, 255, 255)
 	bindmenu.TextSize = 18
+	bindmenu.Text = ""
 	bindmenu.TextXAlignment = "Left"
 	bindmenu.TextTransparency = 0 
 	bindmenu.BorderSizePixel = 0 
