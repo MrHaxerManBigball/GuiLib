@@ -207,6 +207,7 @@ function guiLib:CreateModule(tbl)
 			guiLib.ModuleOn[tbl["Name"]] = false
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			writefile("testlib/config/"..game.GameId.."/Modules/"..tbl["Name"]..".txt", "false") 
+			guiLib:Notify("Binds", "Reinject to apply binds...", 3)
 			end 
 		end
 	end
