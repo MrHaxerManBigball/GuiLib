@@ -172,7 +172,7 @@ function guiLib:CreateModule(tbl)
 	ModuleAmmount[wname] += 1
 	--local corner = Instance.new("UICorner", realwindow  or WorldWindow)
 	local module = Instance.new("TextButton", realwindow or WorldWindow)
-	local bindmenu = Instance.new("TextBox", module)
+	local bindmenu = Instance.new("TextBox", realWindow or WorldWindow)
 	--corner:Clone().Parent = module
 	module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	module.BackgroundTransparency = 0.5
@@ -218,7 +218,7 @@ function guiLib:CreateModule(tbl)
 			bindmenu.Size = UDim2.new(0, 100, 0, 50)
 			bindmenu.BackgroundTransparency = 0.3 
 			bindmenu.TextTransparency = 0 
-			bindmenu.ZIndex = 5
+			bindmenu.ZIndex = 500
 			task.spawn(function()
 				repeat task.wait() until not uis:IsKeyDown(Enum.KeyCode.LeftShift) and not uis:GetFocusedTextBox()
 				writefile("testlib/config/"..game.GameId.."/Binds/"..tbl["Name"]..".txt", bindmenu.Text)
