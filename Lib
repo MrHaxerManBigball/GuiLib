@@ -230,12 +230,12 @@ function guiLib:CreateModule(tbl)
 				bindmenu.ZIndex = 0
 			end)
 		else 
-			if ModuleOn[tbl["Name"]] then 
+			if guiLib.ModuleOn[tbl["Name"]] then 
 				ModuleOn[tbl["Name"]] = false 
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 			else 
-				ModuleOn[tbl["Name"]] = true 
+				guiLib.ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 			end 
