@@ -172,7 +172,7 @@ function guiLib:CreateModule(tbl)
 	ModuleAmmount[wname] += 1
 	--local corner = Instance.new("UICorner", realwindow  or WorldWindow)
 	local module = Instance.new("TextButton", realwindow or WorldWindow)
-	local bindmenu = Instance.new("TextBox", realWindow)
+	local bindmenu = Instance.new("TextBox", module)
 	--corner:Clone().Parent = module
 	module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	module.BackgroundTransparency = 0.5
@@ -186,6 +186,7 @@ function guiLib:CreateModule(tbl)
 	module.Text = " "..tostring(tbl["Name"])
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
+	module.ZIndex = 0 
 	module.Name = guiLib:randomString(50)
 	bindmenu.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	bindmenu.BackgroundTransparency = 1
