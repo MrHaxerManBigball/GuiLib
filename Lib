@@ -253,8 +253,10 @@ function guiLib:CreateModule(tbl)
 				guiLib.ModuleOn[tbl["Name"]] = false 
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				config[tbl.Name] = "false"
-				writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
+				if getgenv().canSave then 
+					config[tbl.Name] = "false"
+					writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
+				end
 			else 
 				guiLib.ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
@@ -304,8 +306,10 @@ if binds[tbl.Name] then
 	
 		end
 	else 
-		config[tbl.Name] = "false",
-		writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
+		if getgenv().canSave then 
+			config[tbl.Name] = "false",
+			writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
+		end 
 	end
 end 
 local TabAmount = {}
