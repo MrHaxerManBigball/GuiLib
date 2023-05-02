@@ -346,7 +346,7 @@ function guiLib:CreateDropDown(tbl2)
 			writefile("testlib/config/"..game.GameId.."/DropDowns/"..realModule.."/"..tbl2["Name"]..".txt", dropdown2.Text)
 		end
 			guiLib.DropDownValue[realModule][tbl2["Name"]] = dropdown2.Text
-			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
+			if dropdown2 and dropdown2.Text and tbl2 and dropdown2.Text ~= "" and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
 				dropdown2.Text = tbl2["Min"]
 				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Min"]
 			elseif dropdown2 and tbl2 and tbl2["Max"] and tonumber(dropdown2.Text) > tonumber(tbl2["Max"]) then
