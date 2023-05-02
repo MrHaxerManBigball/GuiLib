@@ -362,7 +362,7 @@ function guiLib:CreateDropDown(tbl2)
 			else 
 				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Default"]
 				if getgenv().canSave then 
-					dropdowns[tbl2.Name] = ""
+					dropdowns[tbl2.Name] = tbl2["Default"]
 					writefile("testlib/config/"..game.GameId.."/DropDowns/Main.txt", http:JSONEncode(dropdowns))
 				end
 			end 
