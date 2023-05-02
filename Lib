@@ -328,6 +328,7 @@ function guiLib:CreateDropDown(tbl2)
 	repeat task.wait() until guiLib:GetModule(realModule)
 	if not TabAmount[realModule] then TabAmount[realModule] = 0 end 
 	if not guiLib.DropDownValue[realModule] then guiLib.DropDownValue[realModule] = {} end 
+	guiLib.DropDownValue[realModule][tbl2["Name"]] = 0 
 	local module = guiLib:GetModule(realModule)
     TabAmount[realModule] +=1
 	local dropdownText = Instance.new("TextLabel", realwindow)
@@ -405,7 +406,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.Size = UDim2.new(0,0,0)
 			dropdownText.ZIndex = 1
 		else 
-			dropdown2.Text = dropdowns[tbl2.Name]
+			dropdown2.Text = guiLib.DropDownValue[realModule][tbl2["Name"]]
 			dropdown2.BackgroundTransparency = 0 
 			dropdown2.TextTransparency = 0
 			dropdown2.TextEditable = true 
