@@ -430,7 +430,7 @@ function guiLib:Disable(disablemodule)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				guiLib.moduletable[disablemodule] = false
 				if getgenv().canSave then 
-                	config[enabledmodule] = "false"
+                	config[disablemodule] = "false"
 					writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
 				end
 				code(getModuleFunc(disablemodule))
