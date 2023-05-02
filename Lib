@@ -223,7 +223,7 @@ function guiLib:CreateModule(tbl)
 		else 
 			guiLib.ModuleOn[tbl["Name"]] = false
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-			config[tbl.Name] = "false",
+			config[tbl.Name] = "false"
 			writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
 			guiLib:Notify("Binds", "Reinject to apply binds...", 3)
 			end 
@@ -281,7 +281,7 @@ if binds[tbl.Name] then
 						module.TextSize = 18
 						module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 						if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-							config[tbl.Name] = "false",
+							config[tbl.Name] = "false"
 							writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
 						end
 						task.spawn(function()
@@ -292,7 +292,7 @@ if binds[tbl.Name] then
 						guiLib:Notify(tbl["Name"], "Enabled", 1)
 						module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 						if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-							config[tbl.Name] = "true",
+							config[tbl.Name] = "true"
 							writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
 						end 
 						task.spawn(function()
@@ -430,7 +430,7 @@ function guiLib:Disable(disablemodule)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				guiLib.moduletable[disablemodule] = false
 				if getgenv().canSave then 
-                	config[enabledmodule] = "false",
+                	config[enabledmodule] = "false"
 					writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
 				end
 				code(getModuleFunc(disablemodule))
@@ -448,7 +448,7 @@ function guiLib:Enable(enabledmodule)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				guiLib.moduletable[enabledmodule] = true
 				if enabledmodule ~= "Uninject" and getgenv().canSave then 
-					config[enabledmodule] = "true",
+					config[enabledmodule] = "true"
 					writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
 				end 
 				code(getModuleFunc(enabledmodule))
