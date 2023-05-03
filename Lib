@@ -169,7 +169,6 @@ ModuleAmmount.RenderWindow = 0
 guiLib.disconnectfuncs = {}
 local connection1, connection2, connection3, connection4, realwindow, wname, binds2
 function guiLib:CreateModule(tbl)
-	print(tbl.Name, config.Modules[tbl.Name])
 	realwindow = nil
 	table.insert(guiLib.moduletable, tbl["Name"])
 	table.insert(guiLib.functions, tbl)
@@ -224,7 +223,8 @@ function guiLib:CreateModule(tbl)
 	if not guiLib.ModuleOn[tbl["Name"]] then 
 		if config.Modules[tbl.Name] then
 			if config.Modules[tbl.Name] == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
-		else 
+		else 	
+			print(tbl.Name, config.Modules[tbl.Name])
 			guiLib.ModuleOn[tbl["Name"]] = false
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			config.Modules[tbl.Name] = "false"
@@ -438,7 +438,6 @@ function guiLib:Disable(disablemodule)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				guiLib.moduletable[disablemodule] = false
 				if getgenv().canSave then 
-				print(disablemodule)
                 	config.Modules[disablemodule] = "false"
 					save("Modules")
 				end
