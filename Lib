@@ -243,7 +243,7 @@ function guiLib:CreateModule(tbl)
 			bindmenu.TextTransparency = 0 
 			bindmenu.ZIndex = 500
 			task.spawn(function()
-				repeat task.wait() until not uis:IsKeyDown(Enum.KeyCode.LeftShift) and not uis:GetFocusedTextBox()
+				repeat task.wait() until (not uis:IsKeyDown(Enum.KeyCode.LeftShift) or uis:IsKeyDown(Enum.KeyCode.Return)) and not uis:GetFocusedTextBox()
 				config.Binds[tbl.Name] = bindmenu.Text
 				save("Binds")
 				bindmenu.Size = UDim2.new(0, 0, 0, 0)
