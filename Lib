@@ -40,6 +40,7 @@ end
 function save(whichconfig) 
 	writefile("testlib/config/"..game.GameId.."/"..whichconfig.."/Main.txt", http:JSONEncode(config[whichconfig]))
 end 
+task.wait(1)
 function code(b) 
 	b() 
 end 
