@@ -228,7 +228,6 @@ function guiLib:CreateModule(tbl)
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			config.Modules[tbl.Name] = "false"
 			save("Modules")
-			guiLib:Notify("Binds", "Reinject to apply binds...", 3)
 			end 
 		end
 	end
@@ -244,6 +243,7 @@ function guiLib:CreateModule(tbl)
 			bindmenu.ZIndex = 500
 			task.spawn(function()
 				repeat task.wait() until (not uis:IsKeyDown(Enum.KeyCode.LeftShift) or uis:IsKeyDown(Enum.KeyCode.Return)) and not uis:GetFocusedTextBox()
+				guiLib:Notify("Binds", "Reinject to apply binds...", 3)
 				config.Binds[tbl.Name] = bindmenu.Text
 				save("Binds")
 				bindmenu.Size = UDim2.new(0, 0, 0, 0)
@@ -272,9 +272,9 @@ function guiLib:CreateModule(tbl)
 			end 
 		end
 	end) 
-if binds[tbl.Name] then
-	if binds[tbl.Name] ~= "" then 
-		local stored = binds[tbl.Name]
+if config.Binds[tbl.Name] then
+	if config.Binds[tbl.Name] ~= "" then 
+		local stored = config.Binds[tbl.Name]
 		binds2 = uis.InputBegan:Connect(function(input) 
 			if not getgenv().executed and binds2 then binds2:Disconnect() end 
 			if not getgenv().executed then return end 
