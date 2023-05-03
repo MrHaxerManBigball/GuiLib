@@ -18,24 +18,27 @@ guiLib.moduletable = {}
 local Players = game:GetService("Players") 
 local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
-local config, binds, dropdowns
+local config = {}
 if isfile("testlib/config/"..game.GameId.."/Modules/Main.txt") then 
-	config = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Modules/Main.txt"))
+	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Modules/Main.txt"))
 else 
-	config = {}
-	writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
+	config.Modules = {}
+	writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config.Modules))
 end 
 if isfile("testlib/config/"..game.GameId.."/Dropdowns/Main.txt") then 
-	dropdowns = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Dropdowns/Main.txt"))
+	config.Dropdowns = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Dropdowns/Main.txt"))
 else 
-	dropdowns = {}
-	writefile("testlib/config/"..game.GameId.."/Binds/Main.txt" , http:JSONEncode(dropdowns))
+	config.Dropdowns = {}
+	writefile("testlib/config/"..game.GameId.."/Binds/Main.txt" , http:JSONEncode(config.Dropdowns))
 end 
 if isfile("testlib/config/"..game.GameId.."/Binds/Main.txt") then 
-	binds = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Binds/Main.txt"))
+	config.Binds = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Binds/Main.txt"))
 else 
-	binds = {}
-	writefile("testlib/config/"..game.GameId.."/Binds/Main.txt" , http:JSONEncode(binds))
+	config.Binds = {}
+	writefile("testlib/config/"..game.GameId.."/Binds/Main.txt" , http:JSONEncode(config.Binds))
+end 
+function save(whichconfig) 
+	writefile("testlib/config/"..game.GameId.."/"..whichconfig.."/Main.txt", http:JSONEncode(config[whichconfig]))
 end 
 function code(b) 
 	b() 
@@ -218,13 +221,13 @@ function guiLib:CreateModule(tbl)
 	bindmenu.BorderSizePixel = 0 
 	bindmenu.TextTransparency = 1
 	if not guiLib.ModuleOn[tbl["Name"]] then 
-		if config[tbl.Name] then
-			if config[tbl.Name] == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+		if config.Modules[tbl.Name] then
+			if config.Modules[tbl.Name] == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
 		else 
 			guiLib.ModuleOn[tbl["Name"]] = false
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-			config[tbl.Name] = "false"
-			writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
+			config.Modules[tbl.Name] = "false"
+			save("Modules")
 			guiLib:Notify("Binds", "Reinject to apply binds...", 3)
 			end 
 		end
@@ -241,8 +244,8 @@ function guiLib:CreateModule(tbl)
 			bindmenu.ZIndex = 500
 			task.spawn(function()
 				repeat task.wait() until not uis:IsKeyDown(Enum.KeyCode.LeftShift) and not uis:GetFocusedTextBox()
-				binds[tbl.Name] = bindmenu.Text
-				writefile("testlib/config/"..game.GameId.."/Binds/Main.txt", http:JSONEncode(binds))
+				config.Binds[tbl.Name] = bindmenu.Text
+				save("Binds")
 				bindmenu.Size = UDim2.new(0, 0, 0, 0)
 				bindmenu.BackgroundTransparency = 1 
 				bindmenu.TextTransparency = 1
@@ -254,17 +257,17 @@ function guiLib:CreateModule(tbl)
 				guiLib:Notify(tbl["Name"], "Disabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 				if getgenv().canSave then 
-					config[tbl.Name] = "false"
-					writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
+					config.Modules[tbl.Name] = "false"
+					save("Modules")
 				end
 			else 
 				guiLib.ModuleOn[tbl["Name"]] = true 
 				guiLib:Notify(tbl["Name"], "Enabled", 1)
 				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 				if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-					config[tbl.Name] = "true"
+					config.Modules[tbl.Name] = "true"
 					getgenv().extratest = config
-					writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
+					save("Modules")
 				end
 			end 
 		end
@@ -283,8 +286,8 @@ if binds[tbl.Name] then
 						module.TextSize = 18
 						module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 						if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-							config[tbl.Name] = "false"
-							writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
+							config.Modules[tbl.Name] = "false"
+							save("Modules")
 						end
 						task.spawn(function()
 							code(tbl["Function"])
@@ -294,8 +297,8 @@ if binds[tbl.Name] then
 						guiLib:Notify(tbl["Name"], "Enabled", 1)
 						module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 						if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-							config[tbl.Name] = "true"
-							writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
+							config.Modules[tbl.Name] = "true"
+							save("Modules")
 						end 
 						task.spawn(function()
 							code(tbl["Function"])
@@ -307,8 +310,8 @@ if binds[tbl.Name] then
 		end
 	else 
 		if getgenv().canSave then 
-			config[tbl.Name] = "false",
-			writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
+			config.Modules[tbl.Name] = "false",
+			save("Modules")
 		end 
 	end
 end 
@@ -328,7 +331,6 @@ function guiLib:CreateDropDown(tbl2)
 	repeat task.wait() until guiLib:GetModule(realModule)
 	if not TabAmount[realModule] then TabAmount[realModule] = 0 end 
 	if not guiLib.DropDownValue[realModule] then guiLib.DropDownValue[realModule] = {} end 
-	guiLib.DropDownValue[realModule][tbl2["Name"]] = 0 
 	local module = guiLib:GetModule(realModule)
     TabAmount[realModule] +=1
 	local dropdownText = Instance.new("TextLabel", realwindow)
@@ -362,13 +364,13 @@ function guiLib:CreateDropDown(tbl2)
 	end
 	if tbl2["Default"] then 
 		if tbl2["Default"] then 
-			if dropdowns[tbl2.Name] and dropdowns[tbl2.Name] ~= "" then 
-				guiLib.DropDownValue[realModule][tbl2["Name"]] = config[tbl2.Name]
+			if config.Dropdowns[tbl2.Name] and config.Dropdowns[tbl2.Name] ~= "" then 
+				guiLib.DropDownValue[realModule][tbl2["Name"]] = config.Dropdowns[tbl2.Name]
 			else 
 				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Default"]
 				if getgenv().canSave then 
-					dropdowns[tbl2.Name] = tbl2["Default"]
-					writefile("testlib/config/"..game.GameId.."/DropDowns/Main.txt", http:JSONEncode(dropdowns))
+					config.Dropdowns[tbl2.Name] = tbl2["Default"]
+					save("Dropdowns")
 				end
 			end 
 		end
@@ -377,8 +379,8 @@ function guiLib:CreateDropDown(tbl2)
 		table.insert(guiLib.disconnectfuncs, connection1)
 		pcall(function()
 		if getgenv().canSave then 
-			dropdowns[tbl2.Name] = dropdown2.Text
-			writefile("testlib/config/"..game.GameId.."/DropDowns/Main.txt", http:JSONEncode(dropdowns))
+			config.Dropdowns[tbl2.Name] = dropdown2.Text
+			save("Dropdowns")
 		end
 			guiLib.DropDownValue[realModule][tbl2["Name"]] = dropdown2.Text
 			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
@@ -406,7 +408,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.Size = UDim2.new(0,0,0)
 			dropdownText.ZIndex = 1
 		else 
-			dropdown2.Text = (guiLib.DropDownValue[realModule] and guiLib.DropDownValue[realModule][tbl2["Name"]]) or "lol"
+			dropdown2.Text = dropdowns[tbl2.Name]
 			dropdown2.BackgroundTransparency = 0 
 			dropdown2.TextTransparency = 0
 			dropdown2.TextEditable = true 
@@ -435,8 +437,8 @@ function guiLib:Disable(disablemodule)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				guiLib.moduletable[disablemodule] = false
 				if getgenv().canSave then 
-                	config[disablemodule] = "false"
-					writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", http:JSONEncode(config))
+                	config.Modules[disablemodule] = "false"
+					save("Modules")
 				end
 				code(getModuleFunc(disablemodule))
 				break
@@ -453,8 +455,8 @@ function guiLib:Enable(enabledmodule)
 				guiLib:Notify(enabledmodule, "Enabled", 1)
 				guiLib.moduletable[enabledmodule] = true
 				if enabledmodule ~= "Uninject" and getgenv().canSave then 
-					config[enabledmodule] = "true"
-					writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config))
+					config.Modules[enabledmodule] = "true"
+					save("Modules")
 				end 
 				code(getModuleFunc(enabledmodule))
 				break
@@ -525,28 +527,31 @@ return guiLib
 --[[ examples 
 local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib", true))()
 guiLib:CreateModule({
-    ["Name"] = "Uninject", 
-    ["Window"] = "Utility", 
-    ["Function"] = function() 
+    Name = "Uninject", 
+    Window = "Utility", 
+    Function = function() 
         if guiLib:Enabled("Uninject") then 
+            local oldconfig = readfile("testlib/config/"..game.GameId.."/Modules/Main.txt")
             getgenv().canSave = false 
             for _,v in pairs(guiLib.moduletable) do 
-                if guiLib:Enabled(v) then 
+                if v ~= "Uninject" and guiLib:Enabled(v) then 
                     guiLib:Disable(v)
                 end 
             end 
             for _,v in pairs(guiLib.disconnectfuncs) do 
                 v:Disconnect() 
-                v = nil 
             end 
             guiLib.unj:Disconnect()
             guiLib.functions = {}
             guiLib.Boney:Destroy()  
+            guiLib.ModuleOn = {}
             guiLib.moduletable = {}
+            for _,v in pairs(getgenv().binds) do 
+                v:Disconnect() 
+            end
             getgenv().binds = {}
-            Speeding = false
-            guiLib.binds = {}
             getgenv().executed = false 
+            writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", oldconfig)
         end 
     end,
 })
