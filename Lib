@@ -408,7 +408,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.Size = UDim2.new(0,0,0)
 			dropdownText.ZIndex = 1
 		else 
-			dropdown2.Text = dropdowns[tbl2.Name]
+			dropdown2.Text = config.Dropdowns[tbl2.Name]
 			dropdown2.BackgroundTransparency = 0 
 			dropdown2.TextTransparency = 0
 			dropdown2.TextEditable = true 
