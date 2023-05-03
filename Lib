@@ -170,6 +170,7 @@ ModuleAmmount.RenderWindow = 0
 guiLib.disconnectfuncs = {}
 local connection1, connection2, connection3, connection4, realwindow, wname, binds2
 function guiLib:CreateModule(tbl)
+	print(tbl.Name, config.Modules[tbl.Name])
 	realwindow = nil
 	table.insert(guiLib.moduletable, tbl["Name"])
 	table.insert(guiLib.functions, tbl)
