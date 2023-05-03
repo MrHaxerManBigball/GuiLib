@@ -40,7 +40,6 @@ end
 function save(whichconfig) 
 	writefile("testlib/config/"..game.GameId.."/"..whichconfig.."/Main.txt", http:JSONEncode(config[whichconfig]))
 end 
-task.wait(1)
 function code(b) 
 	b() 
 end 
@@ -439,6 +438,7 @@ function guiLib:Disable(disablemodule)
 				guiLib:Notify(disablemodule, "Disabled", 1)
 				guiLib.moduletable[disablemodule] = false
 				if getgenv().canSave then 
+				print(disablemodule)
                 	config.Modules[disablemodule] = "false"
 					save("Modules")
 				end
