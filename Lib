@@ -519,7 +519,8 @@ task.spawn(function()
 end)
 if uis.TouchEnabled then 
 	guiLib:Notify("Josiah", "Tap the Boney Icon to\nopen GUI", 3)
-	local josiah = Instance.new("TextButton", guiLib.Boney) 
+	guiLib.whytheFUCK = Instance.new("ScreenGui", loadingGui)
+	local josiah = Instance.new("TextButton", guiLib.whytheFUCK) 
 	josiah.Name = guiLib:randomString(50)
 	josiah.TextSize = 5
 	josiah.Position = UDim2.new(1, -30, 0, 0)
