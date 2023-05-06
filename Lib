@@ -87,11 +87,6 @@ local TextButton = Instance.new("TextButton")
 guiLib.Boney.Name = guiLib:randomString(50)
 guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 guiLib.Boney.ResetOnSpawn = false
-guiLib.unj = uis.InputBegan:Connect(function(input) 
-	if input.KeyCode == Enum.KeyCode.RightShift then 
-		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
-	end 
-end) 
 local WorldWindow = Instance.new("TextLabel", guiLib.Boney)
 WorldWindow.Name = guiLib:randomString(50)
 WorldWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
@@ -522,7 +517,24 @@ task.spawn(function()
 	repeat task.wait() until not getgenv().executed 
 	queueing:Disconnect()
 end)
-guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
+if uis.TouchEnabled then 
+	guiLib:Notify("Josiah", "Tap the Boney Icon to\nopen GUI", 3)
+	local josiah = Instance.new("TextButton", guiLib.Boney) 
+	josiah.Name = guiLib:randomString(50)
+	josiah.Text = "Boney"
+	josiah.BorderSizePixel = 0
+	josiah.BackgroundTransparency = 0.5
+	josiah.MouseButton1Click:Connect(function() 
+		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
+	end)
+else 
+	guiLib.unj = uis.InputBegan:Connect(function(input) 
+	if input.KeyCode == Enum.KeyCode.RightShift then 
+		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
+	end 
+end) 
+	guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
+end
 
 return guiLib 
 --[[ examples 
