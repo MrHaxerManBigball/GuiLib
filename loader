@@ -1,6 +1,8 @@
 repeat task.wait() until game:IsLoaded() 
 if isfolder("testlib") and isfile("testlib/games/"..game.GameId..".lua") then 
 	loadstring(readfile("testlib/games/"..game.GameId..".lua"))()
+	elseif game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/games/"..game.GameId) then 
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/games/"..game.GameId, true))()
 	else 
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/anyGame", true))()
 end 
