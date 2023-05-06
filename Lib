@@ -521,8 +521,11 @@ if uis.TouchEnabled then
 	guiLib:Notify("Josiah", "Tap the Boney Icon to\nopen GUI", 3)
 	local josiah = Instance.new("TextButton", guiLib.Boney) 
 	josiah.Name = guiLib:randomString(50)
+	josiah.TextSize = 5
+	josiah.Position = UDim2.new(1, -30, 0, 0)
 	josiah.Text = "Boney"
 	josiah.BorderSizePixel = 0
+	josiah.Size = UDim2.new(0, 20, 0, 20)
 	josiah.BackgroundTransparency = 0.5
 	josiah.MouseButton1Click:Connect(function() 
 		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
