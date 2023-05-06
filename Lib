@@ -529,7 +529,7 @@ if uis.TouchEnabled then
 	end)
 else 
 	guiLib.unj = uis.InputBegan:Connect(function(input) 
-	if input.KeyCode == Enum.KeyCode.RightShift then 
+	if input.KeyCode == Enum.KeyCode.RightShift or input.KeyCode == Enum.KeyCode.Quote and not uis:GetFocusedTextBox() then 
 		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
 	end 
 end) 
