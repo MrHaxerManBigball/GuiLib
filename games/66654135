@@ -96,6 +96,7 @@ GuiLib:CreateModule({
             getgenv().binds = {}
             GuiLib.binds = {}
             getgenv().executed = false 
+            if GuiLib.whytheFUCK then  GuiLib.whytheFUCK:Destroy() end 
         end 
     end,
 })
