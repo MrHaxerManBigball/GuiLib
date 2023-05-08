@@ -20,8 +20,6 @@ local http = game:GetService("HttpService")
 local config = {}
 if isfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt") then 
 	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt"))
-    print("Got "..readfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt")..", installed "..tostring(http:JSONDecode(config.Modules)))
-    getgenv().testing = config.Modules
 else 
 	config.Modules = {}
 	writefile("testlib/config/"..game.PlaceId.."/Modules/Main.txt" , http:JSONEncode(config.Modules))
