@@ -219,7 +219,6 @@ function guiLib:CreateModule(tbl)
 		if config.Modules[tbl.Name] then
 			if config.Modules[tbl.Name] == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
 		else 	
-			print(tbl.Name, config.Modules[tbl.Name])
 			guiLib.ModuleOn[tbl["Name"]] = false
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
 			config.Modules[tbl.Name] = "false"
