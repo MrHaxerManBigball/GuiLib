@@ -12,6 +12,19 @@ end
 function isTeammate(plr) 
     return plr and plr ~= lplr and plr.Team == lplr.Team and lplr.Team
 end
+local fallingtime = 0 
+task.spawn(function()
+    repeat 
+        if isAlive(lplr) and lplr.Character.Humanoid.FloorMaterial == Enum.Material.Air and not GuiLib:Enabled("Fly") then 
+            if fallingtime < 50 then 
+                fallingtime += 0.1 
+            end 
+        else 
+            fallingtime = 0 
+        end 
+        task.wait(0.1) 
+    until not getgenv().executed
+end)
 
 GuiLib:CreateModule({
     Name = "Uninject", 
