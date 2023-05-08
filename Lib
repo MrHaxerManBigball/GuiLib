@@ -306,8 +306,8 @@ if config.Binds[tbl.Name] then
 		end
 	else 
 		if getgenv().canSave then 
-			config.Modules[tbl.Name] = "false",
-			save("Modules")
+			config.Binds[tbl.Name] = ""
+			save("Binds")
 		end 
 	end
 end 
