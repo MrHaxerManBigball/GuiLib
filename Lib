@@ -6,39 +6,40 @@ if not isfolder("testlib") then makefolder("testlib") end
 if not isfile("testlib/loadstring.lua") then writefile("testlib/loadstring.lua", "") end 
 if not isfolder("testlib/config") then makefolder("testlib/config") end 
 if not isfolder("testlib/games") then makefolder("testlib/games") end
-if not isfolder("testlib/config/"..game.GameId) then makefolder("testlib/config/"..game.GameId) end 
-if not isfolder("testlib/config/"..game.GameId.."/Modules") then makefolder("testlib/config/"..game.GameId.."/Modules") end 
-if not isfolder("testlib/config/"..game.GameId.."/DropDowns") then makefolder("testlib/config/"..game.GameId.."/DropDowns") end 
-if not isfolder("testlib/config/"..game.GameId.."/Binds") then makefolder("testlib/config/"..game.GameId.."/Binds") end 
+if not isfolder("testlib/config/"..game.PlaceId) then makefolder("testlib/config/"..game.PlaceId) end 
+if not isfolder("testlib/config/"..game.PlaceId.."/Modules") then makefolder("testlib/config/"..game.PlaceId.."/Modules") end 
+if not isfolder("testlib/config/"..game.PlaceId.."/DropDowns") then makefolder("testlib/config/"..game.PlaceId.."/DropDowns") end 
+if not isfolder("testlib/config/"..game.PlaceId.."/Binds") then makefolder("testlib/config/"..game.PlaceId.."/Binds") end 
 getgenv().executed = true
 getgenv().canSave = true 
 local guiLib = {}
-getgenv().testing = guiLib
 guiLib.moduletable = {}
 local Players = game:GetService("Players") 
 local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
 local config = {}
-if isfile("testlib/config/"..game.GameId.."/Modules/Main.txt") then 
-	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Modules/Main.txt"))
+if isfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt") then 
+	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt"))
+    print("Got "..readfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt")..", installed "..tostring(http:JSONDecode(config.Modules)))
+    getgenv().testing = config.Modules
 else 
 	config.Modules = {}
-	writefile("testlib/config/"..game.GameId.."/Modules/Main.txt" , http:JSONEncode(config.Modules))
+	writefile("testlib/config/"..game.PlaceId.."/Modules/Main.txt" , http:JSONEncode(config.Modules))
 end 
-if isfile("testlib/config/"..game.GameId.."/Dropdowns/Main.txt") then 
-	config.Dropdowns = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Dropdowns/Main.txt"))
+if isfile("testlib/config/"..game.PlaceId.."/Dropdowns/Main.txt") then 
+	config.Dropdowns = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Dropdowns/Main.txt"))
 else 
 	config.Dropdowns = {}
-	writefile("testlib/config/"..game.GameId.."/Binds/Main.txt" , http:JSONEncode(config.Dropdowns))
+	writefile("testlib/config/"..game.PlaceId.."/Binds/Main.txt" , http:JSONEncode(config.Dropdowns))
 end 
-if isfile("testlib/config/"..game.GameId.."/Binds/Main.txt") then 
-	config.Binds = http:JSONDecode(readfile("testlib/config/"..game.GameId.."/Binds/Main.txt"))
+if isfile("testlib/config/"..game.PlaceId.."/Binds/Main.txt") then 
+	config.Binds = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Binds/Main.txt"))
 else 
 	config.Binds = {}
-	writefile("testlib/config/"..game.GameId.."/Binds/Main.txt" , http:JSONEncode(config.Binds))
+	writefile("testlib/config/"..game.PlaceId.."/Binds/Main.txt" , http:JSONEncode(config.Binds))
 end 
 function save(whichconfig) 
-	writefile("testlib/config/"..game.GameId.."/"..whichconfig.."/Main.txt", http:JSONEncode(config[whichconfig]))
+	writefile("testlib/config/"..game.PlaceId.."/"..whichconfig.."/Main.txt", http:JSONEncode(config[whichconfig]))
 end 
 function code(b) 
 	b() 
@@ -305,8 +306,8 @@ if config.Binds[tbl.Name] then
 		end
 	else 
 		if getgenv().canSave then 
-			config.Binds[tbl.Name] = ""
-			save("Binds")
+			config.Binds[tbl.Name] = "false"
+			save("Modules")
 		end 
 	end
 end 
@@ -539,15 +540,16 @@ end)
 	guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 end
 
-return guiLib 
---[[ examples 
+return guiLib
+
+--[[ examples
 local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib", true))()
 guiLib:CreateModule({
     Name = "Uninject", 
     Window = "Utility", 
     Function = function() 
         if guiLib:Enabled("Uninject") then 
-            local oldconfig = readfile("testlib/config/"..game.GameId.."/Modules/Main.txt")
+            local oldconfig = readfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt")
             getgenv().canSave = false 
             for _,v in pairs(guiLib.moduletable) do 
                 if v ~= "Uninject" and guiLib:Enabled(v) then 
@@ -567,7 +569,6 @@ guiLib:CreateModule({
             end
             getgenv().binds = {}
             getgenv().executed = false 
-            writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", oldconfig)
         end 
     end,
 })
@@ -602,4 +603,4 @@ guiLib:CreateDropDown({
 	Max = 50,
 	Default = 150,
 })
-]]
+--]]
