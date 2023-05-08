@@ -14,10 +14,11 @@ function isTeammate(plr)
 end
 
 GuiLib:CreateModule({
-    ["Name"] = "Uninject", 
-    ["Window"] = "Utility", 
-    ["Function"] = function() 
+    Name = "Uninject", 
+    Window = "Utility", 
+    Function = function() 
         if GuiLib:Enabled("Uninject") then 
+            local oldconfig = readfile("testlib/config/"..game.GameId.."/Modules/Main.txt")
             getgenv().canSave = false 
             for _,v in pairs(GuiLib.moduletable) do 
                 if v ~= "Uninject" and GuiLib:Enabled(v) then 
@@ -33,10 +34,12 @@ GuiLib:CreateModule({
             GuiLib.ModuleOn = {}
             GuiLib.moduletable = {}
             Speeding = false
-            for i,v in pairs(getgenv().binds) do 
+            for _,v in pairs(getgenv().binds) do 
                 v:Disconnect() 
             end
             getgenv().binds = {}
+            task.wait(2)
+            writefile("testlib/config/"..game.GameId.."/Modules/Main.txt", oldconfig)
             getgenv().executed = false 
         end 
     end,
