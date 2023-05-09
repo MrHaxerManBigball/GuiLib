@@ -353,17 +353,17 @@ function guiLib:CreateDropDown(tbl2)
 	dropdown2.Name = guiLib:randomString(50)
 	dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
-	if not guiLib.DropDownValue[realModule[tbl2["Name"]]] then 
-		guiLib.DropDownValue[realModule][tbl2["Name"]] = 0 
+	if not guiLib.DropDownValue[realModule[tbl2.Module..tbl2.Name]] then 
+		guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = 0 
 	end
 	if tbl2["Default"] then 
 		if tbl2["Default"] then 
-			if config.Dropdowns[tbl2.Name] and config.Dropdowns[tbl2.Name] ~= "" then 
-				guiLib.DropDownValue[realModule][tbl2["Name"]] = config.Dropdowns[tbl2.Name]
+			if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] ~= "" then 
+				guiLib.DropDownValue[realModule][tbl2["Name"]] = config.Dropdowns[tbl2.Module..tbl2.Name]
 			else 
-				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Default"]
+				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = tbl2["Default"]
 				if getgenv().canSave then 
-					config.Dropdowns[tbl2.Name] = tbl2["Default"]
+					config.Dropdowns[tbl2.Module..tbl2.Name] = tbl2["Default"]
 					save("Dropdowns")
 				end
 			end 
@@ -373,7 +373,7 @@ function guiLib:CreateDropDown(tbl2)
 		table.insert(guiLib.disconnectfuncs, connection1)
 		pcall(function()
 		if getgenv().canSave then 
-			config.Dropdowns[tbl2.Name] = dropdown2.Text
+			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
 			save("Dropdowns")
 		end
 			guiLib.DropDownValue[realModule][tbl2["Name"]] = dropdown2.Text
@@ -402,7 +402,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.Size = UDim2.new(0,0,0)
 			dropdownText.ZIndex = 1
 		else 
-			dropdown2.Text = config.Dropdowns[tbl2.Name]
+			dropdown2.Text = config.Dropdowns[tbl2.Module..tbl2.Name]
 			dropdown2.BackgroundTransparency = 0 
 			dropdown2.TextTransparency = 0
 			dropdown2.TextEditable = true 
