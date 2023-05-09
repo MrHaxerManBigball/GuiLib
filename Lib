@@ -356,6 +356,7 @@ function guiLib:CreateDropDown(tbl2)
 	end
 	if tbl2["Default"] then 
 		if tbl2["Default"] then 
+			print(config.Dropdowns[tbl2.Module..tbl2.Name])
 			if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] ~= "" then 
 				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = config.Dropdowns[tbl2.Module..tbl2.Name]
 			else 
