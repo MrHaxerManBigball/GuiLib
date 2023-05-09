@@ -269,10 +269,9 @@ function guiLib:CreateModule(tbl)
 if config.Binds[tbl.Name] then
 	if config.Binds[tbl.Name] ~= "" then 
 		local stored = config.Binds[tbl.Name]
-		binds2 = uis.InputBegan:Connect(function(input) 
+		table.insert(getgenv().binds, uis.InputBegan:Connect(function(input) 
 			if not getgenv().executed and binds2 then binds2:Disconnect() end 
 			if not getgenv().executed then return end 
-			table.insert(getgenv().binds, binds2)
 				if input.KeyCode == Enum.KeyCode[stored] and not uis:GetFocusedTextBox() then 
 					if guiLib.ModuleOn[tbl["Name"]] then 
 						guiLib.ModuleOn[tbl["Name"]] = false 
@@ -299,8 +298,7 @@ if config.Binds[tbl.Name] then
 						end)
 					end 
 				end
-			end)
-	
+			end))
 		end
 	else 
 		if getgenv().canSave then 
