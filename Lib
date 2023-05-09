@@ -419,7 +419,7 @@ function guiLib:CreateDropDown(tbl2)
 	end) 
 end 
 function guiLib:GetDropDownValue(dropped, dropname) 
-	return guiLib.DropDownValue[dropped] and guiLib.DropDownValue[dropped][dropname]
+	return config.Dropdowns[dropped..dropname]
 end 
 function guiLib:Disable(disablemodule)
 	if guiLib.ModuleOn[disablemodule]  then 
