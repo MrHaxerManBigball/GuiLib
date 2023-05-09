@@ -230,7 +230,7 @@ function guiLib:CreateModule(tbl)
 	end)
 		connection4 = module.MouseButton1Down:Connect(function(func) 
 		table.insert(guiLib.disconnectfuncs, connection4)
-		if uis:IsKeyDown(Enum.KeyCode.LeftShift) and bindmenu.Size == UDim2.new(0, 0, 0, 0) then 
+		if uis:IsKeyDown(Enum.KeyCode.LeftShift) then 
 			bindmenu.Size = UDim2.new(0, 100, 0, 50)
 			bindmenu.BackgroundTransparency = 0.3 
 			bindmenu.TextTransparency = 0 
@@ -357,7 +357,7 @@ function guiLib:CreateDropDown(tbl2)
 	if tbl2["Default"] then 
 		if tbl2["Default"] then 
 			if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] ~= "" then 
-				guiLib.DropDownValue[realModule][tbl2["Name"]] = config.Dropdowns[tbl2.Module..tbl2.Name]
+				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = config.Dropdowns[tbl2.Module..tbl2.Name]
 			else 
 				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = tbl2["Default"]
 				if getgenv().canSave then 
