@@ -285,3 +285,20 @@ GuiLib:CreateModule({
         end 
     end,
 })
+
+local tpPos
+GuiLib:CreateModule({
+    ["Name"] = "ClickTP", 
+    ["Window"] = "Movement", 
+    ["Function"] = function()
+        if GuiLib:Enabled("ClickTP") then 
+            if isAlive(lplr) and mouse.Target then 
+                tpPos = mouse.Hit 
+                lplr.Character.HumanoidRootPart.CFrame = CFrame.new(tpPos.X, tpPos.Y, tpPos.Z)
+                GuiLib:Disable("ClickTP")
+            else 
+                GuiLib:Disable("ClickTP")
+            end 
+        end 
+    end, 
+})
