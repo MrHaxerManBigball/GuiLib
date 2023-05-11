@@ -500,10 +500,6 @@ end))
 	guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 end
 
-return guiLib
-
---[[ examples
-local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib", true))()
 guiLib:CreateModule({
     Name = "Uninject", 
     Window = "Utility", 
@@ -528,6 +524,10 @@ guiLib:CreateModule({
     end,
 })
 
+return guiLib
+
+--[[ examples
+local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib", true))()
 guiLib:CreateModule({
 	Name = "Test", 
 	Window = "Utility", 
