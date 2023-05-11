@@ -216,7 +216,7 @@ function guiLib:CreateModule(tbl)
 	bindmenu.TextTransparency = 1
 	if not guiLib.ModuleOn[tbl["Name"]] then 
 		if config.Modules[tbl.Name] then
-			if config.Modules[tbl.Name] == "true" then guiLib:Enable(tbl["Name"]) guiLib.moduletable[tbl["Name"]] = true end 
+			if config.Modules[tbl.Name] == "true" then guiLib:Enable(tbl["Name"], "dont notify mannnnnn") guiLib.moduletable[tbl["Name"]] = true end 
 		else 	
 			guiLib.ModuleOn[tbl["Name"]] = false
 			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
@@ -422,13 +422,13 @@ end
 function guiLib:GetDropDownValue(dropped, dropname) 
 	return config.Dropdowns[dropped..dropname]
 end 
-function guiLib:Disable(disablemodule)
+function guiLib:Disable(disablemodule, displaydisablenotification)
 	if guiLib.ModuleOn[disablemodule]  then 
 		guiLib.ModuleOn[disablemodule] = false 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				guiLib:Notify(disablemodule, "Disabled", 1)
+				if not displaydisablenotification then guiLib:Notify(disablemodule, "Disabled", 1) end
 				guiLib.moduletable[disablemodule] = false
 				if getgenv().canSave then 
                 	config.Modules[disablemodule] = "false"
@@ -440,13 +440,13 @@ function guiLib:Disable(disablemodule)
 		end 
 	end 
 end
-function guiLib:Enable(enabledmodule)
+function guiLib:Enable(enabledmodule, displayenablenotification)
 	if  not guiLib.ModuleOn[enabledmodule] then 
 		guiLib.ModuleOn[enabledmodule] = true 
 		for i,v in next, guiLib.Boney:GetDescendants() do 
 			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-				guiLib:Notify(enabledmodule, "Enabled", 1)
+				if not displayenablenotification then guiLib:Notify(enabledmodule, "Enabled", 1) end
 				guiLib.moduletable[enabledmodule] = true
 				if enabledmodule ~= "Uninject" and getgenv().canSave then 
 					config.Modules[enabledmodule] = "true"
@@ -546,7 +546,7 @@ guiLib:CreateModule({
             getgenv().canSave = false 
             for _,v in pairs(guiLib.moduletable) do 
                 if v ~= "Uninject" and guiLib:Enabled(v) then 
-                    guiLib:Disable(v)
+                    guiLib:Disable(v, "dont even think about it")
                 end 
             end 
             for _,v in pairs(guiLib.disconnectfuncs) do 
