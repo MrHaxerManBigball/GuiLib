@@ -26,27 +26,6 @@ task.spawn(function()
     until not getgenv().executed
 end)
 
-GuiLib:CreateModule({
-    Name = "Uninject", 
-    Window = "Utility", 
-    Function = function() 
-        if GuiLib:Enabled("Uninject") then 
-            getgenv().canSave = false 
-            for _,v in pairs(GuiLib.moduletable) do 
-                if v ~= "Uninject" and GuiLib:Enabled(v) then 
-                    GuiLib:Disable(v, "trolling")
-                end 
-            end 
-            for _,v in pairs(GuiLib.disconnectfuncs) do 
-                v:Disconnect() 
-            end 
-            GuiLib.functions = {}
-            GuiLib.Boney:Destroy()  
-            getgenv().executed = false 
-        end 
-    end,
-})
-
 local FlyVelo, FlyY
 GuiLib:CreateModule({
     ["Name"] = "Fly", 
