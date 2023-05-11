@@ -228,7 +228,7 @@ function guiLib:CreateModule(tbl)
 	task.spawn(function()
 		module.MouseButton1Down:Connect(tbl["Function"]) 
 	end)
-		connection4 = module.MouseButton1Down:Connect(function(func) 
+		table.insert(guiLib.disconnectfuncs, module.MouseButton1Down:Connect(function(func) 
 		table.insert(guiLib.disconnectfuncs, connection4)
 		if uis:IsKeyDown(Enum.KeyCode.LeftShift)  then 
 			if bindmenu.Size == UDim2.new(0, 0, 0, 0) then 
@@ -267,11 +267,11 @@ function guiLib:CreateModule(tbl)
 				end
 			end 
 		end
-	end) 
+	end))
 if config.Binds[tbl.Name] then
 	if config.Binds[tbl.Name] ~= "" then 
 		local stored = config.Binds[tbl.Name]
-		table.insert(getgenv().binds, uis.InputBegan:Connect(function(input) 
+		table.insert(guiLib.disconnectfuncs, uis.InputBegan:Connect(function(input) 
 			if not getgenv().executed and binds2 then binds2:Disconnect() end 
 			if not getgenv().executed then return end 
 				if input.KeyCode == Enum.KeyCode[stored] and not uis:GetFocusedTextBox() then 
@@ -369,7 +369,7 @@ function guiLib:CreateDropDown(tbl2)
 			end 
 		end
 	end
-	connection1 = dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
+	table.insert(guiLib.disconnectfuncs, dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
 		table.insert(guiLib.disconnectfuncs, connection1)
 		pcall(function()
 		if getgenv().canSave then 
@@ -385,8 +385,8 @@ function guiLib:CreateDropDown(tbl2)
 				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Max"]
 			end 
 		end)
-	end) 
-	connection2 = module.MouseButton2Down:Connect(function(right) 
+	end)) 
+	table.insert(guiLib.disconnectfuncs,module.MouseButton2Down:Connect(function(right) 
 		table.insert(guiLib.disconnectfuncs, connection2)
 		if dropdown2.TextEditable then 
 			dropdown2.BackgroundTransparency = 1 
@@ -417,7 +417,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.Selectable = true
 			dropdownText.Size = UDim2.new(0, 200, 0, 50)
 		end 
-	end) 
+	end))
 end 
 function guiLib:GetDropDownValue(dropped, dropname) 
 	return config.Dropdowns[dropped..dropname]
@@ -505,16 +505,11 @@ function guiLib:Notify(header, text, time, tweentime)
 		Notification:Destroy()
 	end)
 end
-local queueing
-queueing = lplr.OnTeleport:Connect(function(State)
+table.insert(guiLib.disconnectfuncs, lplr.OnTeleport:Connect(function(State)
     if State == Enum.TeleportState.InProgress then
         syn.queue_on_teleport('loadstring(readfile("testlib/loadstring.lua"))()')
     end
-end)
-task.spawn(function() 
-	repeat task.wait() until not getgenv().executed 
-	queueing:Disconnect()
-end)
+end))
 if uis.TouchEnabled then 
 	guiLib:Notify("Josiah", "Tap the Boney Icon to\nopen GUI", 3)
 	guiLib.whytheFUCK = Instance.new("ScreenGui", loadingGui)
@@ -526,15 +521,15 @@ if uis.TouchEnabled then
 	josiah.BorderSizePixel = 0
 	josiah.Size = UDim2.new(0, 20, 0, 20)
 	josiah.BackgroundTransparency = 0.5
-	josiah.MouseButton1Click:Connect(function() 
+	table.insert(guiLib.disconnectfuncs, josiah.MouseButton1Click:Connect(function() 
 		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
-	end)
+	end))
 else 
-	guiLib.unj = uis.InputBegan:Connect(function(input) 
+	table.insert(guiLib.disconnectfuncs, uis.InputBegan:Connect(function(input) 
 	if input.KeyCode == Enum.KeyCode.RightShift or input.KeyCode == Enum.KeyCode.Quote and not uis:GetFocusedTextBox() then 
 		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
 	end 
-end) 
+end))
 	guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 end
 
@@ -557,15 +552,10 @@ guiLib:CreateModule({
             for _,v in pairs(guiLib.disconnectfuncs) do 
                 v:Disconnect() 
             end 
-            guiLib.unj:Disconnect()
             guiLib.functions = {}
             guiLib.Boney:Destroy()  
             guiLib.ModuleOn = {}
             guiLib.moduletable = {}
-            for _,v in pairs(getgenv().binds) do 
-                v:Disconnect() 
-            end
-            getgenv().binds = {}
             getgenv().executed = false 
         end 
     end,
