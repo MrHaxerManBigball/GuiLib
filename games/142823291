@@ -76,32 +76,6 @@ function isinDistance(target, tdist)
 end 
 
 GuiLib:CreateModule({
-    ["Name"] = "Uninject", 
-    ["Window"] = "Utility", 
-    ["Function"] = function() 
-        if GuiLib:Enabled("Uninject") then 
-            getgenv().canSave = false 
-            for i,v in pairs(GuiLib.moduletable) do 
-                if GuiLib:Enabled(v) then 
-                    GuiLib:Disable(v)
-                end 
-            end 
-            for i,v in pairs(GuiLib.disconnectfuncs) do 
-                v:Disconnect() 
-            end 
-            GuiLib.unj:Disconnect()
-            GuiLib.functions = {}
-            GuiLib.Boney:Destroy()  
-            GuiLib.moduletable = {}
-            getgenv().binds = {}
-            GuiLib.binds = {}
-            getgenv().executed = false 
-            if GuiLib.whytheFUCK then  GuiLib.whytheFUCK:Destroy() end 
-        end 
-    end,
-})
-
-GuiLib:CreateModule({
     ["Name"] = "RoleESP", 
     ["Window"] = "Render", 
     ["Function"] = function() 
