@@ -34,7 +34,7 @@ GuiLib:CreateModule({
             getgenv().canSave = false 
             for _,v in pairs(GuiLib.moduletable) do 
                 if v ~= "Uninject" and GuiLib:Enabled(v) then 
-                    GuiLib:Disable(v)
+                    GuiLib:Disable(v, "trolling")
                 end 
             end 
             for _,v in pairs(GuiLib.disconnectfuncs) do 
