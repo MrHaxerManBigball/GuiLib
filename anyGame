@@ -40,16 +40,8 @@ GuiLib:CreateModule({
             for _,v in pairs(GuiLib.disconnectfuncs) do 
                 v:Disconnect() 
             end 
-            GuiLib.unj:Disconnect()
             GuiLib.functions = {}
             GuiLib.Boney:Destroy()  
-            GuiLib.ModuleOn = {}
-            GuiLib.moduletable = {}
-            Speeding = false
-            for _,v in pairs(getgenv().binds) do 
-                v:Disconnect() 
-            end
-            getgenv().binds = {}
             getgenv().executed = false 
         end 
     end,
