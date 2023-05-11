@@ -154,7 +154,6 @@ RenderWindow.BorderSizePixel = 0
 ModuleAmmount = {}
 guiLib.ModuleOn = {}
 guiLib.DropDownValue = {"Value" == 0}
-getgenv().binds = {} 
 ModuleAmmount.WorldWindow = 0  
 ModuleAmmount.CombatWindow = 0
 ModuleAmmount.UtilityWindow = 0
@@ -164,29 +163,27 @@ guiLib.disconnectfuncs = {}
 local connection1, connection2, connection3, connection4, realwindow, wname, binds2
 function guiLib:CreateModule(tbl)
 	realwindow = nil
-	table.insert(guiLib.moduletable, tbl["Name"])
+	table.insert(guiLib.moduletable, tbl.Name)
 	table.insert(guiLib.functions, tbl)
-	if tbl["Window"] == "World" then
+	if tbl.Window == "World" then
 		realwindow = WorldWindow
 		wname = "WorldWindow"
-	elseif tbl["Window"] == "Combat" then
+	elseif tbl.Window == "Combat" then
 		realwindow = CombatWindow 
 		wname = "CombatWindow"
-	elseif tbl["Window"] == "Utility" then 
+	elseif tbl.Window == "Utility" then 
 		realwindow = UtilityWindow
 		wname = "UtilityWindow"
-	elseif tbl["Window"] == "Movement" then 
+	elseif tbl.Window == "Movement" then 
 		realwindow = MovementWindow 
 		wname = "MovementWindow"
-	elseif tbl["Window"] == "Render" then 
+	elseif tbl.Window == "Render" then 
 		realwindow = RenderWindow
 		wname = "RenderWindow"
 	end 
 	ModuleAmmount[wname] += 1
-	--local corner = Instance.new("UICorner", realwindow  or WorldWindow)
 	local module = Instance.new("TextButton", realwindow or WorldWindow)
 	local bindmenu = Instance.new("TextBox", realwindow)
-	--corner:Clone().Parent = module
 	module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	module.BackgroundTransparency = 0.5
 	module.Position = UDim2.new(realwindow.Position) + UDim2.new(0,0,1 * ModuleAmmount[wname])
@@ -196,7 +193,7 @@ function guiLib:CreateModule(tbl)
 	module.TextColor3 = Color3.fromRGB(255, 255, 255)
 	module.TextSize = 18
 	module.TextXAlignment = "Left"
-	module.Text = " "..tostring(tbl["Name"])
+	module.Text = " "..tostring(tbl.Name)
 	module.TextTransparency = 0 
 	module.BorderSizePixel = 0 
 	module.ZIndex = 0 
@@ -214,20 +211,19 @@ function guiLib:CreateModule(tbl)
 	bindmenu.TextTransparency = 0 
 	bindmenu.BorderSizePixel = 0 
 	bindmenu.TextTransparency = 1
-	if not guiLib.ModuleOn[tbl["Name"]] then 
-		if config.Modules[tbl.Name] then
-			if config.Modules[tbl.Name] == "true" then guiLib:Enable(tbl["Name"], "dont notify mannnnnn") guiLib.moduletable[tbl["Name"]] = true end 
-		else 	
-			guiLib.ModuleOn[tbl["Name"]] = false
-			if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-			config.Modules[tbl.Name] = "false"
-			save("Modules")
-			end 
+		if not guiLib.ModuleOn[tbl.Name] then 
+			if config.Modules[tbl.Name] then
+				if config.Modules[tbl.Name] == "true" then 
+					guiLib:Enable(tbl.Name, "dont notify mannnnnn") 
+				end 
+			else 	
+				guiLib.ModuleOn[tbl.Name] = false
+				if tbl.Name ~= "Uninject" and getgenv().canSave then 
+					config.Modules[tbl.Name] = "false"
+					save("Modules")
+				end 
+			end
 		end
-	end
-	task.spawn(function()
-		module.MouseButton1Down:Connect(tbl["Function"]) 
-	end)
 		table.insert(guiLib.disconnectfuncs, module.MouseButton1Down:Connect(function(func) 
 		table.insert(guiLib.disconnectfuncs, connection4)
 		if uis:IsKeyDown(Enum.KeyCode.LeftShift)  then 
@@ -248,60 +244,32 @@ function guiLib:CreateModule(tbl)
 				end)
 			end
 		else 
-			if guiLib.ModuleOn[tbl["Name"]] then 
-				guiLib.ModuleOn[tbl["Name"]] = false 
-				guiLib:Notify(tbl["Name"], "Disabled", 1)
-				module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				if getgenv().canSave then 
-					config.Modules[tbl.Name] = "false"
-					save("Modules")
-				end
+			if guiLib:Enabled(tbl.Name) then 
+				guiLib:Disable(tbl.Name)
 			else 
-				guiLib.ModuleOn[tbl["Name"]] = true 
-				guiLib:Notify(tbl["Name"], "Enabled", 1)
-				module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-				if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-					config.Modules[tbl.Name] = "true"
-					getgenv().extratest = config
-					save("Modules")
-				end
+				guiLib:Enable(tbl.Name)
 			end 
 		end
 	end))
-if config.Binds[tbl.Name] then
-	if config.Binds[tbl.Name] ~= "" then 
+	if config.Binds[tbl.Name] and config.Binds[tbl.Name] ~= "" then
 		local stored = config.Binds[tbl.Name]
-		table.insert(guiLib.disconnectfuncs, uis.InputBegan:Connect(function(input) 
-			if not getgenv().executed and binds2 then binds2:Disconnect() end 
-			if not getgenv().executed then return end 
+			table.insert(guiLib.disconnectfuncs, uis.InputBegan:Connect(function(input) 
 				if input.KeyCode == Enum.KeyCode[stored] and not uis:GetFocusedTextBox() then 
-					if guiLib.ModuleOn[tbl["Name"]] then 
-						guiLib.ModuleOn[tbl["Name"]] = false 
-						guiLib:Notify(tbl["Name"], "Disabled", 1)
-						module.TextSize = 18
-						module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-						if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-							config.Modules[tbl.Name] = "false"
-							save("Modules")
-						end
-						task.spawn(function()
-							code(tbl["Function"])
-						end)
-					else 
-						guiLib.ModuleOn[tbl["Name"]] = true 
-						guiLib:Notify(tbl["Name"], "Enabled", 1)
-						module.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-						if tbl["Name"] ~= "Uninject" and getgenv().canSave then 
-							config.Modules[tbl.Name] = "true"
-							save("Modules")
-						end 
-						task.spawn(function()
-							code(tbl["Function"])
-						end)
+					if guiLib:Enabled(tbl.Name) then 
+					guiLib:Disable(tbl.Name)
+					if tbl.Name ~= "Uninject" and getgenv().canSave then 
+						config.Modules[tbl.Name] = "false"
+						save("Modules")
+					end
+				else 
+					guiLib:Enable(tbl.Name )
+					if tbl.Name ~= "Uninject" and getgenv().canSave then 
+						config.Modules[tbl.Name] = "true"
+						save("Modules")
 					end 
-				end
-			end))
-		end
+				end 
+			end
+		end))
 	else 
 		if getgenv().canSave then 
 			config.Binds[tbl.Name] = ""
@@ -321,7 +289,7 @@ function guiLib:GetModule(mname)
 	return gottenModule
 end
 function guiLib:CreateDropDown(tbl2)
-    local realModule = tbl2["Module"]
+    local realModule = tbl2.Module
 	repeat task.wait() until guiLib:GetModule(realModule)
 	if not TabAmount[realModule] then TabAmount[realModule] = 0 end 
 	if not guiLib.DropDownValue[realModule] then guiLib.DropDownValue[realModule] = {} end 
@@ -329,10 +297,9 @@ function guiLib:CreateDropDown(tbl2)
     TabAmount[realModule] +=1
 	local dropdownText = Instance.new("TextLabel", realwindow)
 	local dropdown2 = Instance.new("TextBox", dropdownText) 
-	--corner:Clone().Parent = dropdown2
 	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,2 * (TabAmount[realModule]))
 	dropdownText.TextSize = 10
-	dropdownText.Text = tbl2["Name"]..": "
+	dropdownText.Text = tbl2.Name..": "
 	dropdownText.BackgroundTransparency = 0.9
 	dropdownText.BorderSizePixel = 0 
 	dropdownText.TextTransparency = 1
@@ -356,14 +323,14 @@ function guiLib:CreateDropDown(tbl2)
 	if not guiLib.DropDownValue[realModule[tbl2.Module..tbl2.Name]] then 
 		guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = 0 
 	end
-	if tbl2["Default"] then 
-		if tbl2["Default"] then 
+	if tbl2.Default then 
+		if tbl2.Default then 
 			if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] ~= "" then 
 				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = config.Dropdowns[tbl2.Module..tbl2.Name]
 			else 
-				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = tbl2["Default"]
+				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = tbl2.Default
 				if getgenv().canSave then 
-					config.Dropdowns[tbl2.Module..tbl2.Name] = tbl2["Default"]
+					config.Dropdowns[tbl2.Module..tbl2.Name] = tbl2.Default
 					save("Dropdowns")
 				end
 			end 
@@ -376,13 +343,13 @@ function guiLib:CreateDropDown(tbl2)
 			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
 			save("Dropdowns")
 		end
-			guiLib.DropDownValue[realModule][tbl2["Name"]] = dropdown2.Text
-			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2["Type"] and tbl2["Min"] and tonumber(dropdown2.Text) < tbl2["Min"] then 
-				dropdown2.Text = tbl2["Min"]
-				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Min"]
-			elseif dropdown2 and tbl2 and tbl2["Max"] and tonumber(dropdown2.Text) > tonumber(tbl2["Max"]) then
-				dropdown2.Text = tbl2["Max"]
-				guiLib.DropDownValue[realModule][tbl2["Name"]] = tbl2["Max"]
+			guiLib.DropDownValue[realModule][tbl2.Name] = dropdown2.Text
+			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2.Type and tbl2.Min and tonumber(dropdown2.Text) < tbl2.Min then 
+				dropdown2.Text = tbl2.Min
+				guiLib.DropDownValue[realModule][tbl2.Name] = tbl2.Min
+			elseif dropdown2 and tbl2 and tbl2.Max and tonumber(dropdown2.Text) > tonumber(tbl2.Max) then
+				dropdown2.Text = tbl2.Max
+				guiLib.DropDownValue[realModule][tbl2.Name] = tbl2.Max
 			end 
 		end)
 	end)) 
@@ -411,7 +378,7 @@ function guiLib:CreateDropDown(tbl2)
 			dropdownText.ZIndex = 5
 			module.TextSize = 15
 
-			dropdownText.Text = tbl2["Name"]..": "
+			dropdownText.Text = tbl2.Name..": "
 			dropdownText.BackgroundTransparency = 0.6
 			dropdownText.TextTransparency = 0
 			dropdownText.Selectable = true
@@ -423,38 +390,38 @@ function guiLib:GetDropDownValue(dropped, dropname)
 	return config.Dropdowns[dropped..dropname]
 end 
 function guiLib:Disable(disablemodule, displaydisablenotification)
-	if guiLib.ModuleOn[disablemodule]  then 
-		guiLib.ModuleOn[disablemodule] = false 
-		for i,v in next, guiLib.Boney:GetDescendants() do 
-			if v:IsA("TextButton") and v.Text == " "..disablemodule then 
-				v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-				if not displaydisablenotification then guiLib:Notify(disablemodule, "Disabled", 1) end
-				guiLib.moduletable[disablemodule] = false
-				if getgenv().canSave then 
-                	config.Modules[disablemodule] = "false"
-					save("Modules")
-				end
+	guiLib.ModuleOn[disablemodule] = false 
+	for i,v in next, guiLib.Boney:GetDescendants() do 
+		if v:IsA("TextButton") and v.Text == " "..disablemodule then 
+			v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+			if not displaydisablenotification then guiLib:Notify(disablemodule, "Disabled", 1) end
+			guiLib.moduletable[disablemodule] = false
+			if getgenv().canSave then 
+                config.Modules[disablemodule] = "false"
+				save("Modules")
+			end
+			task.spawn(function()
 				code(getModuleFunc(disablemodule))
-				break
-			end 
+			end)
+			break
 		end 
 	end 
 end
 function guiLib:Enable(enabledmodule, displayenablenotification)
-	if  not guiLib.ModuleOn[enabledmodule] then 
-		guiLib.ModuleOn[enabledmodule] = true 
-		for i,v in next, guiLib.Boney:GetDescendants() do 
-			if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
-				v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
-				if not displayenablenotification then guiLib:Notify(enabledmodule, "Enabled", 1) end
-				guiLib.moduletable[enabledmodule] = true
-				if enabledmodule ~= "Uninject" and getgenv().canSave then 
-					config.Modules[enabledmodule] = "true"
-					save("Modules")
-				end 
-				code(getModuleFunc(enabledmodule))
-				break
+	guiLib.ModuleOn[enabledmodule] = true 
+	for i,v in next, guiLib.Boney:GetDescendants() do 
+		if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
+			v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+			if not displayenablenotification then guiLib:Notify(enabledmodule, "Enabled", 1) end
+			guiLib.moduletable[enabledmodule] = true
+			if enabledmodule ~= "Uninject" and getgenv().canSave then 
+				config.Modules[enabledmodule] = "true"
+				save("Modules")
 			end 
+			task.spawn(function()
+				code(getModuleFunc(enabledmodule))
+			end)
+			break
 		end 
 	end 
 end 
@@ -591,4 +558,4 @@ guiLib:CreateDropDown({
 	Max = 50,
 	Default = 150,
 })
---]]
+]]
