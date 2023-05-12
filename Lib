@@ -339,7 +339,7 @@ function guiLib:CreateDropDown(tbl2)
 		end
 	end
 	table.insert(guiLib.disconnectfuncs, dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
-		if tbl2.Function and dropdown2.Text ~= "" then code(tbl2.Function) end 
+		table.insert(guiLib.disconnectfuncs, connection1)
 		pcall(function()
 		if getgenv().canSave then 
 			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
@@ -402,9 +402,7 @@ function guiLib:Disable(disablemodule, displaydisablenotification)
                 config.Modules[disablemodule] = "false"
 				save("Modules")
 			end
-			task.spawn(function()
-				code(getModuleFunc(disablemodule))
-			end)
+			task.spawn(code, getModuleFunc(disablemodule))
 			break
 		end 
 	end 
@@ -420,9 +418,7 @@ function guiLib:Enable(enabledmodule, displayenablenotification)
 				config.Modules[enabledmodule] = "true"
 				save("Modules")
 			end 
-			task.spawn(function()
-				code(getModuleFunc(enabledmodule))
-			end)
+			task.spawn(code, getModuleFunc(enabledmodule))
 			break
 		end 
 	end 
@@ -536,8 +532,10 @@ guiLib:CreateModule({
 	Function = function() 
 		if guiLib:Enabled("Test") then 
 			if guiLib:GetDropDownValue("Test", "Balls") then 
-				print(guiLib:GetDropDownValue("Test", "Balls"))
+				print(guiLib:GetDropDownValue("Test", "Balls")) -- will play when the module is enabled
 			end 
+		else 
+			print('off') -- will play when module is disabled
 		end
 	end,
 })
@@ -560,4 +558,4 @@ guiLib:CreateDropDown({
 	Max = 50,
 	Default = 150,
 })
-]] 
+--]] 
