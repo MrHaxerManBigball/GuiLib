@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local coregui = game:GetService("CoreGui")
 if not getgenv().lplr then getgenv().lplr = Players.LocalPlayer end 
+local mouse = lplr:GetMouse()
 function isAlive(plr) 
     return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
 end
