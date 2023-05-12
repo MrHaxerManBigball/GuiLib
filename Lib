@@ -468,7 +468,7 @@ function guiLib:Notify(header, text, time, tweentime)
 end
 table.insert(guiLib.disconnectfuncs, lplr.OnTeleport:Connect(function(State)
     if State == Enum.TeleportState.InProgress then
-        syn.queue_on_teleport('loadstring(readfile("testlib/loadstring.lua"))()')
+        syn.queue_on_teleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/loader", true))()')
     end
 end))
 if uis.TouchEnabled then 
@@ -487,10 +487,10 @@ if uis.TouchEnabled then
 	end))
 else 
 	table.insert(guiLib.disconnectfuncs, uis.InputBegan:Connect(function(input) 
-	if input.KeyCode == Enum.KeyCode.RightShift or input.KeyCode == Enum.KeyCode.Quote and not uis:GetFocusedTextBox() then 
-		guiLib.Boney.Enabled = not guiLib.Boney.Enabled
-	end 
-end))
+		if input.KeyCode == Enum.KeyCode.RightShift or input.KeyCode == Enum.KeyCode.Quote and not uis:GetFocusedTextBox() then 
+			guiLib.Boney.Enabled = not guiLib.Boney.Enabled
+		end 
+	end))
 	guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 end
 
