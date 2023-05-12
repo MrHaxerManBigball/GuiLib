@@ -42,6 +42,7 @@ end
 function code(b) 
 	b() 
 end 
+local alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 1,2,3,4,5,6,7,8,9,0, "!", "@", "#","$","%","^","&","*","(",")","_","-","=","+", "|", "{", "}", ".", ",", ";", ":","<",">","'",'"', "`", "?","/", "\\",}
 function guiLib:randomString(amount)
     local returnedString = ""
@@ -232,11 +233,16 @@ function guiLib:CreateModule(tbl)
 				bindmenu.BackgroundTransparency = 0.3 
 				bindmenu.TextTransparency = 0 
 				bindmenu.ZIndex = 500
+				bindmenu.Text = config.Binds[tbl.Name]
 				task.spawn(function()
 					repeat task.wait() until (not uis:IsKeyDown(Enum.KeyCode.LeftShift) or uis:IsKeyDown(Enum.KeyCode.Return)) and not uis:GetFocusedTextBox()
-					guiLib:Notify("Binds", "Reinject to apply binds...", 3)
-					config.Binds[tbl.Name] = bindmenu.Text
-					save("Binds")
+					if table.find(alphabet, bindmenu.Text:upper()) then 
+						guiLib:Notify("Binds", "Bound "..tbl.Name.." to "..bindmenu.Text:upper(), 3)
+						config.Binds[tbl.Name] = string.upper(bindmenu.Text)
+						save("Binds")
+					else 
+						guiLib:Notify("Binds", "Enter an ALPHABETICAL\n character....", 3)
+					end
 					bindmenu.Size = UDim2.new(0, 0, 0, 0)
 					bindmenu.BackgroundTransparency = 1 
 					bindmenu.TextTransparency = 1
@@ -251,31 +257,27 @@ function guiLib:CreateModule(tbl)
 			end 
 		end
 	end))
-	if config.Binds[tbl.Name] and config.Binds[tbl.Name] ~= "" then
-		local stored = config.Binds[tbl.Name]
-			table.insert(guiLib.disconnectfuncs, uis.InputBegan:Connect(function(input) 
-				if input.KeyCode == Enum.KeyCode[stored] and not uis:GetFocusedTextBox() then 
-					if guiLib:Enabled(tbl.Name) then 
-					guiLib:Disable(tbl.Name)
-					if tbl.Name ~= "Uninject" and getgenv().canSave then 
-						config.Modules[tbl.Name] = "false"
-						save("Modules")
-					end
-				else 
-					guiLib:Enable(tbl.Name )
-					if tbl.Name ~= "Uninject" and getgenv().canSave then 
-						config.Modules[tbl.Name] = "true"
-						save("Modules")
-					end 
+	if not config.Binds[tbl.Name] and getgenv().canSave then 
+		config.Binds[tbl.Name] = "" 
+		save("Binds") 
+	end 
+	table.insert(guiLib.disconnectfuncs, uis.InputBegan:Connect(function(input) 
+		if config.Binds[tbl.Name] ~= "" and input.KeyCode == Enum.KeyCode[config.Binds[tbl.Name]] and not uis:GetFocusedTextBox() then 
+			if guiLib:Enabled(tbl.Name) then 
+				guiLib:Disable(tbl.Name)
+				if tbl.Name ~= "Uninject" and getgenv().canSave then 
+					config.Modules[tbl.Name] = "false"
+					save("Modules")
+				end
+			else 
+				guiLib:Enable(tbl.Name )
+				if tbl.Name ~= "Uninject" and getgenv().canSave then 
+					config.Modules[tbl.Name] = "true"
+					save("Modules")
 				end 
-			end
-		end))
-	else 
-		if getgenv().canSave then 
-			config.Binds[tbl.Name] = ""
-			save("Binds")
-		end 
-	end
+			end 
+		end
+	end))
 end 
 local TabAmount = {}
 local gottenModule
@@ -558,4 +560,4 @@ guiLib:CreateDropDown({
 	Max = 50,
 	Default = 150,
 })
-]]
+--]] 
