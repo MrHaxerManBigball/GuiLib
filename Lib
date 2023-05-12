@@ -226,7 +226,6 @@ function guiLib:CreateModule(tbl)
 			end
 		end
 		table.insert(guiLib.disconnectfuncs, module.MouseButton1Down:Connect(function(func) 
-		table.insert(guiLib.disconnectfuncs, connection4)
 		if uis:IsKeyDown(Enum.KeyCode.LeftShift)  then 
 			if bindmenu.Size == UDim2.new(0, 0, 0, 0) then 
 				bindmenu.Size = UDim2.new(0, 100, 0, 50)
@@ -503,7 +502,6 @@ guiLib:CreateModule({
     Window = "Utility", 
     Function = function() 
         if guiLib:Enabled("Uninject") then 
-            local oldconfig = readfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt")
             getgenv().canSave = false 
             for _,v in pairs(guiLib.moduletable) do 
                 if v ~= "Uninject" and guiLib:Enabled(v) then 
