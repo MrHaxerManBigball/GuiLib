@@ -339,7 +339,7 @@ function guiLib:CreateDropDown(tbl2)
 		end
 	end
 	table.insert(guiLib.disconnectfuncs, dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
-		table.insert(guiLib.disconnectfuncs, connection1)
+		if tbl2.Function and dropdown2.Text ~= "" then code(tbl2.Function) end
 		pcall(function()
 		if getgenv().canSave then 
 			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
@@ -558,4 +558,4 @@ guiLib:CreateDropDown({
 	Max = 50,
 	Default = 150,
 })
---]] 
+]] 
