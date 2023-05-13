@@ -200,6 +200,7 @@ function guiLib:CreateModule(tbl)
 	module.BorderSizePixel = 0 
 	module.ZIndex = 0 
 	module.Name = guiLib:randomString(50)
+	bindmenu.Name = guiLib:randomString(50)
 	bindmenu.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	bindmenu.BackgroundTransparency = 1
 	bindmenu.Position = UDim2.new(module.Position) + UDim2.new(0,0,1.5)
@@ -355,7 +356,6 @@ function guiLib:CreateDropDown(tbl2)
 		end)
 		repeat task.wait() until not uis:GetFocusedTextBox() 
 		if getgenv().canSave then 
-			guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = dropdown2.Text
 			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
 			save("Dropdowns")
 		end
