@@ -239,6 +239,10 @@ function guiLib:CreateModule(tbl)
 						guiLib:Notify("Binds", "Bound "..tbl.Name.." to "..bindmenu.Text:upper(), 3)
 						config.Binds[tbl.Name] = string.upper(bindmenu.Text)
 						save("Binds")
+					elseif bindmenu.Text == "" then 
+						guiLib:Notify("Binds", "Unbound "..tbl.Name.."!", 3)
+						config.Binds[tbl.Name] = ""
+						save("Binds")
 					else 
 						guiLib:Notify("Binds", "Enter an ALPHABETICAL\n character....", 3)
 					end
