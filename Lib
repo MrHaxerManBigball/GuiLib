@@ -214,18 +214,16 @@ function guiLib:CreateModule(tbl)
 	bindmenu.TextTransparency = 0 
 	bindmenu.BorderSizePixel = 0 
 	bindmenu.TextTransparency = 1
-		if not guiLib.ModuleOn[tbl.Name] then 
-			if config.Modules[tbl.Name] then
-				if config.Modules[tbl.Name] == "true" then 
-					guiLib:Enable(tbl.Name, "dont notify mannnnnn") 
-				end 
-			else 	
-				guiLib.ModuleOn[tbl.Name] = false
-				if tbl.Name ~= "Uninject" and getgenv().canSave then 
-					config.Modules[tbl.Name] = "false"
-					save("Modules")
-				end 
-			end
+		if config.Modules[tbl.Name] then
+			if config.Modules[tbl.Name] == "true" then 
+				guiLib:Enable(tbl.Name, "dont notify mannnnnn") 
+			end 
+		else 	
+			guiLib.ModuleOn[tbl.Name] = false
+			if tbl.Name ~= "Uninject" and getgenv().canSave then 
+				config.Modules[tbl.Name] = "false"
+				save("Modules")
+			end 
 		end
 		table.insert(guiLib.disconnectfuncs, module.MouseButton1Down:Connect(function(func) 
 		if uis:IsKeyDown(Enum.KeyCode.LeftShift) then 
