@@ -1,4 +1,4 @@
-shared.GuiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib", true))()
+shared.GuiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib.lua", true))()
 local GuiLib = shared.GuiLib
 local Players = game:GetService("Players") 
 local uis = game:GetService("UserInputService")
