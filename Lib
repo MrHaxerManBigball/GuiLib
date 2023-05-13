@@ -269,7 +269,7 @@ function guiLib:CreateModule(tbl)
 					save("Modules")
 				end
 			else 
-				guiLib:Enable(tbl.Name )
+				guiLib:Enable(tbl.Name)
 				if tbl.Name ~= "Uninject" and getgenv().canSave then 
 					config.Modules[tbl.Name] = "true"
 					save("Modules")
@@ -354,7 +354,7 @@ function guiLib:CreateDropDown(tbl2)
 			end 
 		end)
 	end)) 
-	table.insert(guiLib.disconnectfuncs,module.MouseButton2Down:Connect(function(right) 
+	table.insert(guiLib.disconnectfuncs, module.MouseButton2Down:Connect(function(right) 
 		table.insert(guiLib.disconnectfuncs, connection2)
 		if dropdown2.TextEditable then 
 			dropdown2.BackgroundTransparency = 1 
@@ -396,7 +396,6 @@ function guiLib:Disable(disablemodule, displaydisablenotification)
 		if v:IsA("TextButton") and v.Text == " "..disablemodule then 
 			v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 			if not displaydisablenotification then guiLib:Notify(disablemodule, "Disabled", 1) end
-			guiLib.moduletable[disablemodule] = false
 			if getgenv().canSave then 
                 config.Modules[disablemodule] = "false"
 				save("Modules")
@@ -412,7 +411,6 @@ function guiLib:Enable(enabledmodule, displayenablenotification)
 		if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
 			v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
 			if not displayenablenotification then guiLib:Notify(enabledmodule, "Enabled", 1) end
-			guiLib.moduletable[enabledmodule] = true
 			if enabledmodule ~= "Uninject" and getgenv().canSave then 
 				config.Modules[enabledmodule] = "true"
 				save("Modules")
@@ -512,6 +510,7 @@ guiLib:CreateModule({
             guiLib.Boney:Destroy()  
             guiLib.ModuleOn = {}
             guiLib.moduletable = {}
+			shared.GuiLib = nil 
             getgenv().executed = false 
         end 
     end,
