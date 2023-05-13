@@ -191,7 +191,7 @@ function getLowestPoint()
             lowest = v.Position.Y 
         end 
     end 
-    return lowest
+    return (lowest - 10)
 end 
 GuiLib:CreateModule({
     ["Name"] = "AntiVoid", 
