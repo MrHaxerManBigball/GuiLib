@@ -43,7 +43,6 @@ end
 function code(b) 
 	b() 
 end 
-local alphabet = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 local letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 1,2,3,4,5,6,7,8,9,0, "!", "@", "#","$","%","^","&","*","(",")","_","-","=","+", "|", "{", "}", ".", ",", ";", ":","<",">","'",'"', "`", "?","/", "\\",}
 function guiLib:randomString(amount)
     local returnedString = ""
@@ -234,9 +233,9 @@ function guiLib:CreateModule(tbl)
 				bindmenu.Text = config.Binds[tbl.Name]
 				task.spawn(function()
 					repeat task.wait() until (not uis:IsKeyDown(Enum.KeyCode.LeftShift) or uis:IsKeyDown(Enum.KeyCode.Return)) and not uis:GetFocusedTextBox()
-					if table.find(alphabet, bindmenu.Text:upper()) then 
-						guiLib:Notify("Binds", "Bound "..tbl.Name.." to "..bindmenu.Text:upper(), 3)
-						config.Binds[tbl.Name] = string.upper(bindmenu.Text)
+					if not bindmenu.Text:upper():match("[^a-zA-Z]+") and bindmenu.Text ~= "" then 
+						guiLib:Notify("Binds", "Bound "..tbl.Name.." to "..string.sub(bindmenu.Text, 1, 1):upper(), 3)
+						config.Binds[tbl.Name] = string.sub(bindmenu.Text, 1, 1):upper()
 						save("Binds")
 					elseif bindmenu.Text == "" then 
 						guiLib:Notify("Binds", "Unbound "..tbl.Name.."!", 3)
