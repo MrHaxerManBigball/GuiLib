@@ -214,10 +214,8 @@ function guiLib:CreateModule(tbl)
 	bindmenu.TextTransparency = 0 
 	bindmenu.BorderSizePixel = 0 
 	bindmenu.TextTransparency = 1
-		if config.Modules[tbl.Name] then
-			if config.Modules[tbl.Name] == "true" then 
-				guiLib:Enable(tbl.Name, "dont notify mannnnnn") 
-			end 
+		if config.Modules[tbl.Name] == "true" then
+			guiLib:Enable(tbl.Name, "dont notify mannnnnn") 
 		else 	
 			guiLib.ModuleOn[tbl.Name] = false
 			if tbl.Name ~= "Uninject" and getgenv().canSave then 
@@ -557,4 +555,4 @@ guiLib:CreateDropDown({
 	Max = 50,
 	Default = 150,
 })
-]] 
+]]
