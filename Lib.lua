@@ -1,5 +1,5 @@
 if not game:IsLoaded() then game.Loaded:Wait() end 
-local loadingGui 
+local loadingGui, queueteleport = nil, syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 if not gethui then loadingGui = game:GetService("CoreGui") else loadingGui = gethui() end 
 if getgenv().executed then return error("Already Executed") end 
 if not isfolder("testlib") then makefolder("testlib") end 
@@ -467,7 +467,7 @@ function guiLib:Notify(header, text, time, tweentime)
 end
 table.insert(guiLib.disconnectfuncs, lplr.OnTeleport:Connect(function(State)
     if State == Enum.TeleportState.InProgress then
-        syn.queue_on_teleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/loader", true))()')
+       	queueteleport ('loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/loader", true))()')
     end
 end))
 if uis.TouchEnabled then 
