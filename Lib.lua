@@ -6,9 +6,6 @@ if not isfolder("testlib") then makefolder("testlib") end
 if not isfolder("testlib/config") then makefolder("testlib/config") end 
 if not isfolder("testlib/games") then makefolder("testlib/games") end
 if not isfolder("testlib/config/"..game.PlaceId) then makefolder("testlib/config/"..game.PlaceId) end 
-if not isfolder("testlib/config/"..game.PlaceId.."/Modules") then makefolder("testlib/config/"..game.PlaceId.."/Modules") end 
-if not isfolder("testlib/config/"..game.PlaceId.."/DropDowns") then makefolder("testlib/config/"..game.PlaceId.."/DropDowns") end 
-if not isfolder("testlib/config/"..game.PlaceId.."/Binds") then makefolder("testlib/config/"..game.PlaceId.."/Binds") end 
 getgenv().executed = true
 getgenv().canSave = true 
 local guiLib = {}
@@ -18,26 +15,19 @@ local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
 local config = {}
 local currentlyBinding
-if isfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt") then 
-	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Modules/Main.txt"))
+if isfile("testlib/config/"..game.PlaceId.."/Config.lua") then 
+	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Modules
+	config.Binds = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Binds
+	config.Dropdowns = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Dropdowns
 else 
 	config.Modules = {}
-	writefile("testlib/config/"..game.PlaceId.."/Modules/Main.txt" , http:JSONEncode(config.Modules))
-end 
-if isfile("testlib/config/"..game.PlaceId.."/Dropdowns/Main.txt") then 
-	config.Dropdowns = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Dropdowns/Main.txt"))
-else 
 	config.Dropdowns = {}
-	writefile("testlib/config/"..game.PlaceId.."/Binds/Main.txt" , http:JSONEncode(config.Dropdowns))
-end 
-if isfile("testlib/config/"..game.PlaceId.."/Binds/Main.txt") then 
-	config.Binds = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Binds/Main.txt"))
-else 
 	config.Binds = {}
-	writefile("testlib/config/"..game.PlaceId.."/Binds/Main.txt" , http:JSONEncode(config.Binds))
+	writefile("testlib/config/"..game.PlaceId.."/Config.lua" , http:JSONEncode(config))
 end 
-function save(whichconfig) 
-	writefile("testlib/config/"..game.PlaceId.."/"..whichconfig.."/Main.txt", http:JSONEncode(config[whichconfig]))
+
+function save() 
+	writefile("testlib/config/"..game.PlaceId.."/Config.lua", http:JSONEncode(config))
 end 
 function code(b) 
 	b() 
@@ -54,17 +44,10 @@ function guiLib:randomString(amount)
     end 
     return returnedString
 end
-
 local lplr = Players.LocalPlayer
-guiLib.isAlive = function(plr)
-	return plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("Humanoid").Health > 0 
-end
 function guiLib:Enabled(module)
 	return guiLib.ModuleOn[tostring(module)] or false 
 end 
-guiLib.isTeammate =  function(plr) 
-	return plr.Team == lplr.Team and lplr.Team
-end
 
 guiLib.functions = {}
 function getModuleFunc(moduletofunc)
@@ -153,7 +136,6 @@ RenderWindow.Draggable = true
 RenderWindow.BorderSizePixel = 0 
 ModuleAmmount = {}
 guiLib.ModuleOn = {}
-guiLib.DropDownValue = {"Value" == 0}
 ModuleAmmount.WorldWindow = 0  
 ModuleAmmount.CombatWindow = 0
 ModuleAmmount.UtilityWindow = 0
@@ -218,7 +200,7 @@ function guiLib:CreateModule(tbl)
 			guiLib.ModuleOn[tbl.Name] = false
 			if tbl.Name ~= "Uninject" and getgenv().canSave then 
 				config.Modules[tbl.Name] = "false"
-				save("Modules")
+				save()
 			end 
 		end
 		table.insert(guiLib.disconnectfuncs, module.MouseButton1Down:Connect(function(func) 
@@ -235,11 +217,11 @@ function guiLib:CreateModule(tbl)
 					if not bindmenu.Text:upper():match("[^a-zA-Z]+") and bindmenu.Text ~= "" then 
 						guiLib:Notify("Binds", "Bound "..tbl.Name.." to "..string.sub(bindmenu.Text, 1, 1):upper(), 3)
 						config.Binds[tbl.Name] = string.sub(bindmenu.Text, 1, 1):upper()
-						save("Binds")
+						save()
 					elseif bindmenu.Text == "" then 
 						guiLib:Notify("Binds", "Unbound "..tbl.Name.."!", 3)
 						config.Binds[tbl.Name] = ""
-						save("Binds")
+						save()
 					else 
 						guiLib:Notify("Binds", "Enter an ALPHABETICAL\n character....", 3)
 					end
@@ -260,7 +242,7 @@ function guiLib:CreateModule(tbl)
 	end))
 	if not config.Binds[tbl.Name] and getgenv().canSave then 
 		config.Binds[tbl.Name] = "" 
-		save("Binds") 
+		save() 
 	end 
 	table.insert(guiLib.disconnectfuncs, uis.InputBegan:Connect(function(input) 
 		if config.Binds[tbl.Name] ~= "" and input.KeyCode == Enum.KeyCode[config.Binds[tbl.Name]] and not uis:GetFocusedTextBox() then 
@@ -268,13 +250,13 @@ function guiLib:CreateModule(tbl)
 				guiLib:Disable(tbl.Name)
 				if tbl.Name ~= "Uninject" and getgenv().canSave then 
 					config.Modules[tbl.Name] = "false"
-					save("Modules")
+					save()
 				end
 			else 
 				guiLib:Enable(tbl.Name)
 				if tbl.Name ~= "Uninject" and getgenv().canSave then 
 					config.Modules[tbl.Name] = "true"
-					save("Modules")
+					save()
 				end 
 			end 
 		end
@@ -295,7 +277,6 @@ function guiLib:CreateDropDown(tbl2)
     local realModule = tbl2.Module
 	repeat task.wait() until guiLib:GetModule(realModule)
 	if not TabAmount[realModule] then TabAmount[realModule] = 0 end 
-	if not guiLib.DropDownValue[realModule] then guiLib.DropDownValue[realModule] = {} end 
 	local module = guiLib:GetModule(realModule)
     TabAmount[realModule] +=1
 	local dropdownText = Instance.new("TextLabel", realwindow)
@@ -323,17 +304,11 @@ function guiLib:CreateDropDown(tbl2)
 	dropdown2.Name = guiLib:randomString(50)
 	dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
-	if not guiLib.DropDownValue[realModule[tbl2.Module..tbl2.Name]] then 
-		guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = 0 
-	end
 	if tbl2.Default then 
-		if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] ~= "" then 
-			guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = config.Dropdowns[tbl2.Module..tbl2.Name]
-		else 
-			guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = tbl2.Default
+		if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] == "" then 
 			if getgenv().canSave then 
 				config.Dropdowns[tbl2.Module..tbl2.Name] = tbl2.Default
-				save("Dropdowns")
+				save()
 			end
 		end 
 	end
@@ -351,7 +326,7 @@ function guiLib:CreateDropDown(tbl2)
 		end 
 		if getgenv().canSave then 
 			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
-			save("Dropdowns")
+			save()
 		end
 	end)) 
 	table.insert(guiLib.disconnectfuncs, module.MouseButton2Down:Connect(function(right) 
@@ -398,7 +373,7 @@ function guiLib:Disable(disablemodule, displaydisablenotification)
 			if not displaydisablenotification then guiLib:Notify(disablemodule, "Disabled", 1) end
 			if getgenv().canSave then 
                 config.Modules[disablemodule] = "false"
-				save("Modules")
+				save()
 			end
 			task.spawn(code, getModuleFunc(disablemodule))
 			break
@@ -413,7 +388,7 @@ function guiLib:Enable(enabledmodule, displayenablenotification)
 			if not displayenablenotification then guiLib:Notify(enabledmodule, "Enabled", 1) end
 			if enabledmodule ~= "Uninject" and getgenv().canSave then 
 				config.Modules[enabledmodule] = "true"
-				save("Modules")
+				save()
 			end 
 			task.spawn(code, getModuleFunc(enabledmodule))
 			break
