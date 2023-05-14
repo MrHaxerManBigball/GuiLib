@@ -327,17 +327,15 @@ function guiLib:CreateDropDown(tbl2)
 		guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = 0 
 	end
 	if tbl2.Default then 
-		if tbl2.Default then 
-			if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] ~= "" then 
-				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = config.Dropdowns[tbl2.Module..tbl2.Name]
-			else 
-				guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = tbl2.Default
-				if getgenv().canSave then 
-					config.Dropdowns[tbl2.Module..tbl2.Name] = tbl2.Default
-					save("Dropdowns")
-				end
-			end 
-		end
+		if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] ~= "" then 
+			guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = config.Dropdowns[tbl2.Module..tbl2.Name]
+		else 
+			guiLib.DropDownValue[realModule][tbl2.Module..tbl2.Name] = tbl2.Default
+			if getgenv().canSave then 
+				config.Dropdowns[tbl2.Module..tbl2.Name] = tbl2.Default
+				save("Dropdowns")
+			end
+		end 
 	end
 	table.insert(guiLib.disconnectfuncs, dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
 		if tbl2.Function and dropdown2.Text ~= "" then code(tbl2.Function) end
