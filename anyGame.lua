@@ -54,7 +54,7 @@ GuiLib:CreateDropDown({
     Name = "Speed", 
     Type = "number",
     Min = 0,
-    Max = 100,
+    Max = 200,
     Default = 23, 
 })
 GuiLib:CreateDropDown({
@@ -62,7 +62,7 @@ GuiLib:CreateDropDown({
     Name = "VerticalSpeed", 
     Type = "number",
     Min = 0,
-    Max = 100,
+    Max = 200,
     Default = 50, 
 })
 
