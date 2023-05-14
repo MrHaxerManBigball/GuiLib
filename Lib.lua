@@ -461,8 +461,9 @@ function guiLib:Notify(header, text, time, tweentime)
 		Frame:TweenPosition(UDim2.new(0.85,0.1,0.8 - (notifications / 11.65),0.4), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false) 
 		task.wait(time - 0.2) 
 		Frame:TweenPosition(UDim2.new(0.897371888, 0, 0.917338729, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, tweentime or 0.1, false)
-		Notification:Destroy()
 		notifications -= 1 
+		task.wait(0.1)
+		Notification:Destroy()
 	end)
 end
 table.insert(guiLib.disconnectfuncs, lplr.OnTeleport:Connect(function(State)
