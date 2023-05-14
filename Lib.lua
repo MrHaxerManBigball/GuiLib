@@ -338,7 +338,6 @@ function guiLib:CreateDropDown(tbl2)
 		end 
 	end
 	table.insert(guiLib.disconnectfuncs, dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling)
-		if tbl2.Function and dropdown2.Text ~= "" then code(tbl2.Function) end 
 		pcall(function()
 			if dropdown2 and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2.Type and tbl2.Min and tonumber(dropdown2.Text) < tbl2.Min then 
 				dropdown2.Text = tbl2.Min
@@ -347,6 +346,9 @@ function guiLib:CreateDropDown(tbl2)
 			end 
 		end)
 		repeat task.wait() until not uis:GetFocusedTextBox() 
+		if tbl2.Function and dropdown2.Text ~= "" then 
+			code(tbl2.Function) 
+		end 
 		if getgenv().canSave then 
 			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
 			save("Dropdowns")
