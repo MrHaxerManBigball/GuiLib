@@ -338,19 +338,21 @@ function guiLib:CreateDropDown(tbl2)
 		end 
 	end
 	table.insert(guiLib.disconnectfuncs, dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
-		if dropdown2 and dropdown2.Text and tbl2.Type and string.lower(tbl2.Type) == "number" and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2.Type and tbl2.Min and tonumber(dropdown2.Text) < tbl2.Min then 
-			dropdown2.Text = tbl2.Min
-		elseif string.lower(tbl2.Type) == "number" and dropdown2 and dropdown2.Text and dropdown2.Text ~= "" and typeof(dropdown2.Text) == "number" and tbl2 and tbl2.Max and tonumber(dropdown2.Text) > tonumber(tbl2.Max) then
-			dropdown2.Text = tbl2.Max
-		end 
-		repeat task.wait() until not uis:GetFocusedTextBox() 
-		if tbl2.Function and dropdown2.Text ~= "" then 
-			code(tbl2.Function) 
-		end
-		if getgenv().canSave then 
-			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
-			save("Dropdowns")
-		end
+		pcall(function())
+			if dropdown2 and dropdown2.Text and tbl2.Type and string.lower(tbl2.Type) == "number" and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2.Type and tbl2.Min and tonumber(dropdown2.Text) < tbl2.Min then 
+				dropdown2.Text = tbl2.Min
+			elseif string.lower(tbl2.Type) == "number" and dropdown2 and dropdown2.Text and dropdown2.Text ~= "" and typeof(dropdown2.Text) == "number" and tbl2 and tbl2.Max and tonumber(dropdown2.Text) > tonumber(tbl2.Max) then
+				dropdown2.Text = tbl2.Max
+			end 
+			repeat task.wait() until not uis:GetFocusedTextBox() 
+			if tbl2.Function and dropdown2.Text ~= "" then 
+				code(tbl2.Function) 
+			end
+			if getgenv().canSave then 
+				config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
+				save("Dropdowns")
+			end
+		end)
 	end)) 
 	table.insert(guiLib.disconnectfuncs, module.MouseButton2Down:Connect(function(right) 
 		table.insert(guiLib.disconnectfuncs, connection2)
