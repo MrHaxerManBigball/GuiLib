@@ -30,17 +30,17 @@ end)
 
 local FlyVelo, FlyY
 GuiLib:CreateModule({
-    ["Name"] = "Fly", 
-    ["Window"] = "Movement", 
-    ["Function"] = function() 
+    Name = "Fly", 
+    Window = "Movement", 
+    Function = function() 
         if GuiLib:Enabled("Fly") then 
             task.spawn(function()
-                repeat task.wait() until GuiLib:GetDropDownValue("Fly", "Speed") 
                 repeat 
-                    if isAlive(lplr) and GuiLib:GetDropDownValue("Fly", "Speed") ~= "" then 
-                        if uis:IsKeyDown(Enum.KeyCode.Space) and not uis:GetFocusedTextBox() then FlyY = GuiLib:GetDropDownValue("Fly", "Speed") or 10 elseif not uis:IsKeyDown(Enum.KeyCode.LeftShift) then FlyY = 0 end 
-                        if uis:IsKeyDown(Enum.KeyCode.LeftShift) and not uis:GetFocusedTextBox() then FlyY = -GuiLib:GetDropDownValue("Fly", "Speed")  or 10 elseif not uis:IsKeyDown(Enum.KeyCode.Space) then FlyY = 0 end  
-                        FlyVelo = lplr.Character.Humanoid.MoveDirection * GuiLib:GetDropDownValue("Fly", "Speed") or 22.5
+                    if isAlive(lplr) and GuiLib:GetDropDownValue("Fly", "Speed") then 
+                        if uis:IsKeyDown(Enum.KeyCode.Space) and not uis:GetFocusedTextBox() then FlyY = GuiLib:GetDropDownValue("Fly", "VerticalSpeed") or 10 elseif not uis:IsKeyDown(Enum.KeyCode.LeftShift) then FlyY = 0 end 
+                        if uis:IsKeyDown(Enum.KeyCode.LeftShift) and not uis:GetFocusedTextBox() then FlyY = -GuiLib:GetDropDownValue("Fly", "VerticalSpeed") or 10 elseif not uis:IsKeyDown(Enum.KeyCode.Space) then FlyY = 0 end  
+                        if uis:IsKeyDown(Enum.KeyCode.LeftShift) and uis:IsKeyDown(Enum.KeyCode.Space) then FlyY = 0 end 
+                        FlyVelo = lplr.Character.Humanoid.MoveDirection * (GuiLib:GetDropDownValue("Fly", "Speed") or 23)
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.new(FlyVelo.X,FlyY,FlyVelo.Z)
                     end 
                     task.wait() 
@@ -50,12 +50,20 @@ GuiLib:CreateModule({
     end,
 })
 GuiLib:CreateDropDown({
-    ["Module"] = "Fly", 
-    ["type"] = "number",
-    ["Name"] = "Speed", 
-    ["Min"] = 0,
-    ["Max"] = 100, 
-    ["Default"] = 30,
+    Module = "Fly", 
+    Name = "Speed", 
+    Type = "number",
+    Min = 0,
+    Max = 100,
+    Default = 23, 
+})
+GuiLib:CreateDropDown({
+    Module = "Fly", 
+    Name = "VerticalSpeed", 
+    Type = "number",
+    Min = 0,
+    Max = 100,
+    Default = 50, 
 })
 
 local OldFOV, FOVFunc = nil, nil
