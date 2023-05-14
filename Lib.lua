@@ -338,7 +338,7 @@ function guiLib:CreateDropDown(tbl2)
 		end 
 	end
 	table.insert(guiLib.disconnectfuncs, dropdown2:GetPropertyChangedSignal("Text"):Connect(function(balling) 
-		pcall(function())
+		pcall(function()
 			if dropdown2 and dropdown2.Text and tbl2.Type and string.lower(tbl2.Type) == "number" and dropdown2.Text and tbl2 and typeof(dropdown2.Text) == tbl2.Type and tbl2.Min and tonumber(dropdown2.Text) < tbl2.Min then 
 				dropdown2.Text = tbl2.Min
 			elseif string.lower(tbl2.Type) == "number" and dropdown2 and dropdown2.Text and dropdown2.Text ~= "" and typeof(dropdown2.Text) == "number" and tbl2 and tbl2.Max and tonumber(dropdown2.Text) > tonumber(tbl2.Max) then
