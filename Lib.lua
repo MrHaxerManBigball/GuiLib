@@ -467,7 +467,7 @@ function guiLib:Notify(header, text, time, tweentime)
 end
 table.insert(guiLib.disconnectfuncs, lplr.OnTeleport:Connect(function(State)
     if State == Enum.TeleportState.InProgress then
-       	queueteleport ('loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/loader", true))()')
+       	queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/loader", true))()')
     end
 end))
 if uis.TouchEnabled then 
