@@ -305,9 +305,9 @@ function guiLib:CreateDropDown(tbl2)
 	dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	dropdown2.TextColor3 = Color3.fromRGB(255, 255, 255)
 	if tbl2.Default then 
-		if config.Dropdowns[tbl2.Module..tbl2.Name] and config.Dropdowns[tbl2.Module..tbl2.Name] == "" then 
+		if config.Dropdowns[tbl2.Module..tbl2.Name] == "" then 
+			config.Dropdowns[tbl2.Module..tbl2.Name] = tbl2.Default
 			if getgenv().canSave then 
-				config.Dropdowns[tbl2.Module..tbl2.Name] = tbl2.Default
 				save()
 			end
 		end 
