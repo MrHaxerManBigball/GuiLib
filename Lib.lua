@@ -1,9 +1,9 @@
 if not game:IsLoaded() then game.Loaded:Wait() end 
-local loadingGui, queueteleport = nil, syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
+local loadingGui, queueteleport = nil, syn and syn.queue_on_teleport or queue_on_teleport
 if not gethui then loadingGui = game:GetService("CoreGui") else loadingGui = gethui() end 
 if getgenv().executed then return error("Already Executed") end 
 if not isfolder("testlib") then makefolder("testlib") end 
-if not isfolder("testlib/config") then makefolder("testlib/config") end 
+if not isfolder("testlib/config") then makefolder("testlib/config") end
 if not isfolder("testlib/games") then makefolder("testlib/games") end
 if not isfolder("testlib/config/"..game.PlaceId) then makefolder("testlib/config/"..game.PlaceId) end 
 getgenv().executed = true
@@ -19,13 +19,18 @@ if isfile("testlib/config/"..game.PlaceId.."/Config.lua") then
 	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Modules
 	config.Binds = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Binds
 	config.Dropdowns = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Dropdowns
+	config.Hud = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Hud
 else 
 	config.Modules = {}
 	config.Dropdowns = {}
 	config.Binds = {}
+	config.Hud = {}
 	writefile("testlib/config/"..game.PlaceId.."/Config.lua" , http:JSONEncode(config))
 end 
-
+local enabledColor
+if config.Hud and config.Hud.Enabled and config.Hud.Enabled ~= "" then 
+	enabledColor = config.Hud.Enabled
+end 
 function save() 
 	writefile("testlib/config/"..game.PlaceId.."/Config.lua", http:JSONEncode(config))
 end 
@@ -55,24 +60,28 @@ function getModuleFunc(moduletofunc)
 	for i,v in next, guiLib.functions do 
 		for i2,v2 in next, v do 
 			if v.Name == moduletofunc then 
-				returnedFunc = v["Function"]
+				returnedFunc = v.Function
 				break
 			end
 		end 
 	end
 	return returnedFunc
 end
+function guiLib:GetDropDownValue(dropped, dropname) 
+	return config.Dropdowns[dropped..dropname]
+end 
+local windowcolor = (config.Hud.Windows and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[3])) or Color3.fromRGB(111, 128, 200)
+local Transparency = (config.Hud.Transparency and guiLib:GetDropDownValue("HUD", "Transparency")) or 0.5
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui", loadingGui)
 guiLib.Boney.Enabled = false 
-local TextButton = Instance.new("TextButton")
 guiLib.Boney.Name = guiLib:randomString(50)
 guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 guiLib.Boney.ResetOnSpawn = false
 local WorldWindow = Instance.new("TextLabel", guiLib.Boney)
 WorldWindow.Name = guiLib:randomString(50)
-WorldWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
-WorldWindow.BackgroundTransparency = 0.3
+WorldWindow.BackgroundColor3 = windowcolor
+WorldWindow.BackgroundTransparency = Transparency
 WorldWindow.Position = UDim2.new(0.0308897775, 0, 0.0302419364, 0)
 WorldWindow.Size = UDim2.new(0, 200, 0, 50)
 WorldWindow.Font = Enum.Font.Highway
@@ -84,8 +93,8 @@ WorldWindow.Draggable = true
 WorldWindow.BorderSizePixel = 0 
 local CombatWindow = Instance.new("TextLabel", guiLib.Boney)
 CombatWindow.Name = guiLib:randomString(50)
-CombatWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
-CombatWindow.BackgroundTransparency = 0.3
+CombatWindow.BackgroundColor3 = windowcolor
+CombatWindow.BackgroundTransparency = Transparency
 CombatWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.15,0,0.031)
 CombatWindow.Size = UDim2.new(0, 200, 0, 50)
 CombatWindow.Font = Enum.Font.Highway
@@ -97,8 +106,8 @@ CombatWindow.Draggable = true
 CombatWindow.BorderSizePixel = 0 
 local UtilityWindow = Instance.new("TextLabel", guiLib.Boney)
 UtilityWindow.Name = guiLib:randomString(50)
-UtilityWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
-UtilityWindow.BackgroundTransparency = 0.3
+UtilityWindow.BackgroundColor3 = windowcolor
+UtilityWindow.BackgroundTransparency = Transparency
 UtilityWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.3,0,0.031)
 UtilityWindow.Size = UDim2.new(0, 200, 0, 50)
 UtilityWindow.Font = Enum.Font.Highway
@@ -110,8 +119,8 @@ UtilityWindow.Draggable = true
 UtilityWindow.BorderSizePixel = 0 
 local MovementWindow = Instance.new("TextLabel", guiLib.Boney)
 MovementWindow.Name = guiLib:randomString(50)
-MovementWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
-MovementWindow.BackgroundTransparency = 0.3
+MovementWindow.BackgroundColor3 = windowcolor
+MovementWindow.BackgroundTransparency = Transparency
 MovementWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.45,0,0,40)
 MovementWindow.Size = UDim2.new(0, 200, 0, 50)
 MovementWindow.Font = Enum.Font.Highway
@@ -123,8 +132,8 @@ MovementWindow.Draggable = true
 MovementWindow.BorderSizePixel = 0 
 local RenderWindow = Instance.new("TextLabel", guiLib.Boney)
 RenderWindow.Name = guiLib:randomString(50)
-RenderWindow.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
-RenderWindow.BackgroundTransparency = 0.3
+RenderWindow.BackgroundColor3 = windowcolor
+RenderWindow.BackgroundTransparency = Transparency
 RenderWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.6,0,0,49)
 RenderWindow.Size = UDim2.new(0, 200, 0, 50)
 RenderWindow.Font = Enum.Font.Highway
@@ -167,7 +176,7 @@ function guiLib:CreateModule(tbl)
 	local module = Instance.new("TextButton", realwindow or WorldWindow)
 	local bindmenu = Instance.new("TextBox", realwindow)
 	module.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
-	module.BackgroundTransparency = 0.5
+	module.BackgroundTransparency = Transparency
 	module.Position = UDim2.new(realwindow.Position) + UDim2.new(0,0,1 * ModuleAmmount[wname])
 	module.Size = UDim2.new(0, 200, 0, 50)
 	module.Font = Enum.Font.SourceSans
@@ -198,6 +207,7 @@ function guiLib:CreateModule(tbl)
 			guiLib:Enable(tbl.Name, "dont notify mannnnnn") 
 		else 	
 			guiLib.ModuleOn[tbl.Name] = false
+			module.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
 			if tbl.Name ~= "Uninject" and getgenv().canSave then 
 				config.Modules[tbl.Name] = "false"
 				save()
@@ -366,14 +376,11 @@ function guiLib:CreateDropDown(tbl2)
 		end 
 	end))
 end 
-function guiLib:GetDropDownValue(dropped, dropname) 
-	return config.Dropdowns[dropped..dropname]
-end 
 function guiLib:Disable(disablemodule, displaydisablenotification)
 	guiLib.ModuleOn[disablemodule] = false 
 	for i,v in next, guiLib.Boney:GetDescendants() do 
 		if v:IsA("TextButton") and v.Text == " "..disablemodule then 
-			v.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
+			v.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
 			if not displaydisablenotification then guiLib:Notify(disablemodule, "Disabled", 1) end
 			if getgenv().canSave then 
                 config.Modules[disablemodule] = "false"
@@ -388,7 +395,7 @@ function guiLib:Enable(enabledmodule, displayenablenotification)
 	guiLib.ModuleOn[enabledmodule] = true 
 	for i,v in next, guiLib.Boney:GetDescendants() do 
 		if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
-			v.BackgroundColor3 = Color3.fromRGB(83, 33, 153)
+			v.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) or Color3.fromRGB(83, 33, 153)
 			if not displayenablenotification then guiLib:Notify(enabledmodule, "Enabled", 1) end
 			if enabledmodule ~= "Uninject" and getgenv().canSave then 
 				config.Modules[enabledmodule] = "true"
@@ -496,10 +503,76 @@ guiLib:CreateModule({
         end 
     end,
 })
+guiLib:CreateModule({ 
+	Name = "HUD", 
+	Window = "Render", 
+	Function = function()  
+		if guiLib:Enabled("HUD") then 
+
+		end 
+	end, 
+})
+guiLib:CreateDropDown({
+	Module = "HUD", 
+	Name = "ModuleEnableColor(rgb)", 
+	Default = "83, 33, 153",
+	Function = function() 
+		for i,v in next, guiLib.Boney:GetDescendants() do 
+			if v:IsA("TextButton") and guiLib:Enabled(string.split(v.Text, " ")[2]) then 
+				v.BackgroundColor3 = Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])
+				config.Hud.Enabled = guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)")
+				save()
+			end 
+		end 
+	end,
+})
+guiLib:CreateDropDown({
+	Module = "HUD", 
+	Name = "Transparency", 
+	Min = 0.1, 
+	Max = 1,
+	Default = 0.5,
+	Function = function() 
+		for i,v in next, guiLib.Boney:GetDescendants() do 
+			if v:IsA("TextButton") or v:IsA("TextLabel") and not v.Text:find(":") then 
+				v.BackgroundTransparency = guiLib:GetDropDownValue("HUD", "Transparency")
+				config.Hud.Transparency = guiLib:GetDropDownValue("HUD", "Transparency")
+				save()
+			end 
+		end 
+	end,
+})
+guiLib:CreateDropDown({
+	Module = "HUD", 
+	Name = "ModuleDisableColor(rgb)", 
+	Default = "36, 38, 42",
+	Function = function() 
+		for i,v in next, guiLib.Boney:GetDescendants() do 
+			if v:IsA("TextButton") and not guiLib:Enabled(string.split(v.Text, " ")[2]) then 
+				v.BackgroundColor3 = Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])
+				config.Hud.Disabled = guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)")
+				save()
+			end 
+		end 
+	end,
+})
+guiLib:CreateDropDown({
+	Module = "HUD", 
+	Name = "WindowColors(rgb)", 
+	Default = "111, 128, 200",
+	Function = function() 
+		for i,v in next, guiLib.Boney:GetDescendants() do 
+			if v:IsA("TextLabel") and not v.Text:find(":") then 
+				v.BackgroundColor3 = Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[3])
+				config.Hud.Windows = guiLib:GetDropDownValue("HUD", "WindowColors(rgb)")
+				save()
+			end 
+		end 
+	end,
+})
 return guiLib
 
 --[[ examples
-local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib.lua", true))()
 guiLib:CreateModule({
 	Name = "Test", 
 	Window = "Utility", 
