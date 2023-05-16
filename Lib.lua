@@ -15,7 +15,7 @@ local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
 local config = {}
 local currentlyBinding
-if isfile("testlib/config/"..game.PlaceId.."/Config.lua") then 
+if isfile("testlib/config/"..game.PlaceId.."/Config.lua") and http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Modules then 
 	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Modules
 	config.Binds = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Binds
 	config.Dropdowns = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Dropdowns
@@ -70,8 +70,8 @@ end
 function guiLib:GetDropDownValue(dropped, dropname) 
 	return config.Dropdowns[dropped..dropname]
 end 
-local windowcolor = (config.Hud.Windows and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[3])) or Color3.fromRGB(111, 128, 200)
-local Transparency = (config.Hud.Transparency and guiLib:GetDropDownValue("HUD", "Transparency")) or 0.5
+local windowcolor = (config.Hud and config.Hud.Windows and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[3])) or Color3.fromRGB(111, 128, 200)
+local Transparency = (config.Hud and config.Hud.Transparency and guiLib:GetDropDownValue("HUD", "Transparency")) or 0.5
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui", loadingGui)
 guiLib.Boney.Enabled = false 
@@ -508,8 +508,8 @@ guiLib:CreateModule({
 	Window = "Render", 
 	Function = function()  
 		if guiLib:Enabled("HUD") then 
-			guiLib:Disable("HUD")
-			guiLib:Notify("HUD", "This module is only used\nfor the dropdowns!")
+			guiLib:Disable("HUD", "no")
+			guiLib:Notify("HUD", "This module is only used\nfor the dropdowns!", 1)
 		end 
 	end, 
 })
@@ -571,9 +571,21 @@ guiLib:CreateDropDown({
 		end 
 	end,
 })
+guiLib:CreateDropDown({
+	Module = "HUD", 
+	Name = "ResetConfig", 
+	Default = "false",
+	Function = function() 
+		if isfile("testlib/config/"..game.PlaceId.."/Config.lua") and guiLib:GetDropDownValue("HUD", "ResetConfig") == "true" then 
+			writefile("testlib/config/"..game.PlaceId.."/Config.lua", "[]")
+			guiLib:Enable("Uninject")
+		end 
+	end,
+})
 return guiLib
 
 --[[ examples
+local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib.lua", true))()
 guiLib:CreateModule({
 	Name = "Test", 
 	Window = "Utility", 
