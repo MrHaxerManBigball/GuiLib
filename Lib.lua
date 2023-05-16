@@ -508,7 +508,8 @@ guiLib:CreateModule({
 	Window = "Render", 
 	Function = function()  
 		if guiLib:Enabled("HUD") then 
-
+			guiLib:Disable("HUD")
+			guiLib:Notify("HUD", "This module is only\nfor the dropdown!")
 		end 
 	end, 
 })
