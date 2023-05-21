@@ -9,11 +9,13 @@ if not isfolder("testlib/config/"..game.PlaceId) then makefolder("testlib/config
 getgenv().executed = true
 getgenv().canSave = true 
 local guiLib = {}
+shared.GuiLib = guiLib
 guiLib.moduletable = {}
 local Players = game:GetService("Players") 
 local uis = game:GetService("UserInputService")
 local http = game:GetService("HttpService")
 local config = {}
+shared.config = config
 local currentlyBinding
 if isfile("testlib/config/"..game.PlaceId.."/Config.lua") and http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Modules then 
 	config.Modules = http:JSONDecode(readfile("testlib/config/"..game.PlaceId.."/Config.lua")).Modules
@@ -29,6 +31,7 @@ else
 	config.Toggleables = {}
 	writefile("testlib/config/"..game.PlaceId.."/Config.lua" , http:JSONEncode(config))
 end 
+guiLib.disconnectfuncs = {}
 local enabledColor
 if config.Hud and config.Hud.Enabled and config.Hud.Enabled ~= "" then 
 	enabledColor = config.Hud.Enabled
@@ -72,7 +75,8 @@ end
 function guiLib:GetDropDownValue(dropped, dropname) 
 	return config.Dropdowns[dropped..dropname]
 end 
-local windowcolor = (config.Hud and config.Hud.Windows and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[3])) or Color3.fromRGB(111, 128, 200)
+if not config.Hud.Windows then config.Hud.Windows = {} end
+local windowcolor = (config.Hud and config.Hud.Windows and guiLib:GetDropDownValue("HUD", "WindowColors(rgb)") and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[3])) or Color3.fromRGB(111, 128, 200)
 local Transparency = (config.Hud and config.Hud.Transparency and guiLib:GetDropDownValue("HUD", "Transparency")) or 0.5
 local mouse = lplr:GetMouse()
 guiLib.Boney = Instance.new("ScreenGui", loadingGui)
@@ -80,11 +84,13 @@ guiLib.Boney.Enabled = false
 guiLib.Boney.Name = guiLib:randomString(50)
 guiLib.Boney.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 guiLib.Boney.ResetOnSpawn = false
+if not config.Hud.WindowPositions then config.Hud.WindowPositions = {} end 
+if not config.Hud.WindowPositions.WorldWindow then config.Hud.WindowPositions.WorldWindow = "0.108897775, 0, 0.0302419364, 0" end
 local WorldWindow = Instance.new("TextLabel", guiLib.Boney)
 WorldWindow.Name = guiLib:randomString(50)
 WorldWindow.BackgroundColor3 = windowcolor
 WorldWindow.BackgroundTransparency = Transparency
-WorldWindow.Position = UDim2.new(0.0308897775, 0, 0.0302419364, 0)
+WorldWindow.Position = UDim2.new(string.split(config.Hud.WindowPositions.WorldWindow, ",")[1], string.split(config.Hud.WindowPositions.WorldWindow, ",")[2], string.split(config.Hud.WindowPositions.WorldWindow, ",")[3], string.split(config.Hud.WindowPositions.WorldWindow, ",")[4])
 WorldWindow.Size = UDim2.new(0, 200, 0, 50)
 WorldWindow.Font = Enum.Font.Highway
 WorldWindow.Text = "World"
@@ -93,11 +99,16 @@ WorldWindow.TextSize = 25
 WorldWindow.Active = true 
 WorldWindow.Draggable = true 
 WorldWindow.BorderSizePixel = 0 
+table.insert(guiLib.disconnectfuncs, WorldWindow:GetPropertyChangedSignal("Position"):Connect(function()
+	config.Hud.WindowPositions.WorldWindow = string.gsub(string.gsub(tostring(WorldWindow.Position), "}", ""), "{", "")
+	save()
+end))
+if not config.Hud.WindowPositions.CombatWindow then config.Hud.WindowPositions.CombatWindow = "0.3, 0, 0.0302419364, 0" end
 local CombatWindow = Instance.new("TextLabel", guiLib.Boney)
 CombatWindow.Name = guiLib:randomString(50)
 CombatWindow.BackgroundColor3 = windowcolor
 CombatWindow.BackgroundTransparency = Transparency
-CombatWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.15,0,0.031)
+CombatWindow.Position = UDim2.new(string.split(config.Hud.WindowPositions.CombatWindow, ",")[1], string.split(config.Hud.WindowPositions.CombatWindow, ",")[2], string.split(config.Hud.WindowPositions.CombatWindow, ",")[3], string.split(config.Hud.WindowPositions.CombatWindow, ",")[4])
 CombatWindow.Size = UDim2.new(0, 200, 0, 50)
 CombatWindow.Font = Enum.Font.Highway
 CombatWindow.Text = "Combat"
@@ -106,11 +117,16 @@ CombatWindow.TextSize = 25
 CombatWindow.Active = true 
 CombatWindow.Draggable = true 
 CombatWindow.BorderSizePixel = 0 
+table.insert(guiLib.disconnectfuncs, CombatWindow:GetPropertyChangedSignal("Position"):Connect(function()
+	config.Hud.WindowPositions.CombatWindow = string.gsub(string.gsub(tostring(CombatWindow.Position), "}", ""), "{", "")
+	save()
+end))
+if not config.Hud.WindowPositions.UtilityWindow then config.Hud.WindowPositions.UtilityWindow = "0.5, 0, 0.0302419364, 0" end
 local UtilityWindow = Instance.new("TextLabel", guiLib.Boney)
 UtilityWindow.Name = guiLib:randomString(50)
 UtilityWindow.BackgroundColor3 = windowcolor
 UtilityWindow.BackgroundTransparency = Transparency
-UtilityWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.3,0,0.031)
+UtilityWindow.Position = UDim2.new(string.split(config.Hud.WindowPositions.UtilityWindow, ",")[1], string.split(config.Hud.WindowPositions.UtilityWindow, ",")[2], string.split(config.Hud.WindowPositions.UtilityWindow, ",")[3], string.split(config.Hud.WindowPositions.UtilityWindow, ",")[4])
 UtilityWindow.Size = UDim2.new(0, 200, 0, 50)
 UtilityWindow.Font = Enum.Font.Highway
 UtilityWindow.Text = "Utility"
@@ -119,11 +135,16 @@ UtilityWindow.TextSize = 25
 UtilityWindow.Active = true 
 UtilityWindow.Draggable = true 
 UtilityWindow.BorderSizePixel = 0 
+table.insert(guiLib.disconnectfuncs, UtilityWindow:GetPropertyChangedSignal("Position"):Connect(function()
+	config.Hud.WindowPositions.UtilityWindow = string.gsub(string.gsub(tostring(UtilityWindow.Position), "}", ""), "{", "")
+	save()
+end))
+if not config.Hud.WindowPositions.MovementWindow then config.Hud.WindowPositions.MovementWindow = "0.7, 0, 0.0302419364, 0" end
 local MovementWindow = Instance.new("TextLabel", guiLib.Boney)
 MovementWindow.Name = guiLib:randomString(50)
 MovementWindow.BackgroundColor3 = windowcolor
 MovementWindow.BackgroundTransparency = Transparency
-MovementWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.45,0,0,40)
+MovementWindow.Position = UDim2.new(string.split(config.Hud.WindowPositions.MovementWindow, ",")[1], string.split(config.Hud.WindowPositions.MovementWindow, ",")[2], string.split(config.Hud.WindowPositions.MovementWindow, ",")[3], string.split(config.Hud.WindowPositions.MovementWindow, ",")[4])
 MovementWindow.Size = UDim2.new(0, 200, 0, 50)
 MovementWindow.Font = Enum.Font.Highway
 MovementWindow.Text = "Movement"
@@ -132,11 +153,16 @@ MovementWindow.TextSize = 25
 MovementWindow.Active = true 
 MovementWindow.Draggable = true
 MovementWindow.BorderSizePixel = 0 
+table.insert(guiLib.disconnectfuncs, MovementWindow:GetPropertyChangedSignal("Position"):Connect(function()
+	config.Hud.WindowPositions.MovementWindow = string.gsub(string.gsub(tostring(MovementWindow.Position), "}", ""), "{", "")
+	save()
+end))
+if not config.Hud.WindowPositions.RenderWindow then config.Hud.WindowPositions.RenderWindow = "0.9, 0, 0.0302419364, 0" end
 local RenderWindow = Instance.new("TextLabel", guiLib.Boney)
 RenderWindow.Name = guiLib:randomString(50)
 RenderWindow.BackgroundColor3 = windowcolor
 RenderWindow.BackgroundTransparency = Transparency
-RenderWindow.Position = UDim2.new(WorldWindow.Position) + UDim2.new(0.6,0,0,49)
+RenderWindow.Position = UDim2.new(string.split(config.Hud.WindowPositions.RenderWindow, ",")[1], string.split(config.Hud.WindowPositions.RenderWindow, ",")[2], string.split(config.Hud.WindowPositions.RenderWindow, ",")[3], string.split(config.Hud.WindowPositions.RenderWindow, ",")[4])
 RenderWindow.Size = UDim2.new(0, 200, 0, 50)
 RenderWindow.Font = Enum.Font.Highway
 RenderWindow.Text = "Render"
@@ -145,6 +171,10 @@ RenderWindow.TextSize = 25
 RenderWindow.Active = true 
 RenderWindow.Draggable = true 
 RenderWindow.BorderSizePixel = 0 
+table.insert(guiLib.disconnectfuncs, RenderWindow:GetPropertyChangedSignal("Position"):Connect(function()
+	config.Hud.WindowPositions.RenderWindow = string.gsub(string.gsub(tostring(RenderWindow.Position), "}", ""), "{", "")
+	save()
+end))
 ModuleAmmount = {}
 guiLib.ModuleOn = {}
 ModuleAmmount.WorldWindow = 0  
@@ -152,7 +182,6 @@ ModuleAmmount.CombatWindow = 0
 ModuleAmmount.UtilityWindow = 0
 ModuleAmmount.MovementWindow = 0
 ModuleAmmount.RenderWindow = 0 
-guiLib.disconnectfuncs = {}
 local connection1, connection2, connection3, connection4, realwindow, wname, binds2
 function guiLib:CreateModule(tbl)
 	realwindow = nil
@@ -581,7 +610,7 @@ else
 	end))
 	guiLib:Notify("Josiah", "Press Right-Shift to\nopen GUI", 3)
 end
-
+local WaterMark, WaterMarkFunction
 guiLib:CreateModule({
     Name = "Uninject", 
     Window = "Utility", 
@@ -602,6 +631,7 @@ guiLib:CreateModule({
             guiLib.moduletable = {}
 			shared.GuiLib = nil 
             getgenv().executed = false 
+			if WaterMark then WaterMark:Destroy() end 
         end 
     end,
 })
@@ -716,6 +746,64 @@ guiLib:CreateDropDown({
 	Default = 10,
 	Max = 10, 
 	Min = 1,
+})
+local fps, total, startingtick
+guiLib:CreateToggleable({
+	Module = "HUD", 
+	Name = "WaterMark", 
+	Default = false, 
+	Function = function() 
+		if guiLib:ToggleEnabled("HUD", "WaterMark") then 
+			if not config.Hud.WaterMark then print('b') config.Hud.WaterMark = "0.5, 0, 0.4, 0" save() end
+			fps, total, startingtick = 0, 0, tick()
+			WaterMarkFunction = game:GetService("RunService").RenderStepped:Connect(function()
+				fps += 1 
+				total += 1 
+				task.spawn(function()
+					task.wait(1) 
+					fps -= 1
+				end)
+			end)
+			WaterMark = Instance.new("ScreenGui", loadingGui) 
+			WaterMark.Name = guiLib:randomString(50)
+			local WaterMarkFrame = Instance.new("Frame", WaterMark) 
+			local ColorFrame = Instance.new("TextLabel", WaterMarkFrame)
+			local JosiahLabel = Instance.new("TextLabel", WaterMarkFrame)
+			ColorFrame.Name = guiLib:randomString(50)
+			WaterMarkFrame.Name = guiLib:randomString(50)
+			WaterMarkFrame.BackgroundColor3 = Color3.fromRGB(27, 42, 53)
+			WaterMarkFrame.BackgroundTransparency = 0.6
+			WaterMarkFrame.Active = true 
+			WaterMarkFrame.Draggable = true 
+			WaterMarkFrame.BorderSizePixel = 0
+			WaterMarkFrame.Size = UDim2.new(0, 326, 0, 42)
+			WaterMarkFrame.Position = UDim2.new(string.split(config.Hud.WaterMark, ",")[1], string.split(config.Hud.WaterMark, ",")[2], string.split(config.Hud.WaterMark, ",")[3], string.split(config.Hud.WaterMark, ",")[4])
+			JosiahLabel.Size = UDim2.new(0, 194, 0, 22)
+			JosiahLabel.TextXAlignment = Enum.TextXAlignment.Left
+			JosiahLabel.Text = string.rep(" ", (15 - string.len(game.PlaceId))).."Boney | "..game.PlaceId
+			JosiahLabel.BorderSizePixel = 0
+			JosiahLabel.BackgroundTransparency = 1
+			JosiahLabel.Position += UDim2.new(0, 0, 0, 7.6)
+			ColorFrame.Size = UDim2.new(0, 326, 0, 7)
+			ColorFrame.Text = ""
+			ColorFrame.BorderSizePixel = 0
+			task.spawn(function()
+				repeat 
+					JosiahLabel.Text = "\nBoney | "..game.PlaceId.."\n\nFPS: "..fps.."| Average: "..math.floor((total / (tick() - startingtick)))
+					ColorFrame.BackgroundColor3 = Color3.fromHSV((tick() * rainbowUtil % 0.9), 1, 1)
+					task.wait() 
+				until not getgenv().executed or not guiLib:ToggleEnabled("HUD", "WaterMark")
+			end)
+			table.insert(guiLib.disconnectfuncs, WaterMarkFrame:GetPropertyChangedSignal("Position"):Connect(function()
+				config.Hud.WaterMark = string.gsub(string.gsub(tostring(WaterMarkFrame.Position), "}", ""), "{", "")
+				save()
+			end))
+		else 
+			if WaterMarkFunction then WaterMarkFunction:Disconnect() end
+			WaterMark:Destroy()
+			fps, total, startingtick = 0, 0, nil
+		end 
+	end, 
 })
 return guiLib 
 
