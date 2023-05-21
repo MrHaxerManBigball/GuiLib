@@ -423,6 +423,7 @@ function guiLib:CreateToggleable(tbl3)
 	toggle.TextTransparency = 1
 	toggle.TextXAlignment = Enum.TextXAlignment.Left
 	toggle.LayoutOrder = 0
+	toggle.ZIndex = 0
 	toggle.Size = UDim2.new(0,0,0)
 	toggle.Name = guiLib:randomString(50)
 	toggle.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
@@ -443,6 +444,7 @@ function guiLib:CreateToggleable(tbl3)
 		if toggle.Size == UDim2.new(0,0,0) then 
 			toggle.Size = UDim2.new(0, 200, 0, 50)
 			toggle.TextTransparency = 0
+			toggle.ZIndex = 50
 		else 
 			toggle.Size = UDim2.new(0,0,0)
 			toggle.TextTransparency = 1
