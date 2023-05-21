@@ -243,7 +243,7 @@ function guiLib:CreateModule(tbl)
 				bindmenu.Text = config.Binds[tbl.Name]
 				task.spawn(function()
 					repeat task.wait() until (not uis:IsKeyDown(Enum.KeyCode.LeftShift) or uis:IsKeyDown(Enum.KeyCode.Return)) and not uis:GetFocusedTextBox()
-					if not bindmenu.Text:upper():match("[^a-zA-Z]+") and bindmenu.Text ~= "" then 
+					if not string.sub(bindmenu.Text, 1, 1):upper():match("[^a-zA-Z]+") and bindmenu.Text ~= "" then 
 						guiLib:Notify("Binds", "Bound "..tbl.Name.." to "..string.sub(bindmenu.Text, 1, 1):upper(), 3)
 						config.Binds[tbl.Name] = string.sub(bindmenu.Text, 1, 1):upper()
 						save()
