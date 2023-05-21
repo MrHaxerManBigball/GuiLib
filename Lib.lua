@@ -713,7 +713,7 @@ guiLib:CreateDropDown({
 return guiLib 
 
 --[[ examples
-guiLib:CreateModule({
+local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib.lua", true))()
 guiLib:CreateModule({
 	Name = "Test", 
 	Window = "Utility", 
