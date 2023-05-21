@@ -448,6 +448,7 @@ function guiLib:CreateToggleable(tbl3)
 		else 
 			toggle.Size = UDim2.new(0,0,0)
 			toggle.TextTransparency = 1
+			toggle.ZIndex = 0 
 		end 
 	end)
 	toggle.MouseButton1Down:Connect(function()
