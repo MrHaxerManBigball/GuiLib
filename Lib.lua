@@ -670,12 +670,12 @@ guiLib:CreateDropDown({
 		end 
 	end,
 })
-guiLib:CreateDropDown({
+guiLib:CreateToggleable({
 	Module = "HUD", 
 	Name = "ResetConfig", 
-	Default = "false",
+	Default = false,
 	Function = function() 
-		if isfile("testlib/config/"..game.PlaceId.."/Config.lua") and guiLib:GetDropDownValue("HUD", "ResetConfig") == "true" then 
+		if isfile("testlib/config/"..game.PlaceId.."/Config.lua") and guiLib:GetDropDownValue("HUD", "ResetConfig") then 
 			writefile("testlib/config/"..game.PlaceId.."/Config.lua", "[]")
 			guiLib:Enable("Uninject")
 		end 
