@@ -424,7 +424,7 @@ function guiLib:Enable(enabledmodule, displayenablenotification)
 				else 
 					v.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) or Color3.fromRGB(83, 33, 153)
 				end
-			if not displayenablenotification then guiLib:Notify(enabledmodule, "Enabled", 1) end
+			if not displayenablenotification and (enabledmodule ~= "HUD") then guiLib:Notify(enabledmodule, "Enabled", 1) end
 			if enabledmodule ~= "Uninject" and getgenv().canSave then 
 				config.Modules[enabledmodule] = "true"
 				save()
@@ -639,7 +639,7 @@ guiLib:CreateDropDown({
 guiLib:CreateDropDown({
 	Module = "HUD", 
 	Name = "RainbowSpeed", 
-	Default = 9,
+	Default = 10,
 	Max = 10, 
 	Min = 1,
 })
@@ -647,7 +647,6 @@ guiLib:CreateDropDown({
 return guiLib 
 
 --[[ examples
-local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib.lua", true))()
 guiLib:CreateModule({
 	Name = "Test", 
 	Window = "Utility", 
