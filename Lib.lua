@@ -405,13 +405,12 @@ function guiLib:CreateToggleable(tbl3)
 	repeat task.wait() until guiLib:GetModule(realModule)
 	if not TabAmount[realModule] then TabAmount[realModule] = 0 end
 	if not ToggleableOn[realModule] then ToggleableOn[realModule] = {} end 
-	if not ToggleableOn[realModule][tbl3.Name] then ToggleableOn[realModule][tbl3.Name] = 0 end
+	if not ToggleableOn[realModule][tbl3.Name] then ToggleableOn[realModule][tbl3.Name] = false end
 	local module = guiLib:GetModule(realModule)
     TabAmount[realModule] +=1
 	local toggle = Instance.new("TextButton", module) 
 	toggle.Position = UDim2.new(module.Position) + UDim2.new(0,0,1.32 * (TabAmount[realModule]))
 	toggle.TextSize = 10
-	print(tbl3.Name)
 	toggle.Text = " "..tbl3.Name
 	toggle.BackgroundTransparency = Transparency
 	toggle.BorderSizePixel = 0 
