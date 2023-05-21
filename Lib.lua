@@ -53,7 +53,7 @@ local lplr = Players.LocalPlayer
 function guiLib:Enabled(module)
 	return guiLib.ModuleOn[tostring(module)] or false 
 end 
-
+local rainbowUtil = math.random()
 guiLib.functions = {}
 function getModuleFunc(moduletofunc)
 	local returnedFunc
@@ -207,7 +207,24 @@ function guiLib:CreateModule(tbl)
 			guiLib:Enable(tbl.Name, "dont notify mannnnnn") 
 		else 	
 			guiLib.ModuleOn[tbl.Name] = false
-			module.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
+			if config.Hud and config.Hud.RainbowModules and config.Hud.RainbowModules == "true" then 
+				task.spawn(function() 
+					repeat 
+						if guiLib:Enabled(tbl.Name) then 
+							print('a')
+							module.BackgroundColor3 = Color3.fromHSV((tick() * rainbowUtil) % (11 - guiLib:GetDropDownValue("HUD", "RainbowSpeed")), 1, 1)
+						end
+						task.wait() 
+					until not getgenv().executed or guiLib:GetDropDownValue("HUD", "RainbowModules") == "false"
+					if guiLib:Enabled(string.split(v.Text, " ")[2]) then 
+						v.BackgroundColor3 = Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])
+					else 
+						v.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
+					end
+				end) 
+			else 
+				module.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
+			end 
 			if tbl.Name ~= "Uninject" and getgenv().canSave then 
 				config.Modules[tbl.Name] = "false"
 				save()
@@ -395,7 +412,18 @@ function guiLib:Enable(enabledmodule, displayenablenotification)
 	guiLib.ModuleOn[enabledmodule] = true 
 	for i,v in next, guiLib.Boney:GetDescendants() do 
 		if v:IsA("TextButton") and v.Text == " "..enabledmodule then 
-			v.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) or Color3.fromRGB(83, 33, 153)
+			if config.Hud and config.Hud.RainbowModules and config.Hud.RainbowModules == "true" then 
+				task.spawn(function()
+					repeat 
+						if guiLib:Enabled(string.split(v.Text, " ")[2]) then 
+							v.BackgroundColor3 = Color3.fromHSV((tick() * rainbowUtil) % (11 - guiLib:GetDropDownValue("HUD", "RainbowSpeed")), 1, 1)
+						end
+						task.wait()
+						until not guiLib:Enabled(enabledmodule)
+					end)
+				else 
+					v.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) or Color3.fromRGB(83, 33, 153)
+				end
 			if not displayenablenotification then guiLib:Notify(enabledmodule, "Enabled", 1) end
 			if enabledmodule ~= "Uninject" and getgenv().canSave then 
 				config.Modules[enabledmodule] = "true"
@@ -582,7 +610,41 @@ guiLib:CreateDropDown({
 		end 
 	end,
 })
-return guiLib
+guiLib:CreateDropDown({
+	Module = "HUD", 
+	Name = "RainbowModules", 
+	Default = "false",
+	Function = function() 
+		for i,v in next, guiLib.Boney:GetDescendants() do 
+			if v:IsA("TextButton") and not v.Text:find(":") then 
+				task.spawn(function()
+					repeat 
+						if guiLib:Enabled(string.split(v.Text, " ")[2]) then 
+							v.BackgroundColor3 = Color3.fromHSV((tick() * rainbowUtil) % (11 - guiLib:GetDropDownValue("HUD", "RainbowSpeed")), 1, 1)
+						end
+						task.wait()
+					until not getgenv().executed or guiLib:GetDropDownValue("HUD", "RainbowModules") ~= "true"
+					if guiLib:Enabled(string.split(v.Text, " ")[2]) then 
+						v.BackgroundColor3 = Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])
+					else 
+						v.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
+					end
+				end)
+			end 
+		end 
+		config.Hud.RainbowModules = guiLib:GetDropDownValue("HUD", "RainbowModules")
+		save()
+	end,
+})
+guiLib:CreateDropDown({
+	Module = "HUD", 
+	Name = "RainbowSpeed", 
+	Default = 9,
+	Max = 10, 
+	Min = 1,
+})
+
+return guiLib 
 
 --[[ examples
 local guiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/MrHaxerManBigball/GuiLib/main/Lib.lua", true))()
@@ -599,7 +661,6 @@ guiLib:CreateModule({
 		end
 	end,
 })
-
 guiLib:CreateDropDown({
 	Module = "Test",
 	Name = "Balls", 
