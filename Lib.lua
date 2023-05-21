@@ -404,8 +404,14 @@ function guiLib:CreateToggleable(tbl3)
 	table.insert(guiLib.functions, tbl3)
 	repeat task.wait() until guiLib:GetModule(realModule)
 	if not TabAmount[realModule] then TabAmount[realModule] = 0 end
-	if not ToggleableOn[realModule] then ToggleableOn[realModule] = {} end 
-	if not ToggleableOn[realModule][tbl3.Name] then ToggleableOn[realModule][tbl3.Name] = false end
+	if not ToggleableOn[realModule] then ToggleableOn[realModule] = {} end
+	if config.Toggleables[tbl3.Name] then 
+		ToggleableOn[realModule][tbl3.Name] = config.Toggleables[tbl3.Name]
+	else 
+		config.Toggleables[tbl3.Name] = tostring(tbl3.Default)
+		ToggleableOn[realModule][tbl3.Name] = tbl3.Default
+	end 
+	if not ToggleableOn[realModule][tbl3.Name] then ToggleableOn[realModule][tbl3.Name] = tbl3.Default end
 	local module = guiLib:GetModule(realModule)
     TabAmount[realModule] +=1
 	local toggle = Instance.new("TextButton", module) 
@@ -431,7 +437,7 @@ function guiLib:CreateToggleable(tbl3)
 		config.Toggleables[tbl3.Name] = "true"
 		toggle.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) or Color3.fromRGB(83, 33, 153)
 		save()
-		code(getModuleFunc(tbl3.Name))
+		if tbl3.Function then code(getModuleFunc(tbl3.Name)) end
 	end 
 	module.MouseButton2Down:Connect(function()
 		if toggle.Size == UDim2.new(0,0,0) then 
@@ -447,13 +453,13 @@ function guiLib:CreateToggleable(tbl3)
 			ToggleableOn[realModule][tbl3.Name] = false 
 			config.Toggleables[tbl3.Name] = "false"
 			save()
-			code(getModuleFunc(tbl3.Name))
+			if tbl3.Function then code(getModuleFunc(tbl3.Name)) end
 			toggle.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
 		else 
 			ToggleableOn[realModule][tbl3.Name] = true 
 			config.Toggleables[tbl3.Name] = "true"
 			save()
-			code(getModuleFunc(tbl3.Name))
+			if tbl3.Function then code(getModuleFunc(tbl3.Name)) end
 			toggle.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) or Color3.fromRGB(83, 33, 153)
 		end 
 	end)
@@ -708,7 +714,6 @@ guiLib:CreateDropDown({
 	Max = 10, 
 	Min = 1,
 })
-
 return guiLib 
 
 --[[ examples
@@ -748,6 +753,7 @@ guiLib:CreateDropDown({
 guiLib:CreateToggleable({
 	Module = "Test", 
 	Name = "balls3", 
+	Default = true, 
 	Function = function() 
 		if guiLib:ToggleEnabled("Test", "balls3") then 
 			print('on') 
