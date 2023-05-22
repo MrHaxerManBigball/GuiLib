@@ -550,11 +550,11 @@ function guiLib:Notify(header, text, time, tweentime)
 		Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		Frame.Name = guiLib:randomString(50)
 		Frame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-		Frame.BackgroundTransparency = 0.6
+		Frame.BackgroundTransparency = Transparency
 		Frame.Position = UDim2.new(0.897371888, 0, 0.917338729, 0)
 		Frame.Size = UDim2.new(0, 270, 0, 114)
 		Header.Name = guiLib:randomString(50)
-		Header.BackgroundColor3 = Color3.fromRGB(111, 128, 200)
+		Header.BackgroundColor3 = windowcolor
 		Header.BackgroundTransparency = 0.2
 		Header.Position = UDim2.new(-0.00371747208, 0, 0, 0)
 		Header.Size = UDim2.new(0, 270, 0, 39)
@@ -671,6 +671,7 @@ guiLib:CreateDropDown({
 			if v:IsA("TextButton") or v:IsA("TextLabel") and not v.Text:find(":") then 
 				v.BackgroundTransparency = guiLib:GetDropDownValue("HUD", "Transparency")
 				config.Hud.Transparency = guiLib:GetDropDownValue("HUD", "Transparency")
+				Transparency = guiLib:GetDropDownValue("HUD", "Transparency")
 				save()
 			end 
 		end 
@@ -699,6 +700,7 @@ guiLib:CreateDropDown({
 			if v:IsA("TextLabel") and not v.Text:find(":") then 
 				v.BackgroundColor3 = Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[3])
 				config.Hud.Windows = guiLib:GetDropDownValue("HUD", "WindowColors(rgb)")
+				windowcolor = (config.Hud and config.Hud.Windows and guiLib:GetDropDownValue("HUD", "WindowColors(rgb)") and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "WindowColors(rgb)"),",")[3])) or Color3.fromRGB(111, 128, 200)
 				save()
 			end 
 		end 
