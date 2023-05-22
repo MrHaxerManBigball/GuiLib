@@ -121,7 +121,7 @@ table.insert(guiLib.disconnectfuncs, CombatWindow:GetPropertyChangedSignal("Posi
 	config.Hud.WindowPositions.CombatWindow = string.gsub(string.gsub(tostring(CombatWindow.Position), "}", ""), "{", "")
 	save()
 end))
-if not config.Hud.WindowPositions.UtilityWindow then config.Hud.WindowPositions.UtilityWindow = "0.5, 0, 0.0302419364, 0" end
+if not config.Hud.WindowPositions.UtilityWindow then config.Hud.WindowPositions.UtilityWindow = "0.7, 0, 0.0302419364, 0" end
 local UtilityWindow = Instance.new("TextLabel", guiLib.Boney)
 UtilityWindow.Name = guiLib:randomString(50)
 UtilityWindow.BackgroundColor3 = windowcolor
@@ -139,7 +139,8 @@ table.insert(guiLib.disconnectfuncs, UtilityWindow:GetPropertyChangedSignal("Pos
 	config.Hud.WindowPositions.UtilityWindow = string.gsub(string.gsub(tostring(UtilityWindow.Position), "}", ""), "{", "")
 	save()
 end))
-if not config.Hud.WindowPositions.MovementWindow then config.Hud.WindowPositions.MovementWindow = "0.7, 0, 0.0302419364, 0" end
+
+if not config.Hud.WindowPositions.MovementWindow then config.Hud.WindowPositions.MovementWindow = "0.5, 0, 0.0302419364, 0" end
 local MovementWindow = Instance.new("TextLabel", guiLib.Boney)
 MovementWindow.Name = guiLib:randomString(50)
 MovementWindow.BackgroundColor3 = windowcolor
@@ -756,19 +757,21 @@ guiLib:CreateToggleable({
 		if guiLib:ToggleEnabled("HUD", "WaterMark") then 
 			if not config.Hud.WaterMark then print('b') config.Hud.WaterMark = "0.5, 0, 0.4, 0" save() end
 			fps, total, startingtick = 0, 0, tick()
+			WaterMark = Instance.new("ScreenGui", loadingGui) 
+			local WaterMarkFrame = Instance.new("Frame", WaterMark) 
+			local JosiahLabel = Instance.new("TextLabel", WaterMarkFrame)
+			local ColorFrame = Instance.new("TextLabel", WaterMarkFrame)
 			WaterMarkFunction = game:GetService("RunService").RenderStepped:Connect(function()
 				fps += 1 
 				total += 1 
+				JosiahLabel.Text = "\nBoney | "..game.PlaceId.."\n\nFPS: "..fps.."| Average: "..math.floor((total / (tick() - startingtick)))
+				ColorFrame.BackgroundColor3 = Color3.fromHSV((tick() * rainbowUtil % 0.9), 1, 1)
 				task.spawn(function()
 					task.wait(1) 
 					fps -= 1
 				end)
 			end)
-			WaterMark = Instance.new("ScreenGui", loadingGui) 
 			WaterMark.Name = guiLib:randomString(50)
-			local WaterMarkFrame = Instance.new("Frame", WaterMark) 
-			local ColorFrame = Instance.new("TextLabel", WaterMarkFrame)
-			local JosiahLabel = Instance.new("TextLabel", WaterMarkFrame)
 			ColorFrame.Name = guiLib:randomString(50)
 			WaterMarkFrame.Name = guiLib:randomString(50)
 			WaterMarkFrame.BackgroundColor3 = Color3.fromRGB(27, 42, 53)
@@ -776,24 +779,18 @@ guiLib:CreateToggleable({
 			WaterMarkFrame.Active = true 
 			WaterMarkFrame.Draggable = true 
 			WaterMarkFrame.BorderSizePixel = 0
-			WaterMarkFrame.Size = UDim2.new(0, 326, 0, 42)
+			WaterMarkFrame.Size = UDim2.new(0, 326, 0, 60)
 			WaterMarkFrame.Position = UDim2.new(string.split(config.Hud.WaterMark, ",")[1], string.split(config.Hud.WaterMark, ",")[2], string.split(config.Hud.WaterMark, ",")[3], string.split(config.Hud.WaterMark, ",")[4])
 			JosiahLabel.Size = UDim2.new(0, 194, 0, 22)
 			JosiahLabel.TextXAlignment = Enum.TextXAlignment.Left
 			JosiahLabel.Text = string.rep(" ", (15 - string.len(game.PlaceId))).."Boney | "..game.PlaceId
 			JosiahLabel.BorderSizePixel = 0
 			JosiahLabel.BackgroundTransparency = 1
-			JosiahLabel.Position += UDim2.new(0, 0, 0, 7.6)
-			ColorFrame.Size = UDim2.new(0, 326, 0, 7)
+			JosiahLabel.Position += UDim2.new(0, 0, 0, 15)
+			JosiahLabel.TextColor3 = Color3.fromRGB(255,255,255)
+			ColorFrame.Size = UDim2.new(0, 326, 0, 8)
 			ColorFrame.Text = ""
 			ColorFrame.BorderSizePixel = 0
-			task.spawn(function()
-				repeat 
-					JosiahLabel.Text = "\nBoney | "..game.PlaceId.."\n\nFPS: "..fps.."| Average: "..math.floor((total / (tick() - startingtick)))
-					ColorFrame.BackgroundColor3 = Color3.fromHSV((tick() * rainbowUtil % 0.9), 1, 1)
-					task.wait() 
-				until not getgenv().executed or not guiLib:ToggleEnabled("HUD", "WaterMark")
-			end)
 			table.insert(guiLib.disconnectfuncs, WaterMarkFrame:GetPropertyChangedSignal("Position"):Connect(function()
 				config.Hud.WaterMark = string.gsub(string.gsub(tostring(WaterMarkFrame.Position), "}", ""), "{", "")
 				save()
