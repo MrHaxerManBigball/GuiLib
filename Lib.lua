@@ -462,7 +462,7 @@ function guiLib:CreateToggleable(tbl3)
 	if config.Toggleables[tbl3.Name] and config.Toggleables[tbl3.Name] == "true" then  
 		ToggleableOn[realModule][tbl3.Name] = true 
 		config.Toggleables[tbl3.Name] = "true"
-		if tbl3.Function then code(getModuleFunc(tbl3.Name)) end
+		if tbl3.Function then task.spawn(code, getModuleFunc(tbl3.Name)) end
 		task.spawn(function() -- i have to do this because some witch craft occured where the toggle color would be normal for a split second, then change to 0,0,0 for literally no reason
 			for i = 1,15 do 
 				toggle.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) 
@@ -492,13 +492,13 @@ function guiLib:CreateToggleable(tbl3)
 			ToggleableOn[realModule][tbl3.Name] = false 
 			config.Toggleables[tbl3.Name] = "false"
 			save()
-			if tbl3.Function then code(getModuleFunc(tbl3.Name)) end
+			if tbl3.Function then task.spawn(code, getModuleFunc(tbl3.Name)) end
 			toggle.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
 		else 
 			ToggleableOn[realModule][tbl3.Name] = true 
 			config.Toggleables[tbl3.Name] = "true"
 			save()
-			if tbl3.Function then code(getModuleFunc(tbl3.Name)) end
+			if tbl3.Function then task.spawn(code, getModuleFunc(tbl3.Name)) end
 			toggle.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) or Color3.fromRGB(83, 33, 153)
 		end 
 	end)
