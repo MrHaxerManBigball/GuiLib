@@ -342,7 +342,7 @@ function guiLib:CreateDropDown(tbl2)
 	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,1.32 * (TabAmount[realModule]))
 	dropdownText.TextSize = 10
 	dropdownText.Text = tbl2.Name..": "
-	dropdownText.BackgroundTransparency = 0.9
+	dropdownText.BackgroundTransparency = Transparency
 	dropdownText.BorderSizePixel = 0 
 	dropdownText.TextTransparency = 1
 	dropdownText.LayoutOrder = math.huge
