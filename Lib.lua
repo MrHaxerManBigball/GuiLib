@@ -336,20 +336,21 @@ function guiLib:CreateDropDown(tbl2)
 	repeat task.wait() until guiLib:GetModule(realModule)
 	if not TabAmount[realModule] then TabAmount[realModule] = 0 end 
 	local module = guiLib:GetModule(realModule)
-    TabAmount[realModule] +=1
+    TabAmount[realModule] += 1.4
 	local dropdownText = Instance.new("TextLabel", realwindow)
 	local dropdown2 = Instance.new("TextBox", dropdownText) 
-	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,2 * (TabAmount[realModule]))
+	dropdownText.Position = UDim2.new(module.Position) + UDim2.new(0,0,1.32 * (TabAmount[realModule]))
 	dropdownText.TextSize = 10
 	dropdownText.Text = tbl2.Name..": "
 	dropdownText.BackgroundTransparency = 0.9
 	dropdownText.BorderSizePixel = 0 
 	dropdownText.TextTransparency = 1
-	dropdownText.LayoutOrder = 0
+	dropdownText.LayoutOrder = math.huge
 	dropdownText.Size = UDim2.new(0,0,0)
 	dropdownText.Name = guiLib:randomString(50)
 	dropdownText.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
 	dropdownText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	dropdownText.ZIndex = 5000
 
 	dropdown2.Position = UDim2.new(dropdownText.Position) + UDim2.new(0,0,1) 
 	dropdown2.TextSize = 10
@@ -357,7 +358,7 @@ function guiLib:CreateDropDown(tbl2)
 	dropdown2.BorderSizePixel = 0 
 	dropdown2.TextTransparency = 1
 	dropdown2.TextEditable = false 
-	dropdown2.LayoutOrder = 0
+	dropdown2.LayoutOrder = math.huge
 	dropdown2.Size = UDim2.new(0,0,0)
 	dropdown2.Name = guiLib:randomString(50)
 	dropdown2.BackgroundColor3 = Color3.fromRGB(36, 38, 42)
@@ -399,28 +400,30 @@ function guiLib:CreateDropDown(tbl2)
 			dropdown2.TextEditable = false  
 			dropdown2.Selectable = false 
 			module.TextSize = 18
+			module.ZIndex = 1
 			dropdown2.Size = UDim2.new(0,0,0)
 
 			dropdownText.BackgroundTransparency = 1 
 			dropdownText.TextTransparency = 1
 			dropdownText.Selectable = false 
 			dropdownText.Size = UDim2.new(0,0,0)
-			dropdownText.ZIndex = 1
 		else 
 			dropdown2.Text = config.Dropdowns[tbl2.Module..tbl2.Name]
+			dropdown2.ZIndex = 50000
 			dropdown2.BackgroundTransparency = 0 
 			dropdown2.TextTransparency = 0
 			dropdown2.TextEditable = true 
 			dropdown2.Selectable = true
 			dropdown2.Size = UDim2.new(0, 200, 0, 50)
-			dropdownText.ZIndex = 5
 			module.TextSize = 15
+			module.ZIndex = 50000
 
 			dropdownText.Text = tbl2.Name..": "
 			dropdownText.BackgroundTransparency = 0.6
 			dropdownText.TextTransparency = 0
 			dropdownText.Selectable = true
 			dropdownText.Size = UDim2.new(0, 200, 0, 50)
+			dropdownText.ZIndex = 50000
 		end 
 	end))
 end 
@@ -442,7 +445,7 @@ function guiLib:CreateToggleable(tbl3)
 	end 
 	if not ToggleableOn[realModule][tbl3.Name] then ToggleableOn[realModule][tbl3.Name] = tbl3.Default end
 	local module = guiLib:GetModule(realModule)
-    TabAmount[realModule] +=1
+    TabAmount[realModule] += 1
 	local toggle = Instance.new("TextButton", module) 
 	toggle.Position = UDim2.new(module.Position) + UDim2.new(0,0,1.32 * (TabAmount[realModule]))
 	toggle.TextSize = 10
@@ -455,29 +458,33 @@ function guiLib:CreateToggleable(tbl3)
 	toggle.ZIndex = 0
 	toggle.Size = UDim2.new(0,0,0)
 	toggle.Name = guiLib:randomString(50)
-	toggle.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
 	toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-	if not config.Toggleables[tbl3.Name] then 
+	if config.Toggleables[tbl3.Name] and config.Toggleables[tbl3.Name] == "true" then  
+		ToggleableOn[realModule][tbl3.Name] = true 
+		config.Toggleables[tbl3.Name] = "true"
+		if tbl3.Function then code(getModuleFunc(tbl3.Name)) end
+		task.spawn(function() -- i have to do this because some witch craft occured where the toggle color would be normal for a split second, then change to 0,0,0 for literally no reason
+			for i = 1,15 do 
+				toggle.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) 
+				task.wait(0.1)
+			end
+		end)
+		save()
+	else
 		config.Toggleables[tbl3.Name] = "false" 
 		ToggleableOn[realModule][tbl3.Name] = false 
 		toggle.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
 		save() 
-	elseif config.Toggleables[tbl3.Name] and config.Toggleables[tbl3.Name] == "true" then 
-		ToggleableOn[realModule][tbl3.Name] = true 
-		config.Toggleables[tbl3.Name] = "true"
-		toggle.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) or Color3.fromRGB(83, 33, 153)
-		save()
-		if tbl3.Function then code(getModuleFunc(tbl3.Name)) end
 	end 
 	module.MouseButton2Down:Connect(function()
 		if toggle.Size == UDim2.new(0,0,0) then 
 			toggle.Size = UDim2.new(0, 200, 0, 50)
 			toggle.TextTransparency = 0
-			toggle.ZIndex = 50
+			toggle.ZIndex = 50000
 		else 
 			toggle.Size = UDim2.new(0,0,0)
 			toggle.TextTransparency = 1
-			toggle.ZIndex = 0 
+			toggle.ZIndex = 1
 		end 
 	end)
 	toggle.MouseButton1Down:Connect(function()
@@ -710,7 +717,7 @@ guiLib:CreateToggleable({
 	Name = "ResetConfig", 
 	Default = false,
 	Function = function() 
-		if isfile("testlib/config/"..game.PlaceId.."/Config.lua") and guiLib:GetDropDownValue("HUD", "ResetConfig") then 
+		if isfile("testlib/config/"..game.PlaceId.."/Config.lua") and guiLib:ToggleEnabled("HUD", "ResetConfig") then 
 			writefile("testlib/config/"..game.PlaceId.."/Config.lua", "[]")
 			guiLib:Enable("Uninject")
 		end 
@@ -756,7 +763,7 @@ guiLib:CreateToggleable({
 	Default = false, 
 	Function = function() 
 		if guiLib:ToggleEnabled("HUD", "WaterMark") then 
-			if not config.Hud.WaterMark then print('b') config.Hud.WaterMark = "0.5, 0, 0.4, 0" save() end
+			if not config.Hud.WaterMark then config.Hud.WaterMark = "0.5, 0, 0.4, 0" save() end
 			fps, total, startingtick = 0, 0, tick()
 			WaterMark = Instance.new("ScreenGui", loadingGui) 
 			local WaterMarkFrame = Instance.new("Frame", WaterMark) 
@@ -799,7 +806,7 @@ guiLib:CreateToggleable({
 			end))
 		else 
 			if WaterMarkFunction then WaterMarkFunction:Disconnect() end
-			WaterMark:Destroy()
+			if WaterMark then WaterMark:Destroy() end
 			fps, total, startingtick = 0, 0, nil
 		end 
 	end, 
