@@ -243,7 +243,6 @@ function guiLib:CreateModule(tbl)
 				task.spawn(function() 
 					repeat 
 						if guiLib:Enabled(tbl.Name) then 
-							print('a')
 							module.BackgroundColor3 = Color3.fromHSV((tick() * rainbowUtil) % (11 - guiLib:GetDropDownValue("HUD", "RainbowSpeed")), 1, 1)
 						end
 						task.wait() 
@@ -549,7 +548,7 @@ function guiLib:Notify(header, text, time, tweentime)
 		Notification.Name = guiLib:randomString(50)
 		Notification.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		Frame.Name = guiLib:randomString(50)
-		Frame.BackgroundColor3 = Color3.fromRGB(0,0,0)
+		Frame.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(0, 0, 0)
 		Frame.BackgroundTransparency = Transparency
 		Frame.Position = UDim2.new(0.897371888, 0, 0.917338729, 0)
 		Frame.Size = UDim2.new(0, 270, 0, 114)
@@ -776,6 +775,7 @@ guiLib:CreateToggleable({
 			WaterMark.Name = guiLib:randomString(50)
 			ColorFrame.Name = guiLib:randomString(50)
 			WaterMarkFrame.Name = guiLib:randomString(50)
+			JosiahLabel.Name = guiLib:randomString(50)
 			WaterMarkFrame.BackgroundColor3 = Color3.fromRGB(27, 42, 53)
 			WaterMarkFrame.BackgroundTransparency = 0.6
 			WaterMarkFrame.Active = true 
