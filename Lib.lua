@@ -385,7 +385,7 @@ function guiLib:CreateDropDown(tbl2)
 		end)
 		repeat task.wait() until not uis:GetFocusedTextBox() 
 		if tbl2.Function and dropdown2.Text ~= "" then 
-			code(tbl2.Function) 
+			task.spawn(code, tbl2.Function)
 		end 
 		if getgenv().canSave then 
 			config.Dropdowns[tbl2.Module..tbl2.Name] = dropdown2.Text
