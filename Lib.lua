@@ -463,12 +463,7 @@ function guiLib:CreateToggleable(tbl3)
 		ToggleableOn[realModule][tbl3.Name] = true 
 		config.Toggleables[tbl3.Name] = "true"
 		if tbl3.Function then task.spawn(code, getModuleFunc(tbl3.Name)) end
-		task.spawn(function() -- i have to do this because some witch craft occured where the toggle color would be normal for a split second, then change to 0,0,0 for literally no reason
-			for i = 1,15 do 
-				toggle.BackgroundColor3 = (config.Hud.Enabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) 
-				task.wait(0.1)
-			end
-		end)
+		toggle.BackgroundColor3 = (Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])) 
 		save()
 	else
 		config.Toggleables[tbl3.Name] = "false" 
