@@ -181,7 +181,7 @@ GuiLib:CreateModule({
             SheriffImage.BackgroundColor3 = Color3.fromRGB(127, 127, 127)
             SheriffImage.BackgroundTransparency = 0.5
             SheriffImage.BorderSizePixel = 0
-            SheriffImage.Position = UDim2.new(1, 0, 0.159999996, 0)
+            SheriffImage.Position = UDim2.new(1, 0, 0.159999996, 0) - UDim2.new(0,0,0.16,0)
             SheriffImage.Size = UDim2.new(0, 105, 0, 70)
             SheriffImage.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
             MurdererImage.Name = http:GenerateGUID(false)
