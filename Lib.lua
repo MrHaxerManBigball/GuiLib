@@ -247,7 +247,7 @@ function guiLib:CreateModule(tbl)
 						end
 						task.wait() 
 					until not getgenv().executed or guiLib:GetDropDownValue("HUD", "RainbowModules") == "false"
-					if guiLib:Enabled(string.split(v.Text, " ")[2]) then 
+					if v and guiLib:Enabled(string.split(v.Text, " ")[2]) then 
 						v.BackgroundColor3 = Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleEnableColor(rgb)"),",")[3])
 					else 
 						v.BackgroundColor3 = (config.Hud.Disabled and Color3.fromRGB(string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[1], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[2], string.split(guiLib:GetDropDownValue("HUD", "ModuleDisableColor(rgb)"),",")[3])) or Color3.fromRGB(36, 38, 42)
