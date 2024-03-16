@@ -76,9 +76,9 @@ function isinDistance(target, tdist)
 end 
 
 GuiLib:CreateModule({
-    ["Name"] = "RoleESP", 
-    ["Window"] = "Render", 
-    ["Function"] = function() 
+    Name = "RoleESP", 
+    Window = "Render", 
+    Function = function() 
         if GuiLib:Enabled("RoleESP") then 
             task.spawn(function()
                 repeat 
@@ -142,9 +142,9 @@ GuiLib:CreateModule({
 
 local Snitch
 GuiLib:CreateModule({
-    ["Name"] = "RolesGUI", 
-    ["Window"] = "Render", 
-    ["Function"] = function() 
+    Name = "RolesGUI", 
+    Window = "Render", 
+    Function = function() 
         if GuiLib:Enabled("RolesGUI") then 
             Snitch = Instance.new("ScreenGui", gethui and gethui() or game:GetService("CoreGui")) 
             local Murderer = Instance.new("TextLabel", Snitch)
@@ -159,7 +159,7 @@ GuiLib:CreateModule({
             Murderer.Position = UDim2.new(0, 0, 0.459677428, 0)
             Murderer.Size = UDim2.new(0, 200, 0, 70)
             Murderer.Font = Enum.Font.SourceSans
-            Murderer.Text = " Murderer: "..(murderer2["name"])
+            Murderer.Text = " Murderer: "..(murderer2name)
             Murderer.TextColor3 = Color3.fromRGB(0, 0, 0)
             Murderer.TextSize = 14
             Murderer.TextXAlignment = Enum.TextXAlignment.Left
@@ -212,9 +212,9 @@ GuiLib:CreateModule({
 
 local oldTrans = {} 
 GuiLib:CreateModule({
-    ["Name"] = "X-Ray", 
-    ["Window"] = "World", 
-    ["Function"] = function() 
+    Name = "X-Ray", 
+    Window = "World", 
+    Function = function() 
         if GuiLib:Enabled("X-Ray") then 
             for i,v in next, workspace:GetDescendants() do 
                 if v:IsA("Part") or v:IsA("MeshPart") and v.Transparency ~= 0 or nil then 
@@ -238,9 +238,9 @@ GuiLib:CreateModule({
 
 local oldPos
 GuiLib:CreateModule({
-    ["Name"] = "PickupGun", 
-    ["Window"] = "Utility", 
-    ["Function"] = function() 
+    Name = "PickupGun", 
+    Window = "Utility", 
+    Function = function() 
         if GuiLib:Enabled("PickupGun") then 
             if isAlive(lplr) then 
                 if workspace:FindFirstChild("GunDrop") then 
@@ -260,9 +260,9 @@ GuiLib:CreateModule({
 
 
 GuiLib:CreateModule({
-    ["Name"] = "Shift-Speed", 
-    ["Window"] = "Movement", 
-    ["Function"] = function() 
+    Name = "Shift-Speed", 
+    Window = "Movement", 
+    Function = function() 
         if GuiLib:Enabled("Shift-Speed") then
             task.spawn(function() 
                 repeat task.wait() until GuiLib:GetDropDownValue("Shift-Speed", "Speed")
@@ -281,19 +281,19 @@ GuiLib:CreateModule({
     end, 
 })
 GuiLib:CreateDropDown({
-    ["Module"] = "Shift-Speed", 
-    ["Name"] = "Speed", 
-    ["type"] = "number", 
-    ["Min"] = 0, 
-    ["Max"] = 100, 
-    ["Default"] = 32,
+    Module = "Shift-Speed", 
+    Name = "Speed", 
+    type = "number", 
+    Min = 0, 
+    Max = 100, 
+    Default = 32,
 })
 
 local FlyVelo, FlyY
 GuiLib:CreateModule({
-    ["Name"] = "Fly", 
-    ["Window"] = "Movement", 
-    ["Function"] = function() 
+    Name = "Fly", 
+    Window = "Movement", 
+    Function = function() 
         if GuiLib:Enabled("Fly") then 
             task.spawn(function()
                 repeat task.wait() until GuiLib:GetDropDownValue("Fly", "Speed") 
@@ -311,18 +311,18 @@ GuiLib:CreateModule({
     end,
 })
 GuiLib:CreateDropDown({
-    ["Module"] = "Fly", 
-    ["type"] = "number",
-    ["Name"] = "Speed", 
-    ["Min"] = 0,
-    ["Max"] = 100, 
-    ["Default"] = 30,
+    Module = "Fly", 
+    type = "number",
+    Name = "Speed", 
+    Min = 0,
+    Max = 100, 
+    Default = 30,
 })
 
 GuiLib:CreateModule({
-    ["Name"] = "HighJump", 
-    ["Window"] = "Movement", 
-    ["Function"] = function() 
+    Name = "HighJump", 
+    Window = "Movement", 
+    Function = function() 
         if GuiLib:Enabled("HighJump") then     
             task.spawn(function()
                 repeat task.wait() until GuiLib:GetDropDownValue("HighJump", "Height") 
@@ -337,18 +337,18 @@ GuiLib:CreateModule({
     end,
 })
 GuiLib:CreateDropDown({
-    ["Module"] = "HighJump", 
-    ["Name"] = "Height", 
-    ["type"] = "number", 
-    ["Min"] = 0, 
-    ["Max"] = 500, 
-    ["Default"] = 100,
+    Module = "HighJump", 
+    Name = "Height", 
+    type = "number", 
+    Min = 0, 
+    Max = 500, 
+    Default = 100,
 })
 
 GuiLib:CreateModule({
-    ["Name"] = "CameraFix", 
-    ["Window"] = "Render", 
-    ["Function"] = function() 
+    Name = "CameraFix", 
+    Window = "Render", 
+    Function = function() 
         if GuiLib:Enabled("CameraFix") then 
             workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
             GuiLib:Disable("CameraFix")
@@ -357,9 +357,9 @@ GuiLib:CreateModule({
 })
 
 GuiLib:CreateModule({
-    ["Name"] = "CursorFix", 
-    ["Window"] = "Render", 
-    ["Function"] = function() 
+    Name = "CursorFix", 
+    Window = "Render", 
+    Function = function() 
         if GuiLib:Enabled("CursorFix") then 
             uis.MouseIconEnabled = true
             uis.MouseBehavior = Enum.MouseBehavior.Default	
@@ -370,9 +370,9 @@ GuiLib:CreateModule({
 
 local infJumpConnection
 GuiLib:CreateModule({
-    ["Name"] = "InfiniteJump", 
-    ["Window"] = "Movement", 
-    ["Function"] = function() 
+    Name = "InfiniteJump", 
+    Window = "Movement", 
+    Function = function() 
         if GuiLib:Enabled("InfiniteJump") then 
             infJumpConnection = uis.InputBegan:Connect(function(input) 
                 if input.KeyCode == Enum.KeyCode.Space and isAlive(lplr) and lplr.Character:FindFirstChild("Humanoid") and not uis:GetFocusedTextBox() and not GuiLib:Enabled("TestFly") then 
@@ -388,9 +388,9 @@ GuiLib:CreateModule({
 })
 
 GuiLib:CreateModule({
-    ["Name"] = "RemoveBarriers", 
-    ["Window"] = "World", 
-    ["Function"] = function() 
+    Name = "RemoveBarriers", 
+    Window = "World", 
+    Function = function() 
         if GuiLib:Enabled("RemoveBarriers") then 
             for i,v in pairs(workspace:GetChildren()) do 
                 for i2,v2 in pairs(v:GetChildren()) do 
@@ -406,9 +406,9 @@ GuiLib:CreateModule({
 
 local tpPos
 GuiLib:CreateModule({
-    ["Name"] = "ClickTP", 
-    ["Window"] = "Movement", 
-    ["Function"] = function()
+    Name = "ClickTP", 
+    Window = "Movement", 
+    Function = function()
         if GuiLib:Enabled("ClickTP") then 
             if isAlive(lplr) and mouse.Target then 
                 tpPos = mouse.Hit 
@@ -422,9 +422,9 @@ GuiLib:CreateModule({
 })
 
 GuiLib:CreateModule({
-    ["Name"] = "BlurtRoles", 
-    ["Window"] = "World", 
-    ["Function"] = function() 
+    Name = "BlurtRoles", 
+    Window = "World", 
+    Function = function() 
         if GuiLib:Enabled("BlurtRoles") then 
             if getMurderer() then 
                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack({[1] = getMurderer().DisplayName.."("..getMurderer().Name..") is Murderer!",[2] = "normalchat"}))
@@ -440,9 +440,9 @@ GuiLib:CreateModule({
 
 local AcceptedTypes, testmul, collidedparts, noclipfunc = { [1] = "Part", [2] = "MeshPart", [3] = "UnionOperation"}, 2, {}
 GuiLib:CreateModule({ 
-    ["Name"] = "Noclip", 
-    ["Window"] = "Movement",
-    ["Function"] = function() 
+    Name = "Noclip", 
+    Window = "Movement",
+    Function = function() 
         if GuiLib:Enabled("Noclip") then 
             noclipfunc = game:GetService("RunService").RenderStepped:Connect(function()
                 if lplr.Character then 
@@ -466,9 +466,9 @@ GuiLib:CreateModule({
 })
 
 GuiLib:CreateModule({
-    ["Name"] = "GunESP", 
-    ["Window"] = "Render", 
-    ["Function"] = function() 
+    Name = "GunESP", 
+    Window = "Render", 
+    Function = function() 
         if GuiLib:Enabled("GunESP") then 
             task.spawn(function()
                 repeat 
@@ -488,9 +488,9 @@ GuiLib:CreateModule({
 
 local beforeMassacre
 GuiLib:CreateModule({
-    ["Name"] = "KillAll", 
-    ["Window"] = "Combat", 
-    ["Function"] = function() 
+    Name = "KillAll", 
+    Window = "Combat", 
+    Function = function() 
         if GuiLib:Enabled("KillAll") then 
             if isAlive(lplr) and isMurderer(lplr) then 
                 beforeMassacre = lplr.Character.HumanoidRootPart.Position
@@ -514,9 +514,9 @@ GuiLib:CreateModule({
 
 local beforeSlaughtering
 GuiLib:CreateModule({
-    ["Name"] = "KillMurderer", 
-    ["Window"] = "Combat", 
-    ["Function"] = function() 
+    Name = "KillMurderer", 
+    Window = "Combat", 
+    Function = function() 
         if GuiLib:Enabled("KillMurderer") then 
             if isAlive(lplr) and isSheriff(lplr) and getMurderer() and isAlive(getMurderer()) then 
                 beforeSlaughtering = lplr.Character.HumanoidRootPart.Position
@@ -543,9 +543,9 @@ GuiLib:CreateModule({
 })
 
 GuiLib:CreateModule({ 
-    ["Name"] = "ShootMurderer", 
-    ["Window"] = "Combat", 
-    ["Function"] = function() 
+    Name = "ShootMurderer", 
+    Window = "Combat", 
+    Function = function() 
         if GuiLib:Enabled("ShootMurderer") then 
             if isAlive(lplr) and isSheriff(lplr) and getMurderer() and isAlive(getMurderer()) then 
                 if lplr.Backpack:FindFirstChild("Gun") then lplr.Backpack:FindFirstChild("Gun").Parent = lplr.Character end 
@@ -565,9 +565,9 @@ GuiLib:CreateModule({
 })
 
 GuiLib:CreateModule({ 
-    ["Name"] = "EarRape", 
-    ["Window"] = "World", 
-    ["Function"] = function() 
+    Name = "EarRape", 
+    Window = "World", 
+    Function = function() 
         if GuiLib:Enabled("EarRape") then 
             GuiLib:Notify("MM2", "2014 game moment", 3)
             for i,v in pairs(rapedSounds) do 
@@ -583,9 +583,9 @@ GuiLib:CreateModule({
 
 
 GuiLib:CreateModule({
-    ["Name"] = "AntiVoid", 
-    ["Window"] = "World", 
-    ["Function"] = function()
+    Name = "AntiVoid", 
+    Window = "World", 
+    Function = function()
         if GuiLib:Enabled("AntiVoid") then 
             task.spawn(function()
                 repeat 
