@@ -159,7 +159,6 @@ GuiLib:CreateModule({
             Murderer.Position = UDim2.new(0, 0, 0.459677428, 0)
             Murderer.Size = UDim2.new(0, 200, 0, 70)
             Murderer.Font = Enum.Font.SourceSans
-            Murderer.Text = " Murderer: "..(murderer2name)
             Murderer.TextColor3 = Color3.fromRGB(0, 0, 0)
             Murderer.TextSize = 14
             Murderer.TextXAlignment = Enum.TextXAlignment.Left
